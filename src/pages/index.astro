@@ -8,10 +8,8 @@ import SkepticTest from "@/components/SkepticTest.astro";
 import ThemeToggle from "@/components/ThemeToggle.astro";
 import {
   CODE_PROOFS,
-  DEEP_DIVES,
   FEATURES,
   FOOTER_COLUMNS,
-  HERO,
   PERSONAS,
   SITE_NAME,
   STACK_COMPARISON,
@@ -25,26 +23,28 @@ import {
  */
 
 const navLinks = [
-  { label: "Platform", href: "#features" },
-  { label: "How it works", href: "#workflow" },
-  { label: "Docs", href: "#code" },
-  { label: "Community", href: "#teams" },
+  { label: "Docs", href: "/docs/" },
+  { label: "Guides", href: "/guides/" },
+  { label: "Blog", href: "/blog/" },
+  {
+    label: "Releases",
+    href: "https://github.com/micronaut-projects/pyronaut/releases",
+  },
 ];
 
 const heroChecks = [
-  "One application model",
-  "Build-time processing",
-  "JVM & native packaging",
-  "Production Grade Observability",
-  "Netty-powered Scalability",
-  "Write Once Run Anywhere",
+  "High-performance runtime",
+  "Rich data access",
+  "Production observability",
+  "Cloud integrations",
+  "Build-time validation",
+  "Enterprise support"
 ];
 
-const foundations = ["Python", "Micronaut", "GraalPy", "GraalVM"];
 ---
 
 <BaseLayout
-  title={`${SITE_NAME} — Integrated application platform for Python`}
+  title={`${SITE_NAME} — High-performance Python web framework`}
   bodyClass="bg-ink-50 font-sans text-ink-900 antialiased dark:bg-ink-950 dark:text-ink-100"
 >
   <!-- Header -->
@@ -79,13 +79,13 @@ const foundations = ["Python", "Micronaut", "GraalPy", "GraalVM"];
       <div class="ml-auto flex items-center gap-4">
         <ThemeToggle class="rounded-lg p-2 text-ink-600 transition hover:bg-ink-100 dark:text-ink-300 dark:hover:bg-white/10" />
         <a
-          href="https://github.com/micronaut-projects"
+          href="https://github.com/micronaut-projects/pyronaut"
           class="hidden text-[0.95rem] font-semibold text-ink-700 transition hover:text-ink-950 dark:text-ink-300 dark:hover:text-white sm:block"
         >
           GitHub
         </a>
         <a
-          href="#get-started"
+          href="/docs/guide/index.html#gettingStarted"
           class="inline-flex items-center gap-2 rounded-xl bg-ink-950 px-5 py-3 text-sm font-bold text-white transition hover:bg-ink-800 dark:bg-white dark:text-ink-950 dark:hover:bg-ink-100"
         >
           Get started
@@ -103,39 +103,35 @@ const foundations = ["Python", "Micronaut", "GraalPy", "GraalVM"];
       >
       </div>
       <div
-        class="relative mx-auto grid max-w-7xl gap-16 px-5 pb-24 pt-16 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] lg:items-start lg:pt-20"
+        class="relative mx-auto grid max-w-[84rem] gap-16 px-5 pb-24 pt-16 lg:grid-cols-[minmax(0,1.12fr)_minmax(0,0.88fr)] lg:items-start lg:gap-12 lg:pt-20"
       >
         <div>
           <h1
-            class="mt-8 text-[3.4rem] font-extrabold leading-[0.98] tracking-[-0.03em] text-ink-950 dark:text-white md:text-[4.6rem]"
+            class="mt-8 text-[3.4rem] font-extrabold leading-[0.98] tracking-[-0.03em] text-ink-950 dark:text-white md:text-[4.6rem] lg:text-[3.75rem]"
           >
-            Stop{" "}
-            <span class="text-flame-600 dark:text-flame-500">assembling</span>
-            {" "}your Python backend.
+            A <span class="whitespace-nowrap">high-performance</span> Python web framework.
           </h1>
           <p
             class="mt-8 max-w-xl text-xl leading-9 text-ink-500 dark:text-ink-300"
           >
-            Build production Python services with HTTP, dependency injection,
-            validation, testing, configuration, and packaging designed to work
-            together.
+            Build production services with rich data access, observability, cloud integrations, build-time validation, integrated testing, and enterprise support.
           </p>
           <div class="mt-10 flex flex-wrap gap-4" id="get-started">
             <a
-              href="#code"
+              href="/docs/guide/index.html#gettingStarted"
               class="inline-flex items-center gap-2.5 rounded-xl bg-ink-950 px-7 py-4 text-base font-bold text-white transition hover:bg-ink-800 dark:bg-white dark:text-ink-950 dark:hover:bg-ink-100"
             >
-              Start building
+              Get started
               <Glyph name="arrow-right" class="size-4.5 text-flame-500 dark:text-flame-600" />
             </a>
             <a
               href="#features"
               class="inline-flex items-center rounded-xl border border-ink-200 bg-white px-7 py-4 text-base font-bold text-ink-950 transition hover:border-ink-300 hover:bg-ink-50 dark:border-white/15 dark:bg-white/5 dark:text-white dark:hover:bg-white/10"
             >
-              Explore the platform
+              Explore the framework
             </a>
           </div>
-          <ul class="mt-12 grid gap-x-8 gap-y-3 sm:grid-cols-3">
+          <ul class="mt-12 grid gap-x-6 gap-y-3 sm:grid-cols-2 lg:grid-cols-3 lg:gap-x-4">
             {
               heroChecks.map((check) => (
                 <li class="flex items-center gap-2 text-sm font-medium text-ink-600 dark:text-ink-300">
@@ -207,49 +203,27 @@ const foundations = ["Python", "Micronaut", "GraalPy", "GraalVM"];
         </div>
       </div>
 
-      <!-- Foundation strip -->
-      <div class="border-y border-ink-200/70 dark:border-white/10">
-        <div
-          class="mx-auto flex max-w-7xl flex-col gap-4 px-5 py-6 md:flex-row md:items-center md:justify-between"
-        >
-          <p class="text-sm text-ink-500 dark:text-ink-400">
-            Built on a proven application foundation
-          </p>
-          <ul class="flex flex-wrap items-center gap-x-6 gap-y-2">
-            {
-              foundations.map((foundation, index) => (
-                <>
-                  <li class="font-mono text-sm font-bold uppercase tracking-[0.2em] text-ink-800 dark:text-ink-200">
-                    {foundation}
-                  </li>
-                  {index < foundations.length - 1 && (
-                    <li aria-hidden="true" class="size-1.5 rounded-full bg-ember-500" />
-                  )}
-                </>
-              ))
-            }
-          </ul>
-        </div>
-      </div>
     </section>
 
     <!-- Features -->
     <section id="features" class="border-b border-ink-200/70 dark:border-white/10">
       <div class="mx-auto max-w-7xl px-5 py-20 md:py-24">
+        <p class="font-mono text-xs font-bold uppercase tracking-[0.2em] text-ember-500">
+          WHY PYRONAUT
+        </p>
         <div
           class="mt-6 flex flex-col gap-4 md:flex-row md:items-end md:justify-between"
         >
           <h2
             class="max-w-xl text-4xl font-extrabold tracking-[-0.02em] text-ink-950 dark:text-white md:text-5xl"
           >
-            One platform, designed to work together
+            Production Python, working together.
           </h2>
           <p class="max-w-md text-base leading-7 text-ink-500 dark:text-ink-300">
-            Configuration, testing, validation, infrastructure, and
-            packaging - handled one consistent way.
+            Pyronaut brings dependency injection, validation, data access, observability, testing, and packaging into one application model.
           </p>
         </div>
-        <div class="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+        <div class="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {
             FEATURES.map((feature, index) => (
               <a
@@ -283,15 +257,19 @@ const foundations = ["Python", "Micronaut", "GraalPy", "GraalVM"];
         class="mx-auto grid max-w-7xl gap-14 px-5 py-20 md:py-24 lg:grid-cols-[380px_minmax(0,1fr)]"
       >
         <div>
+          <p class="font-mono text-xs font-bold uppercase tracking-[0.2em] text-ember-500">
+            THE APPLICATION MODEL
+          </p>
           <h2
             class="mt-6 text-4xl font-extrabold tracking-[-0.02em] text-ink-950 dark:text-white"
           >
-            Python that uses Micronaut directly
+            Write Python. Get the platform around it.
           </h2>
           <p class="mt-5 text-base leading-7 text-ink-500 dark:text-ink-300">
-            Write controllers and inject services with familiar Python constructs
-            like dataclasses and type hints, then test the running application with
-            pytest.
+            Your Python types and annotations define routing, validation, serialization, dependency injection, OpenAPI, and tests.
+          </p>
+          <p class="mt-5 text-sm leading-6 text-ink-500 dark:text-ink-400">
+            Pyronaut processes the application model before startup, enabling earlier validation and carrying the same model through development, testing, and packaging.
           </p>
           <ul class="mt-8 grid gap-3.5">
             {
@@ -317,12 +295,17 @@ const foundations = ["Python", "Micronaut", "GraalPy", "GraalVM"];
     <!-- Workflow -->
     <section id="workflow" class="border-b border-ink-200/70 bg-white dark:border-white/10 dark:bg-ink-900/40">
       <div class="mx-auto max-w-7xl px-5 py-20 md:py-24">
+        <p class="font-mono text-xs font-bold uppercase tracking-[0.2em] text-ember-500">
+          THE APPLICATION LIFECYCLE
+        </p>
         <h2
           class="mt-6 max-w-2xl text-4xl font-extrabold tracking-[-0.02em] text-ink-950 dark:text-white md:text-5xl"
         >
-          From <code class="font-mono text-flame-700 dark:text-flame-400">create</code> to production
-          artifact
+          From Python source to a production artifact.
         </h2>
+        <p class="mt-5 max-w-xl text-base leading-7 text-ink-500 dark:text-ink-300">
+          One CLI coordinates creation, development, testing, validation, and packaging.
+        </p>
         <ol class="mt-12 grid gap-px overflow-hidden rounded-2xl bg-ink-200 ring-1 ring-ink-200 dark:bg-white/10 dark:ring-white/10 md:grid-cols-5">
           {
             WORKFLOW.map((stage, index) => (
@@ -346,59 +329,19 @@ const foundations = ["Python", "Micronaut", "GraalPy", "GraalVM"];
       </div>
     </section>
 
-    <!-- Deep dives -->
-    <section class="border-b border-ink-200/70 dark:border-white/10">
-      <div class="mx-auto grid max-w-7xl gap-6 px-5 py-20 md:py-24 lg:grid-cols-3">
-        {
-          DEEP_DIVES.map((dive, index) => (
-            <article class="flex flex-col rounded-2xl bg-white p-8 ring-1 ring-ink-200 dark:bg-ink-900 dark:ring-white/10">
-              <div class="flex items-center justify-between">
-                <span class="grid size-12 place-items-center rounded-xl bg-ink-950 text-flame-400 dark:bg-white/10">
-                  <Glyph name={dive.icon} class="size-6" />
-                </span>
-                <span class="font-mono text-xs font-semibold text-ink-300 dark:text-ink-500">
-                  0{index + 1}
-                </span>
-              </div>
-              <h3 class="mt-6 text-xl font-bold tracking-tight text-ink-950 dark:text-white">
-                {dive.title}
-              </h3>
-              <p class="mt-3 text-sm leading-7 text-ink-500 dark:text-ink-300">
-                {dive.copy}
-              </p>
-              <ul class="mt-6 grid gap-2.5 border-t border-ink-100 pt-6 dark:border-white/10">
-                {dive.bullets.map((bullet) => (
-                  <li class="flex items-center gap-2.5 text-sm text-ink-700 dark:text-ink-200">
-                    <Glyph name="check" class="size-4 shrink-0 text-python-blue dark:text-flame-400" />
-                    {bullet}
-                  </li>
-                ))}
-              </ul>
-              <a
-                href={dive.href}
-                class="mt-auto inline-flex items-center gap-2 pt-7 text-sm font-bold text-ink-950 transition hover:gap-3.5 dark:text-white"
-              >
-                {dive.linkLabel}
-                <Glyph name="arrow-right" class="size-4 text-flame-500" />
-              </a>
-            </article>
-          ))
-        }
-      </div>
-    </section>
-
     <!-- Stack comparison -->
     <section class="border-b border-ink-200/70 bg-ink-950 text-white dark:border-white/10">
       <div class="mx-auto max-w-7xl px-5 py-20 md:py-24">
+        <p class="font-mono text-xs font-bold uppercase tracking-[0.2em] text-flame-400">
+          THE TRADE-OFF
+        </p>
         <h2
           class="mt-6 max-w-2xl text-4xl font-extrabold tracking-[-0.02em] md:text-5xl"
         >
-          The alternative is an assembled stack
+          A representative FastAPI stack vs. Pyronaut
         </h2>
         <p class="mt-5 max-w-xl text-base leading-7 text-ink-300">
-          Python&rsquo;s flexibility is a strength, and every component in a
-          hand-assembled stack may be excellent. The cost is the repeated
-          integration work between them, and someone has to own it.
+          FastAPI is a strong HTTP framework. Pyronaut takes a different approach, combining high performance with data access, observability, build-time validation, testing, and production packaging.
         </p>
         <div class="mt-12 grid gap-6 md:grid-cols-2">
           <div class="rounded-2xl border border-white/10 bg-white/[0.04] p-8">
@@ -442,11 +385,17 @@ const foundations = ["Python", "Micronaut", "GraalPy", "GraalVM"];
       class="border-b border-ink-200/70 bg-white dark:border-white/10 dark:bg-ink-900/40"
     >
       <div class="mx-auto max-w-7xl px-5 py-20 md:py-24">
+        <p class="font-mono text-xs font-bold uppercase tracking-[0.2em] text-ember-500">
+          WHO SHOULD CARE?
+        </p>
         <h2
           class="mt-6 max-w-2xl text-4xl font-extrabold tracking-[-0.02em] text-ink-950 dark:text-white md:text-5xl"
         >
-          Built for teams that ship many services
+          For teams building production Python services.
         </h2>
+        <p class="mt-5 max-w-xl text-base leading-7 text-ink-500 dark:text-ink-300">
+          Choose Pyronaut when your Python services need high performance and deeper production capabilities.
+        </p>
         <div class="mt-12 grid gap-5 md:grid-cols-2 lg:grid-cols-4">
           {
             PERSONAS.map((persona) => (
@@ -488,11 +437,10 @@ const foundations = ["Python", "Micronaut", "GraalPy", "GraalVM"];
             <h2
               class="max-w-lg text-4xl font-extrabold tracking-[-0.02em] text-ink-950 dark:text-white"
             >
-              Start building on the platform.
+              Build your first Pyronaut service.
             </h2>
             <p class="mt-3 max-w-md text-base leading-7 text-ink-500 dark:text-ink-300">
-              Create your first Pyronaut service and go from Python source to a
-              tested, validated production artifact.
+              Start with HTTP, data access, validation, observability, testing, and production packaging in one Python project.
             </p>
           </div>
         </div>
@@ -505,10 +453,10 @@ const foundations = ["Python", "Micronaut", "GraalPy", "GraalVM"];
             <Glyph name="arrow-right" class="size-4.5 text-flame-500 dark:text-flame-600" />
           </a>
           <a
-            href="https://github.com/micronaut-projects"
+            href="https://github.com/micronaut-projects/pyronaut"
             class="inline-flex items-center rounded-xl border border-ink-200 bg-white px-7 py-4 text-base font-bold text-ink-950 transition hover:bg-ink-50 dark:border-white/15 dark:bg-white/5 dark:text-white dark:hover:bg-white/10"
           >
-            Star on GitHub
+            View the repository
           </a>
         </div>
       </div>
@@ -535,8 +483,10 @@ const foundations = ["Python", "Micronaut", "GraalPy", "GraalVM"];
             class="hidden h-9 w-auto dark:block"
           />
           <p class="mt-4 max-w-xs text-sm leading-6 text-ink-500 dark:text-ink-400">
-            An integrated application platform for Python, built on
-            Micronaut.
+            A high-performance Python framework for production services.
+          </p>
+          <p class="mt-2 max-w-xs text-xs leading-5 text-ink-400 dark:text-ink-500">
+            Pyronaut is part of Micronaut, a Commonhaus Foundation project.
           </p>
         </div>
         {
@@ -561,10 +511,6 @@ const foundations = ["Python", "Micronaut", "GraalPy", "GraalVM"];
           ))
         }
       </div>
-      <p class="mt-12 border-t border-ink-200/70 pt-6 text-xs text-ink-400 dark:border-white/10 dark:text-ink-500">
-        © 2026 The Pyronaut Project. Python on GraalPy, powered by the
-        Micronaut framework and GraalVM.
-      </p>
     </div>
   </footer>
 
