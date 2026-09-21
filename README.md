@@ -1,7 +1,6 @@
 # pyronaut-web
 
-This is the website for **Pyronaut** — an integrated application platform for
-Python, built on Micronaut.
+This is the website for **Pyronaut** — A high-performance Python web framework built on Micronaut, with data access, cloud integrations, observability, build-time validation, testing, packaging, and Oracle enterprise support.
 
 Built with [Astro](https://astro.build), [Tailwind CSS v4](https://tailwindcss.com),
 and TypeScript, mirroring the page structure of `micronaut-web`.

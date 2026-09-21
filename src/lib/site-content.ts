@@ -5,19 +5,7 @@
 export const SITE_NAME = "Pyronaut";
 
 export const SITE_DESCRIPTION =
-  "Pyronaut is an integrated application platform for Python, built on Micronaut. Build the Python application without having to build the application platform around it.";
-
-export const HERO = {
-  eyebrow: "Integrated application platform for Python",
-  title: "Build the Python application. Not the platform around it.",
-  copy: "Pyronaut combines Python on GraalPy with the Micronaut application model — one platform with a consistent way to configure, build, test, validate, package, and run Python applications.",
-  badges: ["Python on GraalPy", "Micronaut application model", "GraalVM native ready"],
-  ctas: [
-    { label: "Get started", href: "/docs/", primary: true },
-    { label: "Browse guides", href: "/guides/", primary: false },
-    { label: "View on GitHub", href: "https://github.com/micronaut-projects", primary: false },
-  ],
-};
+  "Pyronaut is a high-performance Python web framework built on Micronaut, with data access, cloud integrations, observability, build-time validation, testing, packaging, and Oracle enterprise support.";
 
 export interface Feature {
   title: string;
@@ -29,52 +17,40 @@ export interface Feature {
 /** Icon names map to inline SVG glyphs rendered by each design. */
 export const FEATURES: Feature[] = [
   {
-    title: "Micronaut model, Python code",
-    copy: "Use @Controller, @Get, @Singleton, and dependency injection directly from Python source.",
-    icon: "annotations",
-    href: "/docs/programming-model/",
-  },
-  {
-    title: "One application workflow",
-    copy: "create → dev → test → validate-config → build. One CLI from project creation through packaging.",
-    icon: "workflow",
-    href: "/docs/cli/",
-  },
-  {
-    title: "Prepare before startup",
-    copy: "DI metadata, serialization, and OpenAPI are processed at build time, before application startup.",
-    icon: "bolt",
-    href: "/docs/source-processing/",
-  },
-  {
-    title: "Production Grade Observability",
-    copy: "Monitor and manage your application with metrics exposed via Micrometer, tracing with OpenTelemetry, and production-grade JVM tools for performance monitoring.",
-    icon: "gauge",
-    href: "/docs/observability/",
-  },
-  {
-    title: "Application testing",
-    copy: "Run pytest against the embedded application with Docker-powered Test Resources for realistic infrastructure in development and tests.",
-    icon: "flask",
-    href: "/docs/testing/",
-  },
-  {
-    title: "Optimize with Java",
-    copy: "Optimize performance-sensitive code with Java when you need more speed, without taking on complex native-code setups.",
+    title: "High performance",
+    copy: "Run Python on GraalPy with a runtime built for demanding production services.",
     icon: "bolt",
     href: "/docs/performance/",
   },
   {
-    title: "Validate before production",
-    copy: "Validate configuration and the dependency injection graph before the service ships.",
-    icon: "shield",
-    href: "/docs/validation/",
+    title: "Rich data access",
+    copy: "Use Micronaut Data repositories and database integrations directly from Python.",
+    icon: "annotations",
+    href: "/docs/data-access/",
   },
   {
-    title: "Packaging options",
-    copy: "JVM wheel, JVM container image, native executable, native container image, or a reusable Crema runtime.",
+    title: "Production observability",
+    copy: "Use metrics, traces, health checks, and logging through Micrometer and OpenTelemetry.",
+    icon: "gauge",
+    href: "/docs/observability/",
+  },
+  {
+    title: "Cloud integrations",
+    copy: "Connect to AWS, Azure, GCP, and Oracle Cloud through cloud SDKs and Micronaut integrations.",
+    icon: "flask",
+    href: "/docs/cloud-integrations/",
+  },
+  {
+    title: "Build-time validation",
+    copy: "Catch configuration and dependency wiring problems at build time, giving coding agents and humans feedback before runtime.",
+    icon: "shield",
+    href: "/docs/source-processing/",
+  },
+  {
+    title: "Enterprise support",
+    copy: "Oracle support for teams running Pyronaut in production.",
     icon: "rocket",
-    href: "/docs/packaging/",
+    href: "/docs/support/",
   },
 ];
 
@@ -98,7 +74,7 @@ export const WORKFLOW: WorkflowStage[] = [
   {
     command: "pyronaut test",
     title: "Test",
-    copy: "pytest against the real application context and infrastructure.",
+    copy: "Run pytest against the real application context and test infrastructure.",
   },
   {
     command: "pyronaut validate-config",
@@ -236,9 +212,9 @@ $ pyronaut build --native-base
 ];
 
 export const CODE_PROOFS = [
-  "Dependency injection resolved from build-time metadata",
-  "Wiring and configuration errors can be detected at build time",
-  "Tests run with the same services the application depends on",
+  "One type definition drives the application model",
+  "Check configuration and dependency wiring before runtime",
+  "One application model spans development, tests, and packaging",
 ];
 
 export const DEFINE_ONCE = {
@@ -258,15 +234,8 @@ export const SKEPTIC = {
   question:
     "Why not assemble a stack from the Python frameworks and tools I already know?",
   intro:
-    "You can. Those tools may all be excellent. The trade-off is how much integration and platform work your team wants to maintain itself:",
-  answers: [
-    "Pyronaut reduces the integration work between framework, server, validation, testing, and packaging.",
-    "Configuration is checked automatically during dev, run, test, and native builds.",
-    "The same Python types and metadata can be used across HTTP, validation, serialization, and OpenAPI.",
-    "Test infrastructure is managed as part of development and testing.",
-    "The same project produces wheel, container, native, and Crema artifacts.",
-    "Wiring problems can be detected before the service reaches production.",
-  ],
+    "You can. Those tools may all be excellent. The choice is whether your team wants to assemble and maintain those capabilities separately, or use a high-performance, production-focused framework with a consistent application model.",
+  answers: [],
 };
 
 export const MICRONAUT_AUDIENCE = {
@@ -334,47 +303,47 @@ export interface Persona {
 
 export const PERSONAS: Persona[] = [
   {
-    role: "Python developer",
+    role: "Python developers",
     value:
-      "Spend less time on repeated integration work — build with one consistent application model.",
+      "Build with one consistent application model.",
   },
   {
-    role: "Architect",
+    role: "Architects",
     value:
-      "Give teams one consistent way to build and maintain production Python services at scale.",
+      "Standardize how teams build and run production Python services.",
   },
   {
     role: "Platform engineering",
     value:
-      "One consistent way to build, validate, package, and run Python applications across teams.",
+      "Give teams one path from project creation to production artifact.",
   },
   {
-    role: "Engineering leadership",
+    role: "ENGINEERING LEADERSHIP",
     value:
-      "Reduce duplicated platform engineering and the number of patterns teams need to support.",
+      "Adopt a high-performance Python framework with enterprise support.",
   },
 ];
 
 export const STACK_COMPARISON = {
   conventional: {
-    title: "A representative Python stack",
+    title: "A representative FastAPI stack",
     items: [
-      "FastAPI + Uvicorn",
+      "FastAPI + Uvicorn + SQLAlchemy",
       "Pydantic + Pydantic Settings",
       "pytest + Testcontainers + fixtures",
-      "structlog + OpenAPI setup",
+      "structlog + OpenTelemetry + OpenAPI",
       "Dockerfiles + CI templates",
       "…and every integration between them",
     ],
   },
   pyronaut: {
-    title: "Adopt one platform",
+    title: "Pyronaut platform",
     items: [
-      "Micronaut HTTP on Netty",
-      "Validation + serialization built in",
+      "Micronaut HTTP on Netty + Micronaut Data",
+      "Build-time processing for DI, validation, and serialization",
       "pytest + Micronaut Test + Test Resources",
-      "Unified config and logging",
-      "Wheel, container, and native builds",
+      "Micrometer metrics + OpenTelemetry tracing + observability integrations",
+      "Production packaging + supported cloud integrations",
       "…designed to work together",
     ],
   },
@@ -387,24 +356,22 @@ export const FOOTER_COLUMNS = [
       { label: "Documentation", href: "/docs/" },
       { label: "Guides", href: "/guides/" },
       { label: "CLI reference", href: "/docs/cli/" },
-      { label: "GraalPy compatibility", href: "/docs/compatibility/" },
+      { label: "Python package compatibility", href: "/docs/compatibility/" },
     ],
   },
   {
     title: "Community",
     links: [
-      { label: "GitHub", href: "https://github.com/micronaut-projects" },
-      { label: "Discussions", href: "https://github.com/micronaut-projects/micronaut-core/discussions" },
+      { label: "GitHub", href: "https://github.com/micronaut-projects/pyronaut" },
       { label: "Blog", href: "/blog/" },
-      { label: "Success stories", href: "/stories/" },
     ],
   },
   {
     title: "Ecosystem",
     links: [
-      { label: "Micronaut Framework", href: "https://micronaut.io" },
+      { label: "Micronaut", href: "https://micronaut.io" },
+      { label: "GraalPy", href: "https://www.graalpy.org" },
       { label: "GraalVM", href: "https://www.graalvm.org" },
-      { label: "GraalPy", href: "https://www.graalvm.org/python/" },
     ],
   },
 ];

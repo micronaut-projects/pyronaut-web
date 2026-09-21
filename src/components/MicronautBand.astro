@@ -1,5 +1,4 @@
 ---
-import Glyph from "@/components/Glyph.astro";
 import { MICRONAUT_AUDIENCE } from "@/lib/site-content";
 
 interface Props {
@@ -15,10 +14,6 @@ const section =
 const strong =
   tone === "dark" ? "font-semibold text-white" : "font-semibold text-ink-900 dark:text-white";
 const copy = tone === "dark" ? "text-ink-300" : "text-ink-500 dark:text-ink-300";
-const link =
-  tone === "dark"
-    ? "inline-flex shrink-0 items-center gap-1.5 text-sm font-semibold text-flame-400 transition hover:gap-2.5"
-    : "inline-flex shrink-0 items-center gap-1.5 text-sm font-semibold text-flame-600 transition hover:gap-2.5 dark:text-flame-400";
 ---
 
 <section class={section}>
@@ -29,9 +24,5 @@ const link =
       <span class={strong}>{MICRONAUT_AUDIENCE.kicker}</span>{" "}
       {MICRONAUT_AUDIENCE.copy}
     </p>
-    <a href={MICRONAUT_AUDIENCE.href} class={link}>
-      {MICRONAUT_AUDIENCE.linkLabel}
-      <Glyph name="arrow-right" class="size-4" />
-    </a>
   </div>
 </section>
