@@ -1,0 +1,899 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import Glyph from "@/components/Glyph.astro";
+import SiteFooter from "@/components/SiteFooter.astro";
+import SiteHeader from "@/components/SiteHeader.astro";
+import { SITE_NAME } from "@/lib/site-content";
+import { DEFAULT_PROJECT, STARTER, TYPE_LABELS } from "@/lib/launcher";
+
+/**
+ * Pyronaut Launch — generate a Python project from the Micronaut Starter,
+ * like micronaut.io/launch but locked to Python + Pyronaut + pytest.
+ * The markup is static; the client script below owns all state.
+ *
+ * ARCHIVED (v1): the first launcher design, with the application type picker
+ * and the feature dialog. Kept for later; not routed. To bring it back, move
+ * it to src/pages/ (e.g. src/pages/launch/v1.astro).
+ */
+
+const inputClass =
+  "mt-2 block w-full rounded-xl border border-ink-200 bg-white px-4 py-3 font-mono text-[0.95rem] text-ink-950 outline-none transition placeholder:text-ink-300 focus:border-flame-500 focus:ring-4 focus:ring-flame-500/15 aria-[invalid=true]:border-ember-500 dark:border-white/15 dark:bg-ink-900 dark:text-white dark:focus:border-flame-400";
+
+const kbdClass =
+  "rounded border border-current/25 px-1.5 py-0.5 font-mono text-[0.7rem] font-semibold opacity-70";
+---
+
+<BaseLayout
+  title={`Launch — ${SITE_NAME}`}
+  description="Generate a new Pyronaut project: pick an application type and features, then download a ready-to-run Python service."
+  bodyClass="bg-ink-50 font-sans text-ink-900 antialiased dark:bg-ink-950 dark:text-ink-100"
+>
+  <SiteHeader />
+
+  <main>
+    <section class="relative overflow-hidden">
+      <div
+        class="pointer-events-none absolute -right-40 -top-56 size-[420px] rounded-full border border-ink-200 dark:border-white/10"
+      >
+      </div>
+      <div class="relative mx-auto max-w-7xl px-5 pb-6 pt-8 lg:pt-10">
+        <p
+          class="flex items-center gap-2.5 font-mono text-xs font-semibold uppercase tracking-[0.2em] text-ink-500 dark:text-ink-400"
+        >
+          <span class="size-2 rounded-full bg-flame-500"></span>
+          Pyronaut Launch
+        </p>
+        <h1
+          class="mt-3 text-[1.9rem] font-extrabold leading-tight tracking-[-0.025em] text-ink-950 dark:text-white md:text-[2.25rem]"
+        >
+          Start a new Python service.
+        </h1>
+        <p class="mt-2 text-base leading-7 text-ink-500 dark:text-ink-300">
+          <span class="lg:block xl:inline">Pick an application type and the features you need.</span>{" "}
+          You get a Pyronaut project with <code class="whitespace-nowrap font-mono text-[0.9em]">pyproject.toml</code>,
+          configuration, tests and agent skills, ready for <code class="whitespace-nowrap font-mono text-[0.9em]">pyronaut run</code>.
+        </p>
+      </div>
+    </section>
+
+    <form id="launcher" class="mx-auto max-w-7xl px-5 pb-16" novalidate>
+      <div class="grid gap-6 lg:grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)]">
+        <!-- Project -->
+        <div
+          class="rounded-3xl border border-ink-200 bg-white p-6 shadow-sm dark:border-white/10 dark:bg-ink-900/60 sm:p-8"
+        >
+          <h2 class="flex items-baseline gap-3 text-xl font-bold text-ink-950 dark:text-white">
+            <span class="font-mono text-sm text-flame-600 dark:text-flame-400">01</span>
+            Project
+          </h2>
+
+          <fieldset class="mt-6">
+            <legend class="text-sm font-semibold text-ink-700 dark:text-ink-200">
+              Application type
+            </legend>
+            <div class="mt-3 grid grid-cols-2 gap-2.5 sm:grid-cols-3">
+              {
+                STARTER.applicationTypes.map((type) => (
+                  <label class="group relative flex cursor-pointer flex-col gap-2 rounded-2xl border border-ink-200 p-3.5 transition hover:border-ink-300 has-[:checked]:border-flame-500 has-[:checked]:bg-flame-50 has-[:focus-visible]:ring-4 has-[:focus-visible]:ring-flame-500/20 dark:border-white/10 dark:hover:border-white/25 dark:has-[:checked]:border-flame-400 dark:has-[:checked]:bg-flame-500/10">
+                    <input
+                      type="radio"
+                      name="type"
+                      value={type.value}
+                      checked={type.value === DEFAULT_PROJECT.type}
+                      class="sr-only"
+                    />
+                    <Glyph
+                      name={TYPE_LABELS[type.value]?.icon ?? "rocket"}
+                      class="size-5 text-ink-400 group-has-[:checked]:text-flame-600 dark:group-has-[:checked]:text-flame-400"
+                    />
+                    <span class="text-sm font-bold text-ink-950 dark:text-white">
+                      {TYPE_LABELS[type.value]?.label ?? type.title}
+                    </span>
+                    <span class="text-xs leading-5 text-ink-500 dark:text-ink-400">
+                      {type.description.replace(/^An? /, "")}
+                    </span>
+                  </label>
+                ))
+              }
+            </div>
+          </fieldset>
+
+          <div class="mt-6 grid gap-5 sm:grid-cols-2">
+            <div>
+              <label for="name" class="text-sm font-semibold text-ink-700 dark:text-ink-200">
+                Name
+              </label>
+              <input
+                id="name"
+                name="name"
+                value={DEFAULT_PROJECT.name}
+                autocomplete="off"
+                spellcheck="false"
+                aria-describedby="name-error"
+                class={inputClass}
+              />
+              <p id="name-error" class="mt-1.5 min-h-5 text-xs text-ember-600 dark:text-ember-500"></p>
+            </div>
+            <div>
+              <label for="package" class="text-sm font-semibold text-ink-700 dark:text-ink-200">
+                Base package
+              </label>
+              <input
+                id="package"
+                name="package"
+                value={DEFAULT_PROJECT.package}
+                autocomplete="off"
+                spellcheck="false"
+                aria-describedby="package-error"
+                class={inputClass}
+              />
+              <p id="package-error" class="mt-1.5 min-h-5 text-xs text-ember-600 dark:text-ember-500"></p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Features -->
+        <div
+          class="flex flex-col rounded-3xl border border-ink-200 bg-white p-6 shadow-sm dark:border-white/10 dark:bg-ink-900/60 sm:p-8"
+        >
+          <div class="flex flex-wrap items-center justify-between gap-3">
+            <h2 class="flex items-baseline gap-3 text-xl font-bold text-ink-950 dark:text-white">
+              <span class="font-mono text-sm text-flame-600 dark:text-flame-400">02</span>
+              Features
+              <span
+                id="feature-count"
+                class="rounded-full bg-ink-100 px-2 py-0.5 font-mono text-xs font-semibold text-ink-600 dark:bg-white/10 dark:text-ink-300"
+                >0</span
+              >
+            </h2>
+            <div class="flex items-center gap-2">
+              <button
+                type="button"
+                id="clear-features"
+                class="hidden rounded-lg px-3 py-2 text-sm font-semibold text-ink-500 transition hover:bg-ink-100 hover:text-ink-900 dark:text-ink-400 dark:hover:bg-white/10 dark:hover:text-white"
+              >
+                Clear
+              </button>
+              <button
+                type="button"
+                id="open-features"
+                class="inline-flex items-center gap-2 rounded-xl border border-ink-200 bg-white px-4 py-2.5 text-sm font-bold text-ink-950 transition hover:border-ink-300 hover:bg-ink-50 dark:border-white/15 dark:bg-white/5 dark:text-white dark:hover:bg-white/10"
+              >
+                <Glyph name="plus" class="size-4" />
+                Add features
+                <kbd class:list={[kbdClass, "hidden sm:inline"]} data-mod-key>Ctrl K</kbd>
+              </button>
+            </div>
+          </div>
+
+          <ul id="selected-features" class="mt-6 grid gap-2.5"></ul>
+          <div
+            id="features-empty"
+            class="mt-6 flex flex-1 flex-col items-center justify-center rounded-2xl border border-dashed border-ink-200 px-6 py-12 text-center dark:border-white/15"
+          >
+            <Glyph name="layers" class="size-8 text-ink-300 dark:text-ink-500" />
+            <p class="mt-4 font-semibold text-ink-700 dark:text-ink-200">
+              No features yet
+            </p>
+            <p class="mt-1 max-w-sm text-sm leading-6 text-ink-500 dark:text-ink-400">
+              The project already includes the HTTP server, logging, TOML
+              configuration and pytest. Add data access, security,
+              observability and more.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Actions -->
+      <div
+        class="sticky bottom-4 z-30 mt-6 flex flex-wrap items-center gap-3 rounded-2xl border border-ink-200 bg-white/90 p-3 shadow-lg shadow-ink-900/5 backdrop-blur-lg dark:border-white/10 dark:bg-ink-900/90 sm:p-4"
+      >
+        <p id="summary" class="hidden min-w-0 flex-1 truncate pl-2 font-mono text-sm text-ink-500 dark:text-ink-400 md:block"></p>
+        <div class="ml-auto flex gap-2.5">
+          <button
+            type="button"
+            id="open-preview"
+            aria-label="Preview"
+            class="inline-flex items-center gap-2 rounded-xl border border-ink-200 bg-white px-3.5 py-3 sm:px-4 text-sm font-bold text-ink-950 transition hover:border-ink-300 hover:bg-ink-50 dark:border-white/15 dark:bg-white/5 dark:text-white dark:hover:bg-white/10"
+          >
+            <Glyph name="eye" class="size-4" />
+            <span class="hidden sm:inline">Preview</span>
+          </button>
+          <button
+            type="button"
+            id="open-share"
+            aria-label="Share"
+            class="inline-flex items-center gap-2 rounded-xl border border-ink-200 bg-white px-3.5 py-3 sm:px-4 text-sm font-bold text-ink-950 transition hover:border-ink-300 hover:bg-ink-50 dark:border-white/15 dark:bg-white/5 dark:text-white dark:hover:bg-white/10"
+          >
+            <Glyph name="link" class="size-4" />
+            <span class="hidden sm:inline">Share</span>
+          </button>
+          <button
+            type="submit"
+            id="generate"
+            class="inline-flex items-center gap-2.5 rounded-xl bg-ink-950 px-5 py-3 text-sm font-bold text-white transition hover:bg-ink-800 disabled:cursor-wait disabled:opacity-60 dark:bg-white dark:text-ink-950 dark:hover:bg-ink-100"
+          >
+            <Glyph name="download" class="size-4 text-flame-500 dark:text-flame-600" />
+            Generate project
+            <kbd class:list={[kbdClass, "hidden sm:inline"]} data-mod-key>Ctrl ↵</kbd>
+          </button>
+        </div>
+      </div>
+      <p id="form-error" role="alert" class="mt-3 hidden whitespace-pre-line rounded-xl border border-ember-500/30 bg-ember-500/10 px-4 py-3 text-sm text-ember-600 dark:text-ember-500"></p>
+    </form>
+
+    <!-- Next steps -->
+    <section id="next-steps" hidden class="mx-auto max-w-7xl px-5 pb-20">
+      <div class="rounded-3xl bg-ink-950 p-6 text-white sm:p-8 dark:border dark:border-white/10">
+        <p class="flex items-center gap-2.5 font-mono text-xs font-semibold uppercase tracking-[0.2em] text-flame-400">
+          <Glyph name="check-circle" class="size-4" />
+          <span id="next-steps-title">Project generated</span>
+        </p>
+        <h2 class="mt-4 text-2xl font-bold">Next steps</h2>
+        <pre
+          class="mt-5 overflow-x-auto rounded-2xl bg-white/5 p-5 font-mono text-sm leading-7 text-ink-100"><code id="next-steps-code"></code></pre>
+        <p class="mt-4 text-sm text-ink-300">
+          New to Pyronaut? Read the{" "}
+          <a href="/docs/guide/index.html#gettingStarted" class="font-semibold text-flame-400 underline-offset-4 hover:underline">getting started guide</a>{" "}
+          or the <a href="/docs/cli/" class="font-semibold text-flame-400 underline-offset-4 hover:underline">CLI reference</a>.
+        </p>
+      </div>
+    </section>
+  </main>
+
+  <SiteFooter />
+
+  <!-- Feature picker -->
+  <dialog
+    id="features-dialog"
+    aria-labelledby="features-dialog-title"
+    class="m-auto flex-col overflow-hidden rounded-3xl border border-ink-200 bg-white p-0 text-ink-900 shadow-2xl backdrop:bg-ink-950/50 backdrop:backdrop-blur-sm open:flex dark:border-white/10 dark:bg-ink-900 dark:text-ink-100 h-[min(44rem,calc(100dvh-2rem))] w-[min(52rem,calc(100vw-2rem))]"
+  >
+    <div class="flex items-center gap-3 border-b border-ink-200 px-5 py-4 dark:border-white/10">
+      <h2 id="features-dialog-title" class="sr-only">Add features</h2>
+      <Glyph name="search" class="size-5 shrink-0 text-ink-400" />
+      <input
+        id="feature-search"
+        type="search"
+        placeholder="Search features — e.g. postgres, security, tracing"
+        autocomplete="off"
+        spellcheck="false"
+        aria-controls="feature-results"
+        class="min-w-0 flex-1 bg-transparent py-1.5 text-base text-ink-950 outline-none placeholder:text-ink-400 dark:text-white [&::-webkit-search-cancel-button]:appearance-none"
+      />
+      <button
+        type="button"
+        data-close
+        class="rounded-lg p-2 text-ink-500 transition hover:bg-ink-100 dark:text-ink-400 dark:hover:bg-white/10"
+        aria-label="Close"
+      >
+        <Glyph name="close" class="size-5" />
+      </button>
+    </div>
+    <div class="flex min-h-0 flex-1">
+      <nav
+        id="feature-categories"
+        aria-label="Feature categories"
+        class="hidden w-52 shrink-0 overflow-y-auto border-r border-ink-200 p-3 dark:border-white/10 md:block"
+      >
+      </nav>
+      <div id="feature-results" class="min-h-0 flex-1 overflow-y-auto p-3" role="listbox" aria-multiselectable="true" aria-label="Features"></div>
+    </div>
+    <div class="flex items-center justify-between gap-3 border-t border-ink-200 px-5 py-3 text-sm text-ink-500 dark:border-white/10 dark:text-ink-400">
+      <span id="feature-dialog-status"></span>
+      <button
+        type="button"
+        data-close
+        class="rounded-xl bg-ink-950 px-4 py-2.5 text-sm font-bold text-white transition hover:bg-ink-800 dark:bg-white dark:text-ink-950 dark:hover:bg-ink-100"
+      >
+        Done
+      </button>
+    </div>
+  </dialog>
+
+  <!-- Preview -->
+  <dialog
+    id="preview-dialog"
+    aria-labelledby="preview-dialog-title"
+    class="m-auto flex-col overflow-hidden rounded-3xl border border-ink-200 bg-white p-0 text-ink-900 shadow-2xl backdrop:bg-ink-950/50 backdrop:backdrop-blur-sm open:flex dark:border-white/10 dark:bg-ink-900 dark:text-ink-100 h-[min(48rem,calc(100dvh-2rem))] w-[min(76rem,calc(100vw-2rem))]"
+  >
+    <div class="flex items-center gap-3 border-b border-ink-200 px-5 py-3.5 dark:border-white/10">
+      <Glyph name="eye" class="size-5 text-flame-600 dark:text-flame-400" />
+      <h2 id="preview-dialog-title" class="min-w-0 flex-1 truncate font-mono text-sm font-semibold">
+        Preview
+      </h2>
+      <button
+        type="button"
+        data-close
+        class="rounded-lg p-2 text-ink-500 transition hover:bg-ink-100 dark:text-ink-400 dark:hover:bg-white/10"
+        aria-label="Close"
+      >
+        <Glyph name="close" class="size-5" />
+      </button>
+    </div>
+    <div class="flex min-h-0 flex-1 flex-col md:flex-row">
+      <nav
+        id="preview-tree"
+        aria-label="Project files"
+        class="max-h-48 shrink-0 overflow-y-auto border-b border-ink-200 p-2 font-mono text-[0.8rem] dark:border-white/10 md:max-h-none md:w-72 md:border-b-0 md:border-r"
+      >
+      </nav>
+      <div class="flex min-h-0 min-w-0 flex-1 flex-col">
+        <div id="preview-path" class="border-b border-ink-200 px-5 py-2.5 font-mono text-xs text-ink-500 dark:border-white/10 dark:text-ink-400"></div>
+        <div
+          id="preview-code"
+          class="preview-code min-h-0 flex-1 overflow-auto bg-ink-50 text-ink-800 dark:bg-ink-950 dark:text-ink-200"
+        >
+        </div>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- Share -->
+  <dialog
+    id="share-dialog"
+    aria-labelledby="share-dialog-title"
+    class="m-auto rounded-3xl border border-ink-200 bg-white p-0 text-ink-900 shadow-2xl backdrop:bg-ink-950/50 backdrop:backdrop-blur-sm dark:border-white/10 dark:bg-ink-900 dark:text-ink-100 w-[min(44rem,calc(100vw-2rem))]"
+  >
+    <div class="flex items-center justify-between border-b border-ink-200 px-6 py-4 dark:border-white/10">
+      <h2 id="share-dialog-title" class="text-lg font-bold text-ink-950 dark:text-white">Share this project</h2>
+      <button
+        type="button"
+        data-close
+        class="rounded-lg p-2 text-ink-500 transition hover:bg-ink-100 dark:text-ink-400 dark:hover:bg-white/10"
+        aria-label="Close"
+      >
+        <Glyph name="close" class="size-5" />
+      </button>
+    </div>
+    <div class="grid max-h-[calc(100dvh-8rem)] grid-cols-1 gap-5 overflow-y-auto p-6">
+      {
+        [
+          { id: "share-link", label: "Launcher link", icon: "link" },
+          { id: "share-curl", label: "Download with curl", icon: "download" },
+          { id: "share-cli", label: "Pyronaut CLI", icon: "terminal" },
+        ].map((row) => (
+          <div class="min-w-0">
+            <div class="flex items-center justify-between gap-3">
+              <p class="flex items-center gap-2 text-sm font-semibold text-ink-700 dark:text-ink-200">
+                <Glyph name={row.icon} class="size-4 text-ink-400" />
+                {row.label}
+              </p>
+              <button
+                type="button"
+                data-copy={row.id}
+                class="inline-flex shrink-0 items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-xs font-semibold text-ink-600 transition hover:bg-ink-100 hover:text-ink-950 data-[copied]:text-flame-600 dark:text-ink-300 dark:hover:bg-white/10 dark:hover:text-white dark:data-[copied]:text-flame-400"
+              >
+                <Glyph name="copy" class="size-3.5" />
+                <span>Copy</span>
+              </button>
+            </div>
+            <pre
+              class="mt-2 whitespace-pre-wrap break-all rounded-xl border border-ink-200 bg-ink-50 px-4 py-3 font-mono text-[0.78rem] leading-5 text-ink-800 dark:border-white/10 dark:bg-ink-950 dark:text-ink-200"><code id={row.id}></code></pre>
+          </div>
+        ))
+      }
+    </div>
+  </dialog>
+
+  <div
+    id="toast"
+    role="status"
+    aria-live="polite"
+    class="pointer-events-none fixed bottom-24 left-1/2 z-50 -translate-x-1/2 rounded-xl bg-ink-950 px-4 py-2.5 text-sm font-semibold text-white opacity-0 shadow-lg transition-opacity dark:bg-white dark:text-ink-950"
+  >
+  </div>
+</BaseLayout>
+
+<script>
+  import {
+    PUBLIC_API,
+    STARTER,
+    applicationType,
+    cliCommand,
+    curlCommand,
+    errorMessage,
+    fromQuery,
+    starterUrl,
+    toQuery,
+    validateName,
+    validatePackage,
+    type Project,
+  } from "@/lib/launcher";
+
+  // In dev the Vite proxy (astro.config.mjs) sidesteps the API's CORS policy.
+  const FETCH_API = import.meta.env.DEV ? "/starter-api" : PUBLIC_API;
+
+  const $ = <T extends HTMLElement = HTMLElement>(id: string) =>
+    document.getElementById(id) as T;
+
+  const form = $<HTMLFormElement>("launcher");
+  const nameInput = $<HTMLInputElement>("name");
+  const packageInput = $<HTMLInputElement>("package");
+  const selectedList = $("selected-features");
+  const featuresEmpty = $("features-empty");
+  const featureCount = $("feature-count");
+  const clearButton = $("clear-features");
+  const summary = $("summary");
+  const formError = $("form-error");
+  const generateButton = $<HTMLButtonElement>("generate");
+  const featuresDialog = $<HTMLDialogElement>("features-dialog");
+  const featureSearch = $<HTMLInputElement>("feature-search");
+  const featureResults = $("feature-results");
+  const featureCategories = $("feature-categories");
+  const featureStatus = $("feature-dialog-status");
+  const previewDialog = $<HTMLDialogElement>("preview-dialog");
+  const shareDialog = $<HTMLDialogElement>("share-dialog");
+  const toast = $("toast");
+
+  const isMac = /Mac|iPhone|iPad/.test(navigator.userAgent);
+  if (isMac) {
+    for (const kbd of document.querySelectorAll("[data-mod-key]")) {
+      kbd.textContent = kbd.textContent!.replace("Ctrl ", "⌘");
+    }
+  }
+
+  let project: Project = fromQuery(location.search);
+
+  // ---- helpers ---------------------------------------------------------
+
+  const escapeHtml = (value: string) =>
+    value.replace(/[&<>"']/g, (c) => `&#${c.charCodeAt(0)};`);
+
+  let toastTimer: number | undefined;
+  function showToast(message: string) {
+    toast.textContent = message;
+    toast.style.opacity = "1";
+    clearTimeout(toastTimer);
+    toastTimer = window.setTimeout(() => (toast.style.opacity = "0"), 2600);
+  }
+
+  function showError(message: string | null) {
+    formError.textContent = message ?? "";
+    formError.classList.toggle("hidden", !message);
+  }
+
+  function validate() {
+    let valid = true;
+    for (const [input, check] of [
+      [nameInput, validateName],
+      [packageInput, validatePackage],
+    ] as const) {
+      const error = check(input.value.trim());
+      input.setAttribute("aria-invalid", String(Boolean(error)));
+      $(`${input.id}-error`).textContent = error ?? "";
+      valid &&= !error;
+    }
+    return valid;
+  }
+
+  function badge(label: string) {
+    return `<span class="rounded-md bg-flame-100 px-1.5 py-0.5 font-mono text-[0.65rem] font-bold uppercase tracking-wider text-flame-700 dark:bg-flame-500/15 dark:text-flame-300">${label}</span>`;
+  }
+
+  // ---- state → DOM -----------------------------------------------------
+
+  function render() {
+    const typeInput = form.querySelector<HTMLInputElement>(
+      `input[name=type][value=${project.type}]`,
+    );
+    if (typeInput) typeInput.checked = true;
+    if (nameInput.value !== project.name) nameInput.value = project.name;
+    if (packageInput.value !== project.package) {
+      packageInput.value = project.package;
+    }
+
+    selectedList.innerHTML = project.features
+      .map((name) => {
+        const feature = STARTER.features[name];
+        return `<li class="flex items-start gap-3 rounded-2xl border border-ink-200 p-3.5 dark:border-white/10">
+          <div class="min-w-0 flex-1">
+            <p class="flex flex-wrap items-center gap-2 text-sm font-bold text-ink-950 dark:text-white">
+              ${escapeHtml(feature.title)}
+              <span class="font-mono text-xs font-medium text-ink-400">${escapeHtml(name)}</span>
+              ${feature.preview ? badge("preview") : ""}
+            </p>
+            <p class="mt-1 text-xs leading-5 text-ink-500 dark:text-ink-400">${escapeHtml(feature.description)}</p>
+          </div>
+          <span class="hidden shrink-0 rounded-full bg-ink-100 px-2.5 py-1 text-[0.7rem] font-semibold text-ink-600 dark:bg-white/10 dark:text-ink-300 sm:inline">${escapeHtml(feature.category)}</span>
+          <button type="button" data-remove="${name}" class="shrink-0 rounded-lg p-1.5 text-ink-400 transition hover:bg-ink-100 hover:text-ember-600 dark:hover:bg-white/10" aria-label="Remove ${escapeHtml(feature.title)}">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" class="size-4" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+          </button>
+        </li>`;
+      })
+      .join("");
+
+    const count = project.features.length;
+    featuresEmpty.hidden = count > 0;
+    featuresEmpty.classList.toggle("flex", count === 0);
+    featureCount.textContent = String(count);
+    clearButton.classList.toggle("hidden", count === 0);
+    summary.textContent = `${project.package}.${project.name} · ${applicationType(project.type).title}${
+      count ? ` · ${count} feature${count === 1 ? "" : "s"}` : ""
+    }`;
+
+    const query = toQuery(project);
+    history.replaceState(null, "", `${location.pathname}${query ? `?${query}` : ""}`);
+  }
+
+  function update(changes: Partial<Project>) {
+    project = { ...project, ...changes };
+    render();
+    if (featuresDialog.open) renderFeatureResults();
+  }
+
+  function toggleFeature(name: string) {
+    const features = project.features.includes(name)
+      ? project.features.filter((feature) => feature !== name)
+      : [...project.features, name];
+    update({ features });
+  }
+
+  // ---- project inputs --------------------------------------------------
+
+  form.addEventListener("change", (event) => {
+    const target = event.target as HTMLInputElement;
+    if (target.name !== "type") return;
+    const supported = applicationType(target.value).features;
+    const dropped = project.features.filter((name) => !supported.includes(name));
+    update({
+      type: target.value,
+      features: project.features.filter((name) => supported.includes(name)),
+    });
+    if (dropped.length) {
+      showToast(`Removed ${dropped.join(", ")} — not available for this type`);
+    }
+  });
+
+  for (const input of [nameInput, packageInput]) {
+    input.addEventListener("input", () => {
+      update({ [input.name]: input.value.trim() });
+      if (input.getAttribute("aria-invalid") === "true") validate();
+    });
+    input.addEventListener("blur", validate);
+  }
+
+  selectedList.addEventListener("click", (event) => {
+    const button = (event.target as Element).closest<HTMLElement>("[data-remove]");
+    if (button) toggleFeature(button.dataset.remove!);
+  });
+
+  clearButton.addEventListener("click", () => update({ features: [] }));
+
+  // ---- feature picker --------------------------------------------------
+
+  let activeCategory: string | null = null;
+
+  function matchingFeatures() {
+    const terms = featureSearch.value.toLowerCase().split(/\s+/).filter(Boolean);
+    return applicationType(project.type)
+      .features.map((name) => ({ name, ...STARTER.features[name] }))
+      .filter((feature) => {
+        const haystack =
+          `${feature.name} ${feature.title} ${feature.description} ${feature.category}`.toLowerCase();
+        return terms.every((term) => haystack.includes(term));
+      });
+  }
+
+  /** Feature Enter selects: exact name, then name/title prefix, then first shown. */
+  function bestMatch() {
+    const query = featureSearch.value.trim().toLowerCase();
+    const features = matchingFeatures();
+    const slug = query.replace(/\s+/g, "-");
+    const rank = (feature: (typeof features)[number]) => {
+      const title = feature.title.toLowerCase();
+      if (feature.name === slug || title === query) return 0;
+      if (feature.name.startsWith(slug)) return 1;
+      if (feature.name.includes(slug) || title.includes(query)) return 2;
+      return 3;
+    };
+    const ranked = features
+      .map((feature) => ({ name: feature.name, rank: rank(feature) }))
+      .sort((a, b) => a.rank - b.rank);
+    return ranked[0]?.rank < 3
+      ? ranked[0].name
+      : featureResults.querySelector<HTMLElement>("[data-feature]")?.dataset.feature;
+  }
+
+  function renderFeatureResults() {
+    const features = matchingFeatures();
+    const byCategory = new Map<string, typeof features>();
+    for (const feature of features) {
+      const list = byCategory.get(feature.category) ?? [];
+      list.push(feature);
+      byCategory.set(feature.category, list);
+    }
+    const categories = [...byCategory.keys()].sort();
+    if (activeCategory && !byCategory.has(activeCategory)) activeCategory = null;
+
+    featureCategories.innerHTML = [
+      `<button type="button" data-category="" class="flex w-full items-center justify-between rounded-lg px-3 py-2 text-left text-sm font-semibold transition hover:bg-ink-100 dark:hover:bg-white/10 ${activeCategory ? "text-ink-600 dark:text-ink-300" : "bg-ink-100 text-ink-950 dark:bg-white/10 dark:text-white"}">All <span class="font-mono text-xs text-ink-400">${features.length}</span></button>`,
+      ...categories.map(
+        (category) =>
+          `<button type="button" data-category="${escapeHtml(category)}" class="flex w-full items-center justify-between gap-2 rounded-lg px-3 py-2 text-left text-sm transition hover:bg-ink-100 dark:hover:bg-white/10 ${category === activeCategory ? "bg-ink-100 font-semibold text-ink-950 dark:bg-white/10 dark:text-white" : "text-ink-600 dark:text-ink-300"}"><span class="truncate">${escapeHtml(category)}</span><span class="font-mono text-xs text-ink-400">${byCategory.get(category)!.length}</span></button>`,
+      ),
+    ].join("");
+
+    const shown = activeCategory ? [activeCategory] : categories;
+    featureResults.innerHTML = shown.length
+      ? shown
+          .map(
+            (category) => `<section class="mb-4">
+              <h3 class="sticky top-0 z-10 bg-white/95 px-2 py-2 font-mono text-[0.7rem] font-bold uppercase tracking-[0.18em] text-ink-400 backdrop-blur dark:bg-ink-900/95">${escapeHtml(category)}</h3>
+              ${byCategory
+                .get(category)!
+                .map((feature) => {
+                  const selected = project.features.includes(feature.name);
+                  return `<button type="button" role="option" aria-selected="${selected}" data-feature="${feature.name}" class="group flex w-full items-start gap-3 rounded-xl px-3 py-2.5 text-left transition hover:bg-ink-50 focus-visible:bg-ink-50 focus-visible:outline-none aria-selected:bg-flame-50 dark:hover:bg-white/5 dark:focus-visible:bg-white/5 dark:aria-selected:bg-flame-500/10">
+                    <span class="mt-0.5 flex size-5 shrink-0 items-center justify-center rounded-md border border-ink-300 text-white transition group-aria-selected:border-flame-500 group-aria-selected:bg-flame-500 dark:border-white/25">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="size-3.5 opacity-0 group-aria-selected:opacity-100" aria-hidden="true"><path d="M4.5 12.5l5 5 10-11"/></svg>
+                    </span>
+                    <span class="min-w-0 flex-1">
+                      <span class="flex flex-wrap items-center gap-2 text-sm font-bold text-ink-950 dark:text-white">${escapeHtml(feature.title)} <span class="font-mono text-xs font-medium text-ink-400">${feature.name}</span>${feature.preview ? badge("preview") : ""}</span>
+                      <span class="mt-0.5 block text-xs leading-5 text-ink-500 dark:text-ink-400">${escapeHtml(feature.description)}</span>
+                    </span>
+                  </button>`;
+                })
+                .join("")}
+            </section>`,
+          )
+          .join("")
+      : `<p class="px-3 py-12 text-center text-sm text-ink-500">No features match “${escapeHtml(featureSearch.value)}”.</p>`;
+
+    featureStatus.textContent = `${project.features.length} selected · ${features.length} available for ${applicationType(project.type).title}`;
+  }
+
+  function openFeatures() {
+    featureSearch.value = "";
+    activeCategory = null;
+    renderFeatureResults();
+    featuresDialog.showModal();
+    featureSearch.focus();
+  }
+
+  $("open-features").addEventListener("click", openFeatures);
+  featureSearch.addEventListener("input", () => {
+    activeCategory = null;
+    renderFeatureResults();
+    featureResults.scrollTop = 0;
+  });
+  featureSearch.addEventListener("keydown", (event) => {
+    if (event.key === "ArrowDown") {
+      event.preventDefault();
+      featureResults.querySelector<HTMLElement>("[data-feature]")?.focus();
+    } else if (event.key === "Enter") {
+      event.preventDefault();
+      const best = bestMatch();
+      if (best) toggleFeature(best);
+    }
+  });
+  featureResults.addEventListener("click", (event) => {
+    const option = (event.target as Element).closest<HTMLElement>("[data-feature]");
+    if (!option) return;
+    toggleFeature(option.dataset.feature!);
+    featureResults.querySelector<HTMLElement>(`[data-feature="${option.dataset.feature}"]`)?.focus();
+  });
+  featureResults.addEventListener("keydown", (event) => {
+    if (event.key !== "ArrowDown" && event.key !== "ArrowUp") return;
+    event.preventDefault();
+    const options = [...featureResults.querySelectorAll<HTMLElement>("[data-feature]")];
+    const index = options.indexOf(document.activeElement as HTMLElement);
+    const next = event.key === "ArrowDown" ? index + 1 : index - 1;
+    (next < 0 ? featureSearch : options[Math.min(next, options.length - 1)]).focus();
+  });
+  featureCategories.addEventListener("click", (event) => {
+    const button = (event.target as Element).closest<HTMLElement>("[data-category]");
+    if (!button) return;
+    activeCategory = button.dataset.category || null;
+    renderFeatureResults();
+    featureResults.scrollTop = 0;
+  });
+
+  // ---- dialogs ---------------------------------------------------------
+
+  for (const dialog of document.querySelectorAll("dialog")) {
+    dialog.addEventListener("click", (event) => {
+      // Backdrop clicks land on the <dialog> element itself.
+      if (event.target === dialog || (event.target as Element).closest("[data-close]")) {
+        dialog.close();
+      }
+    });
+  }
+
+  // ---- preview ---------------------------------------------------------
+
+  const previewTree = $("preview-tree");
+  const previewCode = $("preview-code");
+  const previewPath = $("preview-path");
+  let previewFiles: Record<string, string> = {};
+
+  let shownPath = "";
+
+  async function showPreviewFile(path: string) {
+    shownPath = path;
+    previewPath.textContent = path;
+    for (const button of previewTree.querySelectorAll<HTMLElement>("[data-path]")) {
+      button.setAttribute("aria-current", String(button.dataset.path === path));
+    }
+    const code = previewFiles[path].replace(/\n$/, "");
+    // Plain text first so the file shows instantly while Shiki loads.
+    const plain = code
+      .split("\n")
+      .map((line) => `<span class="line">${escapeHtml(line)}</span>`)
+      .join("\n");
+    previewCode.innerHTML = `<pre><code>${plain}</code></pre>`;
+    previewCode.scrollTop = 0;
+    try {
+      // Shiki is loaded on first use to keep it out of the page bundle.
+      const { highlight } = await import("@/lib/highlight");
+      const html = await highlight(code, path);
+      if (html && shownPath === path) previewCode.innerHTML = html;
+    } catch {
+      /* keep the plain-text rendering */
+    }
+  }
+
+  function renderPreviewTree() {
+    const paths = Object.keys(previewFiles).sort((a, b) => {
+      // Directories first at every level, then alphabetical.
+      const pa = a.split("/");
+      const pb = b.split("/");
+      for (let i = 0; i < Math.min(pa.length, pb.length); i++) {
+        const aDir = i < pa.length - 1;
+        const bDir = i < pb.length - 1;
+        if (pa[i] !== pb[i]) {
+          if (aDir !== bDir) return aDir ? -1 : 1;
+          return pa[i].localeCompare(pb[i]);
+        }
+      }
+      return pa.length - pb.length;
+    });
+    const seen = new Set<string>();
+    const rows: string[] = [];
+    for (const path of paths) {
+      const parts = path.split("/");
+      parts.slice(0, -1).forEach((dir, depth) => {
+        const key = parts.slice(0, depth + 1).join("/");
+        if (seen.has(key)) return;
+        seen.add(key);
+        rows.push(
+          `<div class="flex items-center gap-1.5 px-2 py-1 text-ink-500 dark:text-ink-400" style="padding-left:${0.5 + depth * 0.9}rem"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" class="size-3.5 shrink-0" aria-hidden="true"><path d="M3.5 7a2 2 0 012-2h4l2 2.5h7a2 2 0 012 2V17a2 2 0 01-2 2h-13a2 2 0 01-2-2V7z"/></svg>${escapeHtml(dir)}</div>`,
+        );
+      });
+      rows.push(
+        `<button type="button" data-path="${escapeHtml(path)}" class="flex w-full items-center gap-1.5 truncate rounded-md px-2 py-1 text-left text-ink-700 transition hover:bg-ink-100 aria-[current=true]:bg-flame-50 aria-[current=true]:font-semibold aria-[current=true]:text-flame-700 dark:text-ink-200 dark:hover:bg-white/10 dark:aria-[current=true]:bg-flame-500/10 dark:aria-[current=true]:text-flame-300" style="padding-left:${0.5 + (parts.length - 1) * 0.9}rem"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" class="size-3.5 shrink-0 opacity-60" aria-hidden="true"><path d="M13.5 3H7a2 2 0 00-2 2v14a2 2 0 002 2h10a2 2 0 002-2V8.5L13.5 3zM13.5 3v5.5H19"/></svg><span class="truncate">${escapeHtml(parts.at(-1)!)}</span></button>`,
+      );
+    }
+    previewTree.innerHTML = rows.join("");
+    const initial = ["src/main.py", "pyproject.toml"].find((p) => p in previewFiles) ?? paths[0];
+    if (initial) showPreviewFile(initial);
+  }
+
+  previewTree.addEventListener("click", (event) => {
+    const button = (event.target as Element).closest<HTMLElement>("[data-path]");
+    if (button) showPreviewFile(button.dataset.path!);
+  });
+
+  function previewMessage(message: string) {
+    previewTree.innerHTML = "";
+    previewPath.textContent = "";
+    shownPath = "";
+    previewCode.innerHTML = `<p class="p-5 font-sans text-sm leading-6 text-ink-500 dark:text-ink-400">${message}</p>`;
+  }
+
+  $("open-preview").addEventListener("click", async () => {
+    if (!validate()) return;
+    showError(null);
+    $("preview-dialog-title").textContent = `${project.name} — preview`;
+    previewMessage("Generating preview…");
+    previewDialog.showModal();
+    try {
+      const response = await fetch(starterUrl(FETCH_API, "preview", project));
+      if (!response.ok) {
+        previewMessage(escapeHtml(await errorMessage(response)));
+        return;
+      }
+      previewFiles = (await response.json()).contents;
+      renderPreviewTree();
+    } catch {
+      previewMessage(
+        `The starter API at ${escapeHtml(PUBLIC_API)} could not be reached from this page, so the preview is unavailable. ` +
+          `Generating the project still works — it downloads the ZIP directly.`,
+      );
+    }
+  });
+
+  // ---- share -----------------------------------------------------------
+
+  $("open-share").addEventListener("click", () => {
+    if (!validate()) return;
+    const query = toQuery(project);
+    $("share-link").textContent = `${location.origin}${location.pathname}${query ? `?${query}` : ""}`;
+    $("share-curl").textContent = curlCommand(project);
+    $("share-cli").textContent = cliCommand(project);
+    shareDialog.showModal();
+  });
+
+  shareDialog.addEventListener("click", async (event) => {
+    const button = (event.target as Element).closest<HTMLElement>("[data-copy]");
+    if (!button) return;
+    try {
+      await navigator.clipboard.writeText($(button.dataset.copy!).textContent ?? "");
+      const label = button.querySelector("span")!;
+      label.textContent = "Copied";
+      button.dataset.copied = "";
+      setTimeout(() => {
+        label.textContent = "Copy";
+        delete button.dataset.copied;
+      }, 1600);
+    } catch {
+      showToast("Copy failed — select the text and copy it manually");
+    }
+  });
+
+  // ---- generate --------------------------------------------------------
+
+  function showNextSteps() {
+    const section = $("next-steps");
+    $("next-steps-title").textContent = `${project.name}.zip generated`;
+    $("next-steps-code").textContent = [
+      `unzip ${project.name}.zip -d ${project.name}`,
+      `cd ${project.name}`,
+      `pyronaut run      # start the application`,
+      `pyronaut test     # run the pytest suite`,
+    ].join("\n");
+    section.hidden = false;
+    section.scrollIntoView({ behavior: "smooth", block: "nearest" });
+  }
+
+  function save(blob: Blob, filename: string) {
+    const url = URL.createObjectURL(blob);
+    const link = Object.assign(document.createElement("a"), { href: url, download: filename });
+    link.click();
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+  }
+
+  form.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    if (!validate()) return;
+    showError(null);
+    generateButton.disabled = true;
+    try {
+      let response: Response;
+      try {
+        response = await fetch(starterUrl(FETCH_API, "create", project));
+      } catch {
+        // Cross-origin fetch blocked: navigate instead — the API answers with
+        // Content-Disposition: attachment, so the page stays put.
+        location.assign(starterUrl(PUBLIC_API, "create", project));
+        showNextSteps();
+        return;
+      }
+      if (!response.ok) {
+        showError(await errorMessage(response));
+        return;
+      }
+      save(await response.blob(), `${project.name}.zip`);
+      showNextSteps();
+    } finally {
+      generateButton.disabled = false;
+    }
+  });
+
+  // ---- keyboard --------------------------------------------------------
+
+  document.addEventListener("keydown", (event) => {
+    const mod = isMac ? event.metaKey : event.ctrlKey;
+    if (!mod) return;
+    if (event.key === "Enter") {
+      event.preventDefault();
+      form.requestSubmit();
+    } else if (event.key.toLowerCase() === "k" && !featuresDialog.open) {
+      event.preventDefault();
+      document.querySelector<HTMLDialogElement>("dialog[open]")?.close();
+      openFeatures();
+    }
+  });
+
+  render();
+</script>

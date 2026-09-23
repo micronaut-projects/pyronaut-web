@@ -1,0 +1,777 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import Glyph from "@/components/Glyph.astro";
+import SiteFooter from "@/components/SiteFooter.astro";
+import SiteHeader from "@/components/SiteHeader.astro";
+import { SITE_NAME } from "@/lib/site-content";
+import { DEFAULT_PROJECT } from "@/lib/launcher";
+
+/**
+ * Pyronaut Launch — generate a Python application from the Micronaut
+ * Starter, the web counterpart of `pyronaut create-app`. Always an Application
+ * (like the Pyronaut CLI); features are browsed inline and the summary
+ * panel mirrors the equivalent CLI call. The client script owns all state.
+ *
+ * The first design (type picker + feature dialog) is in src/archive/.
+ */
+
+const inputClass =
+  "block w-full min-w-0 rounded-xl border border-ink-200 bg-white px-3.5 py-2.5 font-mono text-[0.92rem] text-ink-950 outline-none transition placeholder:text-ink-300 focus:border-flame-500 focus:ring-4 focus:ring-flame-500/15 aria-[invalid=true]:border-ember-500 dark:border-white/15 dark:bg-ink-900 dark:text-white dark:focus:border-flame-400";
+
+const cardClass =
+  "rounded-3xl border border-ink-200 bg-white shadow-sm dark:border-white/10 dark:bg-ink-900/60";
+
+const kbdClass =
+  "rounded border border-current/25 px-1.5 py-0.5 font-mono text-[0.68rem] font-semibold opacity-70";
+
+const secondaryButton =
+  "inline-flex items-center justify-center gap-2 rounded-xl border border-white/15 bg-white/5 px-3 py-2.5 text-sm font-semibold text-white transition hover:bg-white/10";
+---
+
+<BaseLayout
+  title={`Launch — ${SITE_NAME}`}
+  description="Generate a new Pyronaut application: name it, pick the features you need, and download a ready-to-run Python service."
+  bodyClass="bg-ink-50 font-sans text-ink-900 antialiased dark:bg-ink-950 dark:text-ink-100"
+>
+  <SiteHeader />
+
+  <main class="mx-auto max-w-7xl px-5 pb-24 pt-8 lg:pb-20 lg:pt-10">
+    <p
+      class="flex items-center gap-2.5 font-mono text-xs font-semibold uppercase tracking-[0.2em] text-ink-500 dark:text-ink-400"
+    >
+      <span class="size-2 rounded-full bg-flame-500"></span>
+      Pyronaut Launch
+    </p>
+    <h1
+      class="mt-3 text-[1.9rem] font-extrabold leading-tight tracking-[-0.025em] text-ink-950 dark:text-white md:text-[2.25rem]"
+    >
+      Start a new Python service.
+    </h1>
+    <p class="mt-2 text-base leading-7 text-ink-500 dark:text-ink-300">
+      Name your application, add the features you need, and download a
+      project that is ready for{" "}<code class="whitespace-nowrap font-mono text-[0.9em]">pyronaut dev</code>.
+    </p>
+
+    <form
+      id="launcher"
+      novalidate
+      class="mt-8 grid gap-6 lg:grid-cols-[minmax(0,1fr)_23rem] lg:items-start"
+    >
+      <div class="grid min-w-0 gap-6">
+        <!-- Project -->
+        <section class:list={[cardClass, "p-5 sm:p-6"]} aria-labelledby="project-title">
+          <h2 id="project-title" class="sr-only">Project</h2>
+          <div class="grid gap-4 sm:grid-cols-2">
+            <div>
+              <label for="name" class="text-sm font-semibold text-ink-700 dark:text-ink-200">
+                Name
+              </label>
+              <input
+                id="name"
+                name="name"
+                value={DEFAULT_PROJECT.name}
+                autocomplete="off"
+                spellcheck="false"
+                aria-describedby="name-error"
+                class:list={[inputClass, "mt-1.5"]}
+              />
+              <p id="name-error" class="mt-1 min-h-4 text-xs text-ember-600 dark:text-ember-500"></p>
+            </div>
+            <div>
+              <label for="package" class="text-sm font-semibold text-ink-700 dark:text-ink-200">
+                Base package
+              </label>
+              <input
+                id="package"
+                name="package"
+                value={DEFAULT_PROJECT.package}
+                autocomplete="off"
+                spellcheck="false"
+                aria-describedby="package-error"
+                class:list={[inputClass, "mt-1.5"]}
+              />
+              <p id="package-error" class="mt-1 min-h-4 text-xs text-ember-600 dark:text-ember-500"></p>
+            </div>
+          </div>
+        </section>
+
+        <!-- Feature browser -->
+        <section class:list={[cardClass, "min-w-0 overflow-hidden"]} aria-labelledby="features-title">
+          <div class="flex flex-wrap items-center gap-x-4 gap-y-3 border-b border-ink-200 p-5 dark:border-white/10 sm:px-6">
+            <h2 id="features-title" class="text-lg font-bold text-ink-950 dark:text-white">
+              Features
+            </h2>
+            <label
+              class="flex min-w-0 flex-1 basis-64 items-center gap-2.5 rounded-xl border border-ink-200 bg-ink-50 px-3.5 py-2 transition focus-within:border-flame-500 focus-within:ring-4 focus-within:ring-flame-500/15 dark:border-white/10 dark:bg-ink-950/60 dark:focus-within:border-flame-400"
+            >
+              <Glyph name="search" class="size-4.5 shrink-0 text-ink-400" />
+              <span class="sr-only">Search features</span>
+              <input
+                id="feature-search"
+                type="search"
+                placeholder="Search — postgres, security, tracing…"
+                autocomplete="off"
+                spellcheck="false"
+                aria-controls="feature-results"
+                class="min-w-0 flex-1 bg-transparent py-0.5 text-[0.95rem] text-ink-950 outline-none placeholder:text-ink-400 dark:text-white [&::-webkit-search-cancel-button]:appearance-none"
+              />
+              <kbd class:list={[kbdClass, "hidden text-ink-500 sm:inline"]}>/</kbd>
+            </label>
+          </div>
+          <nav
+            id="feature-categories"
+            aria-label="Feature categories"
+            class="flex gap-2 overflow-x-auto border-b border-ink-200 px-5 py-3 [mask-image:linear-gradient(to_right,black_calc(100%-3rem),transparent)] [scrollbar-width:none] dark:border-white/10 sm:px-6"
+          >
+          </nav>
+          <div
+            id="feature-results"
+            role="listbox"
+            aria-multiselectable="true"
+            aria-label="Features"
+            class="max-h-[34rem] overflow-y-auto p-3 sm:p-4"
+          >
+          </div>
+        </section>
+      </div>
+
+      <!-- Summary -->
+      <aside
+        class="rounded-3xl bg-ink-950 p-6 text-white shadow-xl shadow-ink-950/10 dark:border dark:border-white/10 dark:bg-ink-900 lg:sticky lg:top-24 lg:max-h-[calc(100dvh-7rem)] lg:overflow-y-auto lg:[scrollbar-width:thin]"
+        aria-labelledby="summary-title"
+      >
+        <p
+          id="summary-title"
+          class="font-mono text-[0.7rem] font-semibold uppercase tracking-[0.2em] text-flame-400"
+        >
+          Your application
+        </p>
+        <p id="summary-id" class="mt-2 break-all font-mono text-lg font-semibold"></p>
+        <p id="summary-meta" class="mt-1 text-sm text-ink-300"></p>
+
+        <ul id="selected-features" class="mt-5 flex flex-wrap gap-2"></ul>
+        <p id="features-empty" class="mt-5 text-sm leading-6 text-ink-300">
+          Includes the Netty HTTP server, TOML configuration, logging and
+          pytest. Add data access, security or observability from the list.
+        </p>
+
+        <button
+          type="submit"
+          id="generate"
+          class="mt-6 inline-flex w-full items-center justify-center gap-2.5 rounded-xl bg-linear-to-r from-flame-500 to-ember-500 px-5 py-3.5 text-[0.95rem] font-bold text-white shadow-lg shadow-flame-500/20 transition hover:brightness-110 disabled:cursor-wait disabled:opacity-60"
+        >
+          <Glyph name="download" class="size-4.5" />
+          Generate project
+          <kbd class:list={[kbdClass, "hidden sm:inline"]} data-mod-key>Ctrl ↵</kbd>
+        </button>
+        <div class="mt-2.5 grid grid-cols-2 gap-2.5">
+          <button type="button" id="open-preview" class={secondaryButton}>
+            <Glyph name="eye" class="size-4" />
+            Preview
+          </button>
+          <button type="button" id="copy-link" class={secondaryButton}>
+            <Glyph name="link" class="size-4" />
+            <span>Copy link</span>
+          </button>
+        </div>
+
+        <p
+          id="form-error"
+          role="alert"
+          class="mt-4 hidden whitespace-pre-line rounded-xl border border-ember-500/40 bg-ember-500/15 px-3.5 py-2.5 text-sm text-flame-100"
+        >
+        </p>
+
+        <div class="mt-6 border-t border-white/10 pt-5">
+          <div class="flex items-center justify-between gap-3">
+            <div role="tablist" aria-label="Command" class="flex rounded-lg bg-white/5 p-0.5 text-xs font-semibold">
+              <button type="button" role="tab" data-command="cli" aria-selected="true" class="rounded-md px-2.5 py-1 text-ink-300 transition aria-selected:bg-white/10 aria-selected:text-white">
+                Pyronaut CLI
+              </button>
+              <button type="button" role="tab" data-command="curl" aria-selected="false" class="rounded-md px-2.5 py-1 text-ink-300 transition aria-selected:bg-white/10 aria-selected:text-white">
+                curl
+              </button>
+            </div>
+            <button
+              type="button"
+              id="copy-command"
+              class="inline-flex items-center gap-1.5 rounded-lg px-2 py-1 text-xs font-semibold text-ink-300 transition hover:bg-white/10 hover:text-white data-[copied]:text-flame-400"
+            >
+              <Glyph name="copy" class="size-3.5" />
+              <span>Copy</span>
+            </button>
+          </div>
+          <pre
+            class="mt-3 max-h-40 overflow-y-auto whitespace-pre-wrap break-all rounded-xl bg-white/5 px-3.5 py-3 font-mono text-[0.75rem] leading-5 text-ink-100"><code id="command"></code></pre>
+          <p id="command-hint" class="mt-2 text-xs text-ink-400">
+            Install the CLI with{" "}<code class="font-mono text-ink-200">pip install pyronaut</code>.
+          </p>
+        </div>
+
+        <div id="next-steps" hidden class="mt-6 border-t border-white/10 pt-5">
+          <p class="flex items-center gap-2 font-mono text-[0.7rem] font-semibold uppercase tracking-[0.2em] text-flame-400">
+            <Glyph name="check-circle" class="size-4" />
+            <span id="next-steps-title">Project generated</span>
+          </p>
+          <pre
+            class="mt-3 overflow-x-auto rounded-xl bg-white/5 px-3.5 py-3 font-mono text-[0.75rem] leading-6 text-ink-100"><code id="next-steps-code"></code></pre>
+          <p class="mt-2 text-xs leading-5 text-ink-400">
+            See the{" "}<a href="/docs/guide/index.html#gettingStarted" class="font-semibold text-flame-400 underline-offset-4 hover:underline">getting started guide</a>{" "}for what each file does.
+          </p>
+        </div>
+      </aside>
+    </form>
+  </main>
+
+  <!-- Mobile action bar -->
+  <div
+    class="fixed inset-x-0 bottom-0 z-30 flex items-center gap-3 border-t border-ink-200 bg-white/95 px-4 py-3 backdrop-blur-lg dark:border-white/10 dark:bg-ink-950/95 lg:hidden"
+  >
+    <p id="mobile-summary" class="min-w-0 flex-1 truncate font-mono text-xs text-ink-500 dark:text-ink-400"></p>
+    <button
+      type="button"
+      id="mobile-generate"
+      class="inline-flex shrink-0 items-center gap-2 rounded-xl bg-linear-to-r from-flame-500 to-ember-500 px-4 py-2.5 text-sm font-bold text-white"
+    >
+      <Glyph name="download" class="size-4" />
+      Generate
+    </button>
+  </div>
+
+  <SiteFooter />
+
+  <!-- Preview -->
+  <dialog
+    id="preview-dialog"
+    aria-labelledby="preview-dialog-title"
+    class="m-auto flex-col overflow-hidden rounded-3xl border border-ink-200 bg-white p-0 text-ink-900 shadow-2xl backdrop:bg-ink-950/50 backdrop:backdrop-blur-sm open:flex dark:border-white/10 dark:bg-ink-900 dark:text-ink-100 h-[min(48rem,calc(100dvh-2rem))] w-[min(76rem,calc(100vw-2rem))]"
+  >
+    <div class="flex items-center gap-3 border-b border-ink-200 px-5 py-3.5 dark:border-white/10">
+      <Glyph name="eye" class="size-5 text-flame-600 dark:text-flame-400" />
+      <h2 id="preview-dialog-title" class="min-w-0 flex-1 truncate font-mono text-sm font-semibold">
+        Preview
+      </h2>
+      <button
+        type="button"
+        data-close
+        class="rounded-lg p-2 text-ink-500 transition hover:bg-ink-100 dark:text-ink-400 dark:hover:bg-white/10"
+        aria-label="Close"
+      >
+        <Glyph name="close" class="size-5" />
+      </button>
+    </div>
+    <div class="flex min-h-0 flex-1 flex-col md:flex-row">
+      <nav
+        id="preview-tree"
+        aria-label="Project files"
+        class="max-h-48 shrink-0 overflow-y-auto border-b border-ink-200 p-2 font-mono text-[0.8rem] dark:border-white/10 md:max-h-none md:w-72 md:border-b-0 md:border-r"
+      >
+      </nav>
+      <div class="flex min-h-0 min-w-0 flex-1 flex-col">
+        <div id="preview-path" class="border-b border-ink-200 px-5 py-2.5 font-mono text-xs text-ink-500 dark:border-white/10 dark:text-ink-400"></div>
+        <div
+          id="preview-code"
+          class="preview-code min-h-0 flex-1 overflow-auto bg-ink-50 text-ink-800 dark:bg-ink-950 dark:text-ink-200"
+        >
+        </div>
+      </div>
+    </div>
+  </dialog>
+</BaseLayout>
+
+<script>
+  import {
+    POPULAR_FEATURES,
+    PUBLIC_API,
+    STARTER,
+    applicationType,
+    cliCommand,
+    curlCommand,
+    errorMessage,
+    fromQuery,
+    starterUrl,
+    toQuery,
+    validateName,
+    validatePackage,
+    type Project,
+  } from "@/lib/launcher";
+
+  // In dev the Vite proxy (astro.config.mjs) sidesteps the API's CORS policy.
+  const FETCH_API = import.meta.env.DEV ? "/starter-api" : PUBLIC_API;
+  // Like `pyronaut create-app`, the launcher always generates an Application.
+  const APPLICATION = applicationType("DEFAULT");
+
+  const $ = <T extends HTMLElement = HTMLElement>(id: string) =>
+    document.getElementById(id) as T;
+
+  const form = $<HTMLFormElement>("launcher");
+  const nameInput = $<HTMLInputElement>("name");
+  const packageInput = $<HTMLInputElement>("package");
+  const search = $<HTMLInputElement>("feature-search");
+  const categoriesNav = $("feature-categories");
+  const results = $("feature-results");
+  const selectedList = $("selected-features");
+  const generateButton = $<HTMLButtonElement>("generate");
+  const previewDialog = $<HTMLDialogElement>("preview-dialog");
+
+  const isMac = /Mac|iPhone|iPad/.test(navigator.userAgent);
+  if (isMac) {
+    for (const kbd of document.querySelectorAll("[data-mod-key]")) {
+      kbd.textContent = kbd.textContent!.replace("Ctrl ", "⌘");
+    }
+  }
+
+  const initial = fromQuery(location.search);
+  let project: Project = {
+    ...initial,
+    type: APPLICATION.value,
+    features: initial.features.filter((name) => APPLICATION.features.includes(name)),
+  };
+  let commandKind: "cli" | "curl" = "cli";
+  let activeCategory = "Popular";
+
+  // ---- helpers ---------------------------------------------------------
+
+  const escapeHtml = (value: string) =>
+    value.replace(/[&<>"']/g, (c) => `&#${c.charCodeAt(0)};`);
+
+  function showError(message: string | null) {
+    const box = $("form-error");
+    box.textContent = message ?? "";
+    box.classList.toggle("hidden", !message);
+  }
+
+  function validate() {
+    let valid = true;
+    for (const [input, check] of [
+      [nameInput, validateName],
+      [packageInput, validatePackage],
+    ] as const) {
+      const error = check(input.value.trim());
+      input.setAttribute("aria-invalid", String(Boolean(error)));
+      $(`${input.id}-error`).textContent = error ?? "";
+      valid &&= !error;
+    }
+    return valid;
+  }
+
+  function shareUrl() {
+    const query = toQuery(project);
+    return `${location.origin}${location.pathname}${query ? `?${query}` : ""}`;
+  }
+
+  async function copy(text: string, button: HTMLElement) {
+    const label = button.querySelector("span")!;
+    const original = label.textContent;
+    try {
+      await navigator.clipboard.writeText(text);
+      label.textContent = "Copied";
+    } catch {
+      label.textContent = "Copy failed";
+    }
+    button.dataset.copied = "";
+    setTimeout(() => {
+      label.textContent = original;
+      delete button.dataset.copied;
+    }, 1600);
+  }
+
+  // ---- summary ---------------------------------------------------------
+
+  function renderSummary() {
+    const count = project.features.length;
+    const id = `${project.package}.${project.name}`;
+    $("summary-id").textContent = id;
+    $("summary-meta").textContent = `Python application · ${count ? `${count} feature${count === 1 ? "" : "s"}` : "no extra features"}`;
+    $("mobile-summary").textContent = `${id} · ${count} feature${count === 1 ? "" : "s"}`;
+    $("features-empty").hidden = count > 0;
+    selectedList.hidden = count === 0;
+    selectedList.innerHTML = project.features
+      .map((name) => {
+        const title = STARTER.features[name]?.title ?? name;
+        return `<li class="inline-flex max-w-full items-center gap-1 rounded-full bg-white/10 py-1 pl-3 pr-1 text-xs font-semibold text-white">
+          <span class="truncate" title="${escapeHtml(name)}">${escapeHtml(title)}</span>
+          <button type="button" data-remove="${name}" class="rounded-full p-1 text-ink-300 transition hover:bg-white/15 hover:text-white" aria-label="Remove ${escapeHtml(title)}">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" class="size-3" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+          </button>
+        </li>`;
+      })
+      .join("");
+    $("command").textContent =
+      commandKind === "cli" ? cliCommand(project) : curlCommand(project);
+    $("command-hint").hidden = commandKind !== "cli";
+
+    const query = toQuery(project);
+    history.replaceState(null, "", `${location.pathname}${query ? `?${query}` : ""}`);
+  }
+
+  // ---- feature browser -------------------------------------------------
+
+  type Entry = { name: string; title: string; description: string; category: string; preview?: boolean };
+
+  function matching(): Entry[] {
+    const terms = search.value.toLowerCase().split(/\s+/).filter(Boolean);
+    return APPLICATION.features
+      .map((name) => ({ name, ...STARTER.features[name] }))
+      .filter((feature) => {
+        const haystack =
+          `${feature.name} ${feature.title} ${feature.description} ${feature.category}`.toLowerCase();
+        return terms.every((term) => haystack.includes(term));
+      });
+  }
+
+  /** Enter in the search box picks: exact name, name prefix, then first shown. */
+  function bestMatch(features: Entry[]) {
+    const query = search.value.trim().toLowerCase();
+    const slug = query.replace(/\s+/g, "-");
+    const rank = (feature: Entry) => {
+      const title = feature.title.toLowerCase();
+      if (feature.name === slug || title === query) return 0;
+      if (feature.name.startsWith(slug)) return 1;
+      if (feature.name.includes(slug) || title.includes(query)) return 2;
+      return 3;
+    };
+    const ranked = features
+      .map((feature) => ({ name: feature.name, rank: rank(feature) }))
+      .sort((a, b) => a.rank - b.rank);
+    return ranked[0]?.rank < 3
+      ? ranked[0].name
+      : results.querySelector<HTMLElement>("[data-feature]")?.dataset.feature;
+  }
+
+  function tile(feature: Entry) {
+    const selected = project.features.includes(feature.name);
+    return `<button type="button" role="option" aria-selected="${selected}" data-feature="${feature.name}" class="group flex w-full items-start gap-3 rounded-2xl border border-transparent p-3 text-left transition hover:border-ink-200 hover:bg-ink-50 focus-visible:border-flame-500 focus-visible:outline-none aria-selected:border-flame-500/60 aria-selected:bg-flame-50 dark:hover:border-white/10 dark:hover:bg-white/5 dark:aria-selected:border-flame-400/50 dark:aria-selected:bg-flame-500/10">
+      <span class="mt-0.5 flex size-5 shrink-0 items-center justify-center rounded-md border border-ink-300 text-white transition group-aria-selected:border-flame-500 group-aria-selected:bg-flame-500 dark:border-white/25">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="size-3.5 opacity-0 group-aria-selected:opacity-100" aria-hidden="true"><path d="M4.5 12.5l5 5 10-11"/></svg>
+      </span>
+      <span class="min-w-0 flex-1">
+        <span class="flex flex-wrap items-baseline gap-x-2 gap-y-0.5">
+          <span class="text-sm font-bold text-ink-950 dark:text-white">${escapeHtml(feature.title)}</span>
+          <span class="font-mono text-[0.7rem] text-ink-400">${feature.name}</span>
+          ${feature.preview ? `<span class="rounded bg-flame-100 px-1.5 font-mono text-[0.6rem] font-bold uppercase tracking-wider text-flame-700 dark:bg-flame-500/15 dark:text-flame-300">preview</span>` : ""}
+        </span>
+        <span class="mt-0.5 line-clamp-2 block text-xs leading-5 text-ink-500 dark:text-ink-400">${escapeHtml(feature.description)}</span>
+      </span>
+    </button>`;
+  }
+
+  function renderFeatures() {
+    const features = matching();
+    const searching = search.value.trim().length > 0;
+    const byCategory = new Map<string, Entry[]>();
+    for (const feature of features) {
+      byCategory.set(feature.category, [...(byCategory.get(feature.category) ?? []), feature]);
+    }
+    const categories = [...byCategory.keys()].sort();
+    const popular = POPULAR_FEATURES.map((name) => features.find((f) => f.name === name)).filter(
+      (f): f is Entry => Boolean(f),
+    );
+
+    const pills: [string, number][] = [
+      ...(searching ? [] : ([["Popular", popular.length]] as [string, number][])),
+      ["All", features.length],
+      ...categories.map((c) => [c, byCategory.get(c)!.length] as [string, number]),
+    ];
+    if (!pills.some(([label]) => label === activeCategory)) activeCategory = "All";
+
+    categoriesNav.innerHTML = pills
+      .map(
+        ([label, count]) =>
+          `<button type="button" data-category="${escapeHtml(label)}" aria-pressed="${label === activeCategory}" class="inline-flex shrink-0 items-center gap-1.5 rounded-full border border-ink-200 px-3 py-1.5 text-xs font-semibold text-ink-600 transition hover:border-ink-300 hover:text-ink-950 aria-pressed:border-ink-950 aria-pressed:bg-ink-950 aria-pressed:text-white dark:border-white/10 dark:text-ink-300 dark:hover:text-white dark:aria-pressed:border-white dark:aria-pressed:bg-white dark:aria-pressed:text-ink-950">${escapeHtml(label)}<span class="font-mono text-[0.65rem] opacity-60">${count}</span></button>`,
+      )
+      .join("");
+
+    const grid = (list: Entry[]) =>
+      `<div class="grid gap-1 sm:grid-cols-2">${list.map(tile).join("")}</div>`;
+    const heading = (label: string) =>
+      `<h3 class="sticky top-0 z-10 -mx-1 bg-white/95 px-4 pb-1.5 pt-3 font-mono text-[0.68rem] font-bold uppercase tracking-[0.18em] text-ink-400 backdrop-blur first:pt-1 dark:bg-ink-900/95">${escapeHtml(label)}</h3>`;
+
+    if (!features.length) {
+      results.innerHTML = `<p class="px-3 py-14 text-center text-sm text-ink-500">No features match “${escapeHtml(search.value)}”.</p>`;
+    } else if (activeCategory === "Popular") {
+      results.innerHTML = grid(popular);
+    } else if (activeCategory === "All") {
+      results.innerHTML = categories
+        .map((category) => heading(category) + grid(byCategory.get(category)!))
+        .join("");
+    } else {
+      results.innerHTML = grid(byCategory.get(activeCategory)!);
+    }
+  }
+
+  function render() {
+    renderSummary();
+    renderFeatures();
+  }
+
+  function update(changes: Partial<Project>) {
+    project = { ...project, ...changes };
+    render();
+  }
+
+  function toggleFeature(name: string) {
+    update({
+      features: project.features.includes(name)
+        ? project.features.filter((feature) => feature !== name)
+        : [...project.features, name],
+    });
+  }
+
+  // ---- events ----------------------------------------------------------
+
+  for (const input of [nameInput, packageInput]) {
+    input.addEventListener("input", () => {
+      update({ [input.name]: input.value.trim() });
+      if (input.getAttribute("aria-invalid") === "true") validate();
+    });
+    input.addEventListener("blur", validate);
+  }
+
+  search.addEventListener("input", () => {
+    results.scrollTop = 0;
+    renderFeatures();
+  });
+  search.addEventListener("keydown", (event) => {
+    if (event.key === "Enter") {
+      event.preventDefault();
+      const best = bestMatch(matching());
+      if (best) toggleFeature(best);
+    } else if (event.key === "ArrowDown") {
+      event.preventDefault();
+      results.querySelector<HTMLElement>("[data-feature]")?.focus();
+    } else if (event.key === "Escape" && search.value) {
+      search.value = "";
+      renderFeatures();
+    }
+  });
+
+  categoriesNav.addEventListener("click", (event) => {
+    const pill = (event.target as Element).closest<HTMLElement>("[data-category]");
+    if (!pill) return;
+    activeCategory = pill.dataset.category!;
+    results.scrollTop = 0;
+    renderFeatures();
+  });
+
+  results.addEventListener("click", (event) => {
+    const option = (event.target as Element).closest<HTMLElement>("[data-feature]");
+    if (!option) return;
+    const name = option.dataset.feature!;
+    toggleFeature(name);
+    results.querySelector<HTMLElement>(`[data-feature="${name}"]`)?.focus();
+  });
+  results.addEventListener("keydown", (event) => {
+    if (event.key !== "ArrowDown" && event.key !== "ArrowUp") return;
+    event.preventDefault();
+    const options = [...results.querySelectorAll<HTMLElement>("[data-feature]")];
+    const index = options.indexOf(document.activeElement as HTMLElement);
+    const next = event.key === "ArrowDown" ? index + 1 : index - 1;
+    (next < 0 ? search : options[Math.min(next, options.length - 1)]).focus();
+  });
+
+  selectedList.addEventListener("click", (event) => {
+    const button = (event.target as Element).closest<HTMLElement>("[data-remove]");
+    if (button) toggleFeature(button.dataset.remove!);
+  });
+
+  for (const tab of document.querySelectorAll<HTMLElement>("[data-command]")) {
+    tab.addEventListener("click", () => {
+      commandKind = tab.dataset.command as "cli" | "curl";
+      for (const other of document.querySelectorAll("[data-command]")) {
+        other.setAttribute("aria-selected", String(other === tab));
+      }
+      renderSummary();
+    });
+  }
+
+  $("copy-command").addEventListener("click", (event) =>
+    copy($("command").textContent ?? "", event.currentTarget as HTMLElement),
+  );
+  $("copy-link").addEventListener("click", (event) => {
+    if (validate()) copy(shareUrl(), event.currentTarget as HTMLElement);
+  });
+
+  // ---- preview ---------------------------------------------------------
+
+  const previewTree = $("preview-tree");
+  const previewCode = $("preview-code");
+  const previewPath = $("preview-path");
+  let previewFiles: Record<string, string> = {};
+  let shownPath = "";
+
+  async function showPreviewFile(path: string) {
+    shownPath = path;
+    previewPath.textContent = path;
+    for (const button of previewTree.querySelectorAll<HTMLElement>("[data-path]")) {
+      button.setAttribute("aria-current", String(button.dataset.path === path));
+    }
+    const code = previewFiles[path].replace(/\n$/, "");
+    // Plain text first so the file shows instantly while Shiki loads.
+    previewCode.innerHTML = `<pre><code>${code
+      .split("\n")
+      .map((line) => `<span class="line">${escapeHtml(line)}</span>`)
+      .join("\n")}</code></pre>`;
+    previewCode.scrollTop = 0;
+    try {
+      // Shiki is loaded on first use to keep it out of the page bundle.
+      const { highlight } = await import("@/lib/highlight");
+      const html = await highlight(code, path);
+      if (html && shownPath === path) previewCode.innerHTML = html;
+    } catch {
+      /* keep the plain-text rendering */
+    }
+  }
+
+  function renderPreviewTree() {
+    const paths = Object.keys(previewFiles).sort((a, b) => {
+      // Directories first at every level, then alphabetical.
+      const pa = a.split("/");
+      const pb = b.split("/");
+      for (let i = 0; i < Math.min(pa.length, pb.length); i++) {
+        const aDir = i < pa.length - 1;
+        const bDir = i < pb.length - 1;
+        if (pa[i] !== pb[i]) {
+          if (aDir !== bDir) return aDir ? -1 : 1;
+          return pa[i].localeCompare(pb[i]);
+        }
+      }
+      return pa.length - pb.length;
+    });
+    const seen = new Set<string>();
+    const rows: string[] = [];
+    for (const path of paths) {
+      const parts = path.split("/");
+      parts.slice(0, -1).forEach((dir, depth) => {
+        const key = parts.slice(0, depth + 1).join("/");
+        if (seen.has(key)) return;
+        seen.add(key);
+        rows.push(
+          `<div class="flex items-center gap-1.5 px-2 py-1 text-ink-500 dark:text-ink-400" style="padding-left:${0.5 + depth * 0.9}rem"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" class="size-3.5 shrink-0" aria-hidden="true"><path d="M3.5 7a2 2 0 012-2h4l2 2.5h7a2 2 0 012 2V17a2 2 0 01-2 2h-13a2 2 0 01-2-2V7z"/></svg>${escapeHtml(dir)}</div>`,
+        );
+      });
+      rows.push(
+        `<button type="button" data-path="${escapeHtml(path)}" class="flex w-full items-center gap-1.5 truncate rounded-md px-2 py-1 text-left text-ink-700 transition hover:bg-ink-100 aria-[current=true]:bg-flame-50 aria-[current=true]:font-semibold aria-[current=true]:text-flame-700 dark:text-ink-200 dark:hover:bg-white/10 dark:aria-[current=true]:bg-flame-500/10 dark:aria-[current=true]:text-flame-300" style="padding-left:${0.5 + (parts.length - 1) * 0.9}rem"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" class="size-3.5 shrink-0 opacity-60" aria-hidden="true"><path d="M13.5 3H7a2 2 0 00-2 2v14a2 2 0 002 2h10a2 2 0 002-2V8.5L13.5 3zM13.5 3v5.5H19"/></svg><span class="truncate">${escapeHtml(parts.at(-1)!)}</span></button>`,
+      );
+    }
+    previewTree.innerHTML = rows.join("");
+    const first = ["src/main.py", "pyproject.toml"].find((p) => p in previewFiles) ?? paths[0];
+    if (first) showPreviewFile(first);
+  }
+
+  function previewMessage(message: string) {
+    previewTree.innerHTML = "";
+    previewPath.textContent = "";
+    shownPath = "";
+    previewCode.innerHTML = `<p class="p-5 font-sans text-sm leading-6 text-ink-500 dark:text-ink-400">${message}</p>`;
+  }
+
+  previewTree.addEventListener("click", (event) => {
+    const button = (event.target as Element).closest<HTMLElement>("[data-path]");
+    if (button) showPreviewFile(button.dataset.path!);
+  });
+
+  previewDialog.addEventListener("click", (event) => {
+    // Backdrop clicks land on the <dialog> element itself.
+    if (event.target === previewDialog || (event.target as Element).closest("[data-close]")) {
+      previewDialog.close();
+    }
+  });
+
+  $("open-preview").addEventListener("click", async () => {
+    if (!validate()) return;
+    showError(null);
+    $("preview-dialog-title").textContent = `${project.name} — preview`;
+    previewMessage("Generating preview…");
+    previewDialog.showModal();
+    try {
+      const response = await fetch(starterUrl(FETCH_API, "preview", project));
+      if (!response.ok) {
+        previewMessage(escapeHtml(await errorMessage(response)));
+        return;
+      }
+      previewFiles = (await response.json()).contents;
+      renderPreviewTree();
+    } catch {
+      previewMessage(
+        `The starter API at ${escapeHtml(PUBLIC_API)} could not be reached from this page, so the preview is unavailable. ` +
+          `Generating the project still works — it downloads the ZIP directly.`,
+      );
+    }
+  });
+
+  // ---- generate --------------------------------------------------------
+
+  function showNextSteps() {
+    $("next-steps-title").textContent = `${project.name}.zip generated`;
+    $("next-steps-code").textContent = [
+      `unzip ${project.name}.zip -d ${project.name}`,
+      `cd ${project.name}`,
+      `pyronaut setup   # once per install`,
+      `pyronaut dev     # run with reload`,
+      `pyronaut test`,
+    ].join("\n");
+    const section = $("next-steps");
+    section.hidden = false;
+    section.scrollIntoView({ behavior: "smooth", block: "nearest" });
+  }
+
+  function save(blob: Blob, filename: string) {
+    const url = URL.createObjectURL(blob);
+    const link = Object.assign(document.createElement("a"), { href: url, download: filename });
+    link.click();
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+  }
+
+  form.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    if (!validate()) {
+      nameInput.scrollIntoView({ behavior: "smooth", block: "center" });
+      return;
+    }
+    showError(null);
+    generateButton.disabled = true;
+    try {
+      let response: Response;
+      try {
+        response = await fetch(starterUrl(FETCH_API, "create", project));
+      } catch {
+        // Cross-origin fetch blocked: navigate instead — the API answers with
+        // Content-Disposition: attachment, so the page stays put.
+        location.assign(starterUrl(PUBLIC_API, "create", project));
+        showNextSteps();
+        return;
+      }
+      if (!response.ok) {
+        showError(await errorMessage(response));
+        return;
+      }
+      save(await response.blob(), `${project.name}.zip`);
+      showNextSteps();
+    } finally {
+      generateButton.disabled = false;
+    }
+  });
+
+  $("mobile-generate").addEventListener("click", () => form.requestSubmit());
+
+  // ---- keyboard --------------------------------------------------------
+
+  document.addEventListener("keydown", (event) => {
+    const mod = isMac ? event.metaKey : event.ctrlKey;
+    const typing = (event.target as Element).closest("input, textarea");
+    if (mod && event.key === "Enter") {
+      event.preventDefault();
+      form.requestSubmit();
+    } else if (
+      (mod && event.key.toLowerCase() === "k") ||
+      (event.key === "/" && !typing && !previewDialog.open)
+    ) {
+      event.preventDefault();
+      search.focus();
+      search.select();
+    }
+  });
+
+  render();
+</script>
