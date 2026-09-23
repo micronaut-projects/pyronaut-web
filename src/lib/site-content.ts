@@ -18,13 +18,13 @@ export interface Feature {
 export const FEATURES: Feature[] = [
   {
     title: "High performance",
-    copy: "Run Python on GraalPy with a runtime built for demanding production services.",
+    copy: "Pyronaut shifts application work to build time, preparing dependency injection, serialization, routing, and more before startup. A JIT compiler optimizes hot Python code, while a non-blocking HTTP runtime handles concurrent requests.",
     icon: "bolt",
     href: "/docs/performance/",
   },
   {
     title: "Rich data access",
-    copy: "Use Micronaut Data repositories and database integrations directly from Python.",
+    copy: "Define data access declaratively in Python. Pyronaut generates repository implementations and precomputes queries at build time, with a consistent programming model across supported databases.",
     icon: "annotations",
     href: "/docs/data-access/",
   },
@@ -36,7 +36,7 @@ export const FEATURES: Feature[] = [
   },
   {
     title: "Cloud integrations",
-    copy: "Connect to AWS, Azure, GCP, and Oracle Cloud through cloud SDKs and Micronaut integrations.",
+    copy: "Make AWS, Azure, GCP, and Oracle Cloud services part of your Python application. Inject managed SDK clients, import cloud configuration and secrets, and work with messaging, storage, events, serverless workloads, and more through one application model.",
     icon: "flask",
     href: "/docs/cloud-integrations/",
   },
