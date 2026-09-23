@@ -1,0 +1,24 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import SiteFooter from "@/components/SiteFooter.astro";
+import SiteHeader from "@/components/SiteHeader.astro";
+
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const { title, description } = Astro.props;
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  bodyClass="bg-ink-50 font-sans text-ink-900 antialiased dark:bg-ink-950 dark:text-ink-100"
+>
+  <SiteHeader />
+  <main>
+    <slot />
+  </main>
+  <SiteFooter />
+</BaseLayout>

@@ -4,12 +4,12 @@ import CodeTabs from "@/components/CodeTabs.astro";
 import DefineOnce from "@/components/DefineOnce.astro";
 import Glyph from "@/components/Glyph.astro";
 import MicronautBand from "@/components/MicronautBand.astro";
+import SiteFooter from "@/components/SiteFooter.astro";
+import SiteHeader from "@/components/SiteHeader.astro";
 import SkepticTest from "@/components/SkepticTest.astro";
-import ThemeToggle from "@/components/ThemeToggle.astro";
 import {
   CODE_PROOFS,
   FEATURES,
-  FOOTER_COLUMNS,
   PERSONAS,
   SITE_NAME,
   STACK_COMPARISON,
@@ -21,16 +21,6 @@ import {
  * orange dots, huge tight-tracking headlines, dark pill buttons, an artwork
  * card with an overlapping code window, and a foundation logo strip.
  */
-
-const navLinks = [
-  { label: "Docs", href: "/docs/" },
-  { label: "Guides", href: "/guides/" },
-  { label: "Blog", href: "/blog/" },
-  {
-    label: "Releases",
-    href: "https://github.com/micronaut-projects/pyronaut/releases",
-  },
-];
 
 const heroChecks = [
   "High-performance runtime",
@@ -47,53 +37,7 @@ const heroChecks = [
   title={`${SITE_NAME} — High-performance Python web framework`}
   bodyClass="bg-ink-50 font-sans text-ink-900 antialiased dark:bg-ink-950 dark:text-ink-100"
 >
-  <!-- Header -->
-  <header
-    class="sticky top-0 z-40 border-b border-ink-200/70 bg-ink-50/90 backdrop-blur-lg dark:border-white/10 dark:bg-ink-950/90"
-  >
-    <div class="mx-auto flex h-[4.5rem] max-w-7xl items-center gap-10 px-5">
-      <a href="/" class="flex shrink-0 items-center">
-        <img
-          src="/pyronaut-assets/logo-header.svg"
-          alt="Pyronaut"
-          class="h-10 w-auto dark:hidden"
-        />
-        <img
-          src="/pyronaut-assets/logo-header-dark.svg"
-          alt="Pyronaut"
-          class="hidden h-10 w-auto dark:block"
-        />
-      </a>
-      <nav class="hidden gap-8 md:flex">
-        {
-          navLinks.map((link) => (
-            <a
-              href={link.href}
-              class="text-[0.95rem] font-semibold text-ink-700 transition hover:text-ink-950 dark:text-ink-300 dark:hover:text-white"
-            >
-              {link.label}
-            </a>
-          ))
-        }
-      </nav>
-      <div class="ml-auto flex items-center gap-4">
-        <ThemeToggle class="rounded-lg p-2 text-ink-600 transition hover:bg-ink-100 dark:text-ink-300 dark:hover:bg-white/10" />
-        <a
-          href="https://github.com/micronaut-projects/pyronaut"
-          class="hidden text-[0.95rem] font-semibold text-ink-700 transition hover:text-ink-950 dark:text-ink-300 dark:hover:text-white sm:block"
-        >
-          GitHub
-        </a>
-        <a
-          href="/docs/guide/index.html#gettingStarted"
-          class="inline-flex items-center gap-2 rounded-xl bg-ink-950 px-5 py-3 text-sm font-bold text-white transition hover:bg-ink-800 dark:bg-white dark:text-ink-950 dark:hover:bg-ink-100"
-        >
-          Get started
-          <Glyph name="arrow-right" class="size-4" />
-        </a>
-      </div>
-    </div>
-  </header>
+  <SiteHeader />
 
   <main>
     <!-- Hero -->
@@ -465,53 +409,6 @@ const heroChecks = [
     <MicronautBand />
   </main>
 
-  <!-- Footer -->
-  <footer class="border-t border-ink-200/70 bg-white dark:border-white/10 dark:bg-ink-950">
-    <div class="mx-auto max-w-7xl px-5 py-14">
-      <div
-        class="grid gap-10 md:grid-cols-[minmax(0,1.2fr)_repeat(3,minmax(0,1fr))]"
-      >
-        <div>
-          <img
-            src="/pyronaut-assets/logo-header.svg"
-            alt="Pyronaut"
-            class="h-9 w-auto dark:hidden"
-          />
-          <img
-            src="/pyronaut-assets/logo-header-dark.svg"
-            alt="Pyronaut"
-            class="hidden h-9 w-auto dark:block"
-          />
-          <p class="mt-4 max-w-xs text-sm leading-6 text-ink-500 dark:text-ink-400">
-            A high-performance Python framework for production services.
-          </p>
-          <p class="mt-2 max-w-xs text-xs leading-5 text-ink-400 dark:text-ink-500">
-            Pyronaut is part of Micronaut, a Commonhaus Foundation project.
-          </p>
-        </div>
-        {
-          FOOTER_COLUMNS.map((column) => (
-            <div>
-              <h3 class="font-mono text-xs font-bold uppercase tracking-[0.2em] text-ink-950 dark:text-white">
-                {column.title}
-              </h3>
-              <ul class="mt-4 grid gap-2.5">
-                {column.links.map((link) => (
-                  <li>
-                    <a
-                      href={link.href}
-                      class="text-sm text-ink-500 transition hover:text-flame-600 dark:text-ink-400 dark:hover:text-flame-400"
-                    >
-                      {link.label}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))
-        }
-      </div>
-    </div>
-  </footer>
+  <SiteFooter />
 
 </BaseLayout>

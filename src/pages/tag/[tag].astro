@@ -1,0 +1,32 @@
+---
+import BlogArchive from "@/components/BlogArchive.astro";
+import PageLayout from "@/layouts/PageLayout.astro";
+import { SITE_NAME } from "@/lib/site-content";
+import { getBlogPosts } from "@/lib/blog";
+
+export async function getStaticPaths() {
+  const posts = await getBlogPosts();
+  const tags = new Set(posts.flatMap((post) => post.entry.data.tags));
+  return [...tags].sort().map((tag) => ({
+    params: { tag },
+    props: {
+      tag,
+      posts: posts.filter((post) => post.entry.data.tags.includes(tag)),
+    },
+  }));
+}
+
+const { tag, posts } = Astro.props;
+---
+
+<PageLayout
+  title={`${SITE_NAME} posts tagged ${tag}`}
+  description={`Browse ${SITE_NAME} blog posts tagged ${tag}.`}
+>
+  <BlogArchive
+    eyebrow="Tag"
+    title={`Posts tagged ${tag}`}
+    intro={`Browse ${SITE_NAME} blog posts tagged ${tag}.`}
+    posts={posts}
+  />
+</PageLayout>
