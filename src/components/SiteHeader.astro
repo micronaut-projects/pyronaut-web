@@ -1,5 +1,4 @@
 ---
-import Glyph from "@/components/Glyph.astro";
 import ThemeToggle from "@/components/ThemeToggle.astro";
 
 const navLinks = [
@@ -11,50 +10,38 @@ const navLinks = [
     href: "https://github.com/micronaut-projects/pyronaut/releases",
   },
 ];
+
+const container = "mx-auto max-w-6xl px-5";
 ---
 
-<header
-  class="sticky top-0 z-40 border-b border-ink-200/70 bg-ink-50/90 backdrop-blur-lg dark:border-white/10 dark:bg-ink-950/90"
->
-  <div class="mx-auto flex h-[4.5rem] max-w-7xl items-center gap-10 px-5">
+<!-- Header: always dark, it sits on the hero -->
+<header class="sticky top-0 z-40 border-b border-white/10 bg-ink-950/90 backdrop-blur">
+  <div class:list={[container, "flex h-16 items-center gap-8"]}>
     <a href="/" class="flex shrink-0 items-center">
-      <img
-        src="/pyronaut-assets/logo-header.svg"
-        alt="Pyronaut"
-        class="h-10 w-auto dark:hidden"
-      />
-      <img
-        src="/pyronaut-assets/logo-header-dark.svg"
-        alt="Pyronaut"
-        class="hidden h-10 w-auto dark:block"
-      />
+      <img src="/pyronaut-assets/logo-header-dark.svg" alt="Pyronaut" class="h-9 w-auto" />
     </a>
-    <nav class="hidden gap-8 md:flex">
+    <nav class="hidden gap-6 md:flex">
       {
         navLinks.map((link) => (
-          <a
-            href={link.href}
-            class="text-[0.95rem] font-semibold text-ink-700 transition hover:text-ink-950 dark:text-ink-300 dark:hover:text-white"
-          >
+          <a href={link.href} class="text-sm font-medium text-ink-300 transition hover:text-white">
             {link.label}
           </a>
         ))
       }
     </nav>
-    <div class="ml-auto flex items-center gap-4">
-      <ThemeToggle class="rounded-lg p-2 text-ink-600 transition hover:bg-ink-100 dark:text-ink-300 dark:hover:bg-white/10" />
+    <div class="ml-auto flex items-center gap-5">
       <a
         href="https://github.com/micronaut-projects/pyronaut"
-        class="hidden text-[0.95rem] font-semibold text-ink-700 transition hover:text-ink-950 dark:text-ink-300 dark:hover:text-white sm:block"
+        class="hidden text-sm font-medium text-ink-300 transition hover:text-white lg:block"
       >
         GitHub
       </a>
+      <ThemeToggle class="rounded-md p-1.5 text-ink-400 transition hover:bg-white/10 hover:text-white" />
       <a
         href="/docs/guide/index.html#gettingStarted"
-        class="inline-flex items-center gap-2 rounded-xl bg-ink-950 px-5 py-3 text-sm font-bold text-white transition hover:bg-ink-800 dark:bg-white dark:text-ink-950 dark:hover:bg-ink-100"
+        class="hidden rounded-md bg-flame-500 px-3.5 py-1.5 text-sm font-semibold text-ink-950 transition hover:bg-flame-400 sm:inline-flex"
       >
         Get started
-        <Glyph name="arrow-right" class="size-4" />
       </a>
     </div>
   </div>
