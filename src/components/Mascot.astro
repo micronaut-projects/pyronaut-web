@@ -1,0 +1,446 @@
+---
+/**
+ * The Pyronaut mascot with a starfield drifting across its visor and a sheen
+ * sweeping the glass now and then — the same treatment Sally gets on
+ * micronaut.io. The mascot stays a plain image; the animation is a separate
+ * SVG overlay because CSS animation does not run inside an <img>.
+ * Coordinates are mascot.svg's own, so the overlay tracks the artwork.
+ */
+interface Props {
+  class?: string;
+}
+
+const { class: className } = Astro.props;
+
+// Outline of the visor glass, traced from the base raster of mascot.svg by
+// flood-filling its dark glass and sampling the edge every 6 degrees.
+const visorPath =
+  "M646,278L645,292L642,306L639,320L634,334L627,346L619,358L610,369L599,378L587,386L575,393L562,398L549,401L536,404L522,405L509,406L495,405L482,403L469,401L456,398L442,393L430,387L417,380L406,371L395,361L386,349L378,336L373,322L370,308L368,293L369,278L371,264L375,250L380,236L386,224L394,212L403,201L412,191L423,182L434,175L445,167L457,161L469,155L482,151L495,147L509,144L523,143L538,143L552,144L567,148L580,154L594,161L605,171L616,182L624,195L631,208L637,221L641,235L644,249L645,264Z";
+const visorCentre = { x: 509, y: 278 };
+
+// Sheen sweeping across the visor: a band bowed onto the visor's curve rather
+// than a straight bar laid over it. Its soft edges are stacked strokes of
+// shrinking width, because a linear gradient can only fade sideways across a
+// straight shape; each stroke adds the alpha the wider one beneath it is still
+// missing, so the stack composites into a gaussian falloff.
+const sheenReach = 34;
+const sheenSteps = 14;
+const sheenFalloff = (distance: number) =>
+  0.66 * Math.exp(-((distance / 14) ** 2));
+const visorSheen = Array.from({ length: sheenSteps }, (_, index) => {
+  const step = sheenReach / sheenSteps;
+  const radius = (sheenSteps - index) * step;
+  const opacity =
+    1 - (1 - sheenFalloff(radius)) / (1 - sheenFalloff(radius + step));
+  return `<path d="M0,-172 C48,-82 48,78 0,168" stroke-width="${(radius * 2).toFixed(1)}" stroke-opacity="${opacity.toFixed(4)}"/>`;
+}).join("");
+
+// Starfield drifting across the visor, clipped to the visor path. The marks
+// are dealt by a seeded generator rather than written out by hand, so nothing
+// about the scatter repeats on a beat the eye can pick up: position, size,
+// colour, speed, phase and bow are all drawn per mark. The seed keeps every
+// build identical; change it to deal a different sky.
+let starSeed = 0x9f1e5;
+const starRandom = () => {
+  starSeed = (starSeed + 0x6d2b79f5) | 0;
+  let t = Math.imul(starSeed ^ (starSeed >>> 15), 1 | starSeed);
+  t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+  return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+};
+const between = (low: number, high: number) =>
+  low + starRandom() * (high - low);
+function pick<T>(items: T[]): T {
+  return items[Math.floor(starRandom() * items.length)];
+}
+// Star colours, loosely by spectral flavour: a soft outer glow, the body of
+// the mark, and a hotter near-white centre. Weights keep the sky mostly blue
+// and white, with the warm tints common enough to notice and the odd cyan or
+// lilac rare enough to feel like a find.
+const starTints = [
+  { weight: 5, glow: "#8fb6ef", body: "#bcd8ff", core: "#f2f8ff" },
+  { weight: 5, glow: "#9fc4ff", body: "#dbeaff", core: "#ffffff" },
+  { weight: 4, glow: "#cfe3ff", body: "#eaf4ff", core: "#ffffff" },
+  { weight: 4, glow: "#ffe6a4", body: "#fff6d6", core: "#ffffff" },
+  { weight: 3, glow: "#ffd68f", body: "#fff2e0", core: "#fffaf0" },
+  { weight: 3, glow: "#ffcf5f", body: "#ffe6a4", core: "#fff8e2" },
+  { weight: 2, glow: "#ffb473", body: "#ffd3a6", core: "#fff1e0" },
+  { weight: 2, glow: "#ff9d8f", body: "#ffc2b6", core: "#ffece7" },
+  { weight: 1, glow: "#7fd8d4", body: "#b7f0ee", core: "#eafffe" },
+  { weight: 1, glow: "#b39cff", body: "#d9c8ff", core: "#f3ecff" },
+];
+const starTintPool = starTints.flatMap((tint) =>
+  Array.from({ length: tint.weight }, () => tint),
+);
+// Depth reads off speed and size together: the far layer is small, dim and
+// slow, the near layer large, bright and quick. The leads are the rare slow
+// bright ones that cross on their own schedule.
+const starLayers = [
+  {
+    cls: "pv-far",
+    count: 13,
+    bright: false,
+    radius: [0.9, 1.7],
+    duration: [16.8, 23.2],
+    opacity: [0.3, 0.5],
+  },
+  {
+    cls: "pv-mid",
+    count: 7,
+    bright: false,
+    radius: [1.7, 2.5],
+    duration: [12.4, 16.8],
+    opacity: [0.62, 0.86],
+  },
+  {
+    cls: "pv-near",
+    count: 3,
+    bright: true,
+    radius: [2.5, 3.4],
+    duration: [8.4, 11.6],
+    opacity: [1, 1],
+  },
+  {
+    cls: "pv-lead",
+    count: 2,
+    bright: true,
+    radius: [2.6, 5.2],
+    duration: [36, 64],
+    opacity: [1, 1],
+  },
+];
+const starSpike =
+  "M0,-9 C1.6,-2.4 2.4,-1.6 9,0 C2.4,1.6 1.6,2.4 0,9 C-1.6,2.4 -2.4,1.6 -9,0 C-2.4,-1.6 -1.6,-2.4 0,-9 Z";
+// Marks start just off the right of the glass and one full pass, matching the
+// keyframes' 100% translate, carries them just past its left edge.
+const starStart = 720;
+const starTravel = 428;
+const starMarks = starLayers.flatMap((layer) =>
+  Array.from({ length: layer.count }, () => layer),
+);
+for (let i = starMarks.length - 1; i > 0; i--) {
+  const j = Math.floor(starRandom() * (i + 1));
+  [starMarks[i], starMarks[j]] = [starMarks[j], starMarks[i]];
+}
+// Marks are dealt one per band down the glass and then jittered past their
+// band's edges: pure uniform placement clumps and leaves bald patches at this
+// count, while a strict ladder reads as a grid. Overlapping the jitter keeps
+// the whole height covered and still lets pairs crowd together.
+const glassTop = 158;
+const glassBottom = 392;
+const glassBand = (glassBottom - glassTop) / starMarks.length;
+const visorField = starMarks
+  .map((layer, index) => {
+    const y = Math.round(
+      Math.min(
+        glassBottom,
+        Math.max(
+          glassTop,
+          glassTop + (index + between(-0.35, 1.35)) * glassBand,
+        ),
+      ),
+    );
+    const radius = between(layer.radius[0], layer.radius[1]);
+    const duration = between(layer.duration[0], layer.duration[1]);
+    const twinkle = between(1.5, 2.7);
+    const tint = pick(starTintPool);
+    // Where the mark sits in the settled field, as a fraction of its pass.
+    // The page opens on clear glass and the stars arrive afterwards, so the
+    // delay is what is left of the pass rather than what is behind it: the
+    // mark waits off the glass and drifts on to reach that point. It is also
+    // the still position Reduce Motion falls back to.
+    const phase = starRandom();
+    const body = layer.bright
+      ? `<circle r="${(radius * 2.4).toFixed(1)}" fill="${tint.glow}" opacity=".14"/>` +
+        `<path d="${starSpike}" transform="scale(${(radius * 0.41).toFixed(2)})" fill="${tint.body}" opacity=".9"/>` +
+        `<path d="${starSpike}" transform="rotate(45) scale(${(radius * 0.19).toFixed(2)})" fill="${tint.core}" opacity=".75"/>` +
+        `<circle r="${radius.toFixed(1)}" fill="${tint.core}"/>`
+      : `<circle r="${radius.toFixed(1)}" fill="${tint.body}" opacity="${between(layer.opacity[0], layer.opacity[1]).toFixed(2)}"/>`;
+    // Timings ride on the mark's own style attribute as plain literals, so
+    // Safari never sees a duration built from calc(var(...)). The still
+    // transform sits there too: an animation outranks an inline declaration,
+    // so the pinned position surfaces only once Reduce Motion has switched
+    // the animation off.
+    const motion =
+      `animation-duration:${duration.toFixed(2)}s;` +
+      `animation-delay:${(duration * (1 - phase)).toFixed(2)}s;` +
+      `transform:translate(${(-starTravel * phase).toFixed(0)}px,0) scale(1)`;
+    // A lead now and then crosses on the long pass instead of drifting, so it
+    // hangs off the glass and then streaks over it.
+    const track =
+      layer.cls === "pv-lead" && starRandom() < 0.4
+        ? "pv-pass"
+        : `pv-bow-${pick(["a", "b", "c", "d", "e"])}`;
+    return (
+      `<g transform="translate(${starStart} ${y})"><g class="pv-m ${layer.cls} ${track}" style="${motion}">` +
+      `<g class="pv-tw" style="animation-duration:${twinkle.toFixed(2)}s;animation-delay:-${(twinkle * starRandom()).toFixed(2)}s">` +
+      `${body}</g></g></g>`
+    );
+  })
+  .join("");
+---
+
+<div class:list={["relative", className]}>
+  <img
+    src="/pyronaut-assets/mascot.svg"
+    alt="Pyronaut mascot — an astronaut with a Python-powered flamethrower"
+    class="block w-full"
+  />
+  {
+    /* The viewBox starts at 0 0, with the artwork's 77,6 offset moved onto a
+    group, because transform-box: view-box pivots the sheen about the viewBox
+    origin rather than the artwork's. */
+  }
+  <svg
+    viewBox="0 0 1438 811"
+    aria-hidden="true"
+    class="pyronaut-visor absolute inset-0 size-full"
+  >
+    <defs>
+      <clipPath id="pyronautVisorClip"><path d={visorPath}></path></clipPath>
+    </defs>
+    <g transform="translate(-77 -6)">
+      <g clip-path="url(#pyronautVisorClip)" set:html={visorField} />
+      <g clip-path="url(#pyronautVisorClip)">
+        {
+          /* Centred on the visor so the sheen's own rotation and swell pivot
+          about the dome rather than the SVG origin, and left unrotated so the
+          sweep itself travels straight across. */
+        }
+        <g transform={`translate(${visorCentre.x} ${visorCentre.y})`}>
+          <g
+            class="pv-glint"
+            fill="none"
+            stroke="#fff"
+            stroke-linecap="round"
+            set:html={visorSheen}
+          />
+        </g>
+      </g>
+    </g>
+  </svg>
+</div>
+
+<!-- Global because the marks are injected with set:html and so never get
+  Astro's scoping attribute. Every selector is nested under .pyronaut-visor. -->
+<style is:global>
+  /* Travel is linear so the marks never appear to slow; depth comes from
+     per-mark speed, bow and swell. The vertical bow is baked into one keyframe
+     set per track rather than read from a custom property, because Safari is
+     unreliable about var() inside @keyframes. */
+  @keyframes pyronautStreakA {
+    0% {
+      transform: translate(0, 0) scale(0.5);
+      opacity: 0;
+    }
+    14% {
+      opacity: 0.85;
+    }
+    50% {
+      transform: translate(-214px, -15px) scale(1.16);
+      opacity: 1;
+    }
+    86% {
+      opacity: 0.5;
+    }
+    100% {
+      transform: translate(-428px, 0) scale(0.5);
+      opacity: 0;
+    }
+  }
+  @keyframes pyronautStreakB {
+    0% {
+      transform: translate(0, 0) scale(0.5);
+      opacity: 0;
+    }
+    14% {
+      opacity: 0.85;
+    }
+    50% {
+      transform: translate(-214px, -8px) scale(1.16);
+      opacity: 1;
+    }
+    86% {
+      opacity: 0.5;
+    }
+    100% {
+      transform: translate(-428px, 0) scale(0.5);
+      opacity: 0;
+    }
+  }
+  @keyframes pyronautStreakC {
+    0% {
+      transform: translate(0, 0) scale(0.5);
+      opacity: 0;
+    }
+    14% {
+      opacity: 0.85;
+    }
+    50% {
+      transform: translate(-214px, 0px) scale(1.16);
+      opacity: 1;
+    }
+    86% {
+      opacity: 0.5;
+    }
+    100% {
+      transform: translate(-428px, 0) scale(0.5);
+      opacity: 0;
+    }
+  }
+  @keyframes pyronautStreakD {
+    0% {
+      transform: translate(0, 0) scale(0.5);
+      opacity: 0;
+    }
+    14% {
+      opacity: 0.85;
+    }
+    50% {
+      transform: translate(-214px, 9px) scale(1.16);
+      opacity: 1;
+    }
+    86% {
+      opacity: 0.5;
+    }
+    100% {
+      transform: translate(-428px, 0) scale(0.5);
+      opacity: 0;
+    }
+  }
+  @keyframes pyronautStreakE {
+    0% {
+      transform: translate(0, 0) scale(0.5);
+      opacity: 0;
+    }
+    14% {
+      opacity: 0.85;
+    }
+    50% {
+      transform: translate(-214px, 18px) scale(1.16);
+      opacity: 1;
+    }
+    86% {
+      opacity: 0.5;
+    }
+    100% {
+      transform: translate(-428px, 0) scale(0.5);
+      opacity: 0;
+    }
+  }
+  @keyframes pyronautBigPass {
+    0%,
+    85% {
+      transform: translate(0, 0) scale(0.5);
+      opacity: 0;
+    }
+    87% {
+      opacity: 0.85;
+    }
+    92.5% {
+      transform: translate(-214px, 0px) scale(1.16);
+      opacity: 1;
+    }
+    98% {
+      opacity: 0.5;
+    }
+    100% {
+      transform: translate(-428px, 0) scale(0.5);
+      opacity: 0;
+    }
+  }
+  @keyframes pyronautTwinkle {
+    0%,
+    100% {
+      opacity: 0.62;
+    }
+    50% {
+      opacity: 1;
+    }
+  }
+  /* The sheen travels straight left to right, lying at 29deg to match the
+     highlight painted on the visor. It rides over the dome as it goes: tipped
+     a little past that angle on the near rim, square on it and swollen across
+     the middle, then tipped back the other side of it on the far rim. */
+  @keyframes pyronautGlint {
+    0%,
+    85% {
+      transform: translateX(-250px) rotate(36deg) scale(0.84);
+    }
+    92.5% {
+      transform: translateX(0) rotate(29deg) scale(1.1);
+    }
+    100% {
+      transform: translateX(250px) rotate(22deg) scale(0.84);
+    }
+  }
+  /* Backwards fill is what keeps the visor clear on arrival: through its
+     delay each mark takes the 0% frame, which parks it off the right of the
+     glass at zero opacity, rather than the still position on its own style
+     attribute. */
+  .pyronaut-visor .pv-m {
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+    animation-fill-mode: backwards;
+  }
+  .pyronaut-visor .pv-bow-a {
+    animation-name: pyronautStreakA;
+  }
+  .pyronaut-visor .pv-bow-b {
+    animation-name: pyronautStreakB;
+  }
+  .pyronaut-visor .pv-bow-c {
+    animation-name: pyronautStreakC;
+  }
+  .pyronaut-visor .pv-bow-d {
+    animation-name: pyronautStreakD;
+  }
+  .pyronaut-visor .pv-bow-e {
+    animation-name: pyronautStreakE;
+  }
+  /* A lead on the long pass: off the glass for most of the cycle, then
+     across it in one streak. */
+  .pyronaut-visor .pv-pass {
+    animation-name: pyronautBigPass;
+  }
+  .pyronaut-visor .pv-glint {
+    transform-box: view-box;
+    transform-origin: 0 0;
+    animation-name: pyronautGlint;
+    animation-duration: 10s;
+    animation-delay: -3.75s;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+  }
+  .pyronaut-visor .pv-tw {
+    animation-name: pyronautTwinkle;
+    animation-timing-function: ease-in-out;
+    animation-iteration-count: infinite;
+  }
+  /* WebKit does not composite SVG group transforms, so every frame
+     re-rasterises the clipped overlay on the main thread. On phones the
+     twinkle and the sub-pixel far layer come off; everything that stays keeps
+     its own speed. */
+  @media (max-width: 639px) {
+    .pyronaut-visor .pv-tw {
+      animation: none;
+    }
+    .pyronaut-visor .pv-far {
+      display: none;
+      animation: none;
+    }
+  }
+  /* WebKit turns animations off entirely under Reduce Motion, so pausing them
+     would leave the marks parked off the glass. Each mark is instead pinned
+     where its own phase would have put it: a still, scattered starfield. */
+  @media (prefers-reduced-motion: reduce) {
+    .pyronaut-visor .pv-m,
+    .pyronaut-visor .pv-tw {
+      animation: none;
+      opacity: 1;
+    }
+    .pyronaut-visor .pv-glint {
+      animation: none;
+      opacity: 0;
+    }
+  }
+</style>

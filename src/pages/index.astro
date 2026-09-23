@@ -1,8 +1,9 @@
 ---
+import { Code } from "astro:components";
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import CodeTabs from "@/components/CodeTabs.astro";
-import DefineOnce from "@/components/DefineOnce.astro";
 import Glyph from "@/components/Glyph.astro";
+import Mascot from "@/components/Mascot.astro";
 import MicronautBand from "@/components/MicronautBand.astro";
 import SkepticTest from "@/components/SkepticTest.astro";
 import ThemeToggle from "@/components/ThemeToggle.astro";
@@ -17,9 +18,10 @@ import {
 } from "@/lib/site-content";
 
 /**
- * "Ignition" — modern editorial startup style: mono uppercase kickers with
- * orange dots, huge tight-tracking headlines, dark pill buttons, an artwork
- * card with an overlapping code window, and a foundation logo strip.
+ * Homepage. The mascot's flame is the one light source: dark bands (hero,
+ * CTA) are lit from where the flamethrower points, and flame orange is kept
+ * for things you act on — buttons, commands, the active tab. Everything else
+ * is ink and hairlines.
  */
 
 const navLinks = [
@@ -32,64 +34,66 @@ const navLinks = [
   },
 ];
 
-const heroChecks = [
-  "High-performance runtime",
-  "Rich data access",
-  "Production observability",
-  "Cloud integrations",
-  "Build-time validation",
-  "Enterprise support"
-];
+const helloCode = `@Get("/hello/{name}")
+def hello(name: str):
+    return {"message": f"Hello, {name}"}`;
 
+const createCommand = "pyronaut create rocket-service";
+
+// A sparse, seeded starfield for the dark bands — deterministic so the
+// build is stable, uneven so it doesn't read as a pattern.
+let seed = 7;
+const rand = () => ((seed = (seed * 16807) % 2147483647) - 1) / 2147483646;
+const stars = Array.from({ length: 70 }, () => ({
+  x: (rand() * 100).toFixed(2),
+  y: (rand() * 100).toFixed(2),
+  r: (rand() < 0.85 ? 0.6 + rand() * 0.5 : 1.2 + rand() * 0.6).toFixed(2),
+  o: (0.15 + rand() * 0.5).toFixed(2),
+}));
+
+const container = "mx-auto max-w-6xl px-5";
+const sectionRule = "border-t border-ink-200 dark:border-white/10";
+const h2 =
+  "font-display text-balance text-4xl font-bold leading-[1.05] tracking-[-0.02em] text-ink-950 dark:text-white md:text-5xl";
+const lead = "text-base leading-7 text-ink-500 dark:text-ink-300 md:text-lg md:leading-8";
+const btnFlame =
+  "inline-flex items-center gap-2 rounded-md bg-flame-500 px-5 py-3 text-sm font-semibold text-ink-950 transition hover:bg-flame-400";
+const btnGhost =
+  "inline-flex items-center rounded-md border border-white/20 px-5 py-3 text-sm font-semibold text-white transition hover:border-white/50";
 ---
 
 <BaseLayout
   title={`${SITE_NAME} — High-performance Python web framework`}
-  bodyClass="bg-ink-50 font-sans text-ink-900 antialiased dark:bg-ink-950 dark:text-ink-100"
+  bodyClass="bg-white font-sans text-ink-900 antialiased dark:bg-ink-950 dark:text-ink-100"
 >
-  <!-- Header -->
-  <header
-    class="sticky top-0 z-40 border-b border-ink-200/70 bg-ink-50/90 backdrop-blur-lg dark:border-white/10 dark:bg-ink-950/90"
-  >
-    <div class="mx-auto flex h-[4.5rem] max-w-7xl items-center gap-10 px-5">
+  <!-- Header: always dark, it sits on the hero -->
+  <header class="sticky top-0 z-40 border-b border-white/10 bg-ink-950/90 backdrop-blur">
+    <div class:list={[container, "flex h-16 items-center gap-8"]}>
       <a href="/" class="flex shrink-0 items-center">
-        <img
-          src="/pyronaut-assets/logo-header.svg"
-          alt="Pyronaut"
-          class="h-10 w-auto dark:hidden"
-        />
-        <img
-          src="/pyronaut-assets/logo-header-dark.svg"
-          alt="Pyronaut"
-          class="hidden h-10 w-auto dark:block"
-        />
+        <img src="/pyronaut-assets/logo-header-dark.svg" alt="Pyronaut" class="h-9 w-auto" />
       </a>
-      <nav class="hidden gap-8 md:flex">
+      <nav class="hidden gap-6 md:flex">
         {
           navLinks.map((link) => (
-            <a
-              href={link.href}
-              class="text-[0.95rem] font-semibold text-ink-700 transition hover:text-ink-950 dark:text-ink-300 dark:hover:text-white"
-            >
+            <a href={link.href} class="text-sm font-medium text-ink-300 transition hover:text-white">
               {link.label}
             </a>
           ))
         }
       </nav>
-      <div class="ml-auto flex items-center gap-4">
-        <ThemeToggle class="rounded-lg p-2 text-ink-600 transition hover:bg-ink-100 dark:text-ink-300 dark:hover:bg-white/10" />
+      <div class="ml-auto flex items-center gap-5">
         <a
           href="https://github.com/micronaut-projects/pyronaut"
-          class="hidden text-[0.95rem] font-semibold text-ink-700 transition hover:text-ink-950 dark:text-ink-300 dark:hover:text-white sm:block"
+          class="hidden text-sm font-medium text-ink-300 transition hover:text-white lg:block"
         >
           GitHub
         </a>
+        <ThemeToggle class="rounded-md p-1.5 text-ink-400 transition hover:bg-white/10 hover:text-white" />
         <a
           href="/docs/guide/index.html#gettingStarted"
-          class="inline-flex items-center gap-2 rounded-xl bg-ink-950 px-5 py-3 text-sm font-bold text-white transition hover:bg-ink-800 dark:bg-white dark:text-ink-950 dark:hover:bg-ink-100"
+          class="hidden rounded-md bg-flame-500 px-3.5 py-1.5 text-sm font-semibold text-ink-950 transition hover:bg-flame-400 sm:inline-flex"
         >
           Get started
-          <Glyph name="arrow-right" class="size-4" />
         </a>
       </div>
     </div>
@@ -97,153 +101,102 @@ const heroChecks = [
 
   <main>
     <!-- Hero -->
-    <section class="relative overflow-hidden">
+    <section class="relative isolate overflow-hidden bg-ink-950 text-white">
+      <svg class="absolute inset-0 -z-10 size-full" aria-hidden="true">
+        {stars.map((s) => <circle cx={`${s.x}%`} cy={`${s.y}%`} r={s.r} fill="#fff" opacity={s.o} />)}
+      </svg>
+      <!-- Warm light thrown by the flamethrower -->
       <div
-        class="pointer-events-none absolute -right-40 top-10 size-[640px] rounded-full border border-ink-200 dark:border-white/10"
+        class="absolute inset-0 -z-10 bg-[radial-gradient(38rem_28rem_at_88%_42%,rgba(249,115,22,0.28),transparent_70%),radial-gradient(60rem_20rem_at_70%_110%,rgba(239,68,68,0.18),transparent_70%)]"
+        aria-hidden="true"
       >
       </div>
       <div
-        class="relative mx-auto grid max-w-[84rem] gap-16 px-5 pb-24 pt-16 lg:grid-cols-[minmax(0,1.12fr)_minmax(0,0.88fr)] lg:items-start lg:gap-12 lg:pt-20"
+        class:list={[
+          container,
+          "grid gap-14 pb-20 pt-16 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] lg:items-center lg:gap-10 lg:pb-28 lg:pt-24",
+        ]}
       >
         <div>
+          <p class="text-sm font-medium text-flame-300">
+            Python on Micronaut, powered by GraalPy
+          </p>
           <h1
-            class="mt-8 text-[3.4rem] font-extrabold leading-[0.98] tracking-[-0.03em] text-ink-950 dark:text-white md:text-[4.6rem] lg:text-[3.75rem]"
+            class="font-display mt-5 text-balance text-5xl font-bold leading-[0.98] tracking-[-0.03em] md:text-7xl lg:text-[3.9rem] xl:text-[4.25rem]"
           >
-            A <span class="whitespace-nowrap">high-performance</span> Python web framework.
+            A <span class="text-flame-400 sm:whitespace-nowrap">high-performance</span> Python web framework.
           </h1>
-          <p
-            class="mt-8 max-w-xl text-xl leading-9 text-ink-500 dark:text-ink-300"
-          >
+          <p class="mt-7 max-w-xl text-lg leading-8 text-ink-300">
             Build production services with rich data access, observability, cloud integrations, build-time validation, integrated testing, and enterprise support.
           </p>
-          <div class="mt-10 flex flex-wrap gap-4" id="get-started">
-            <a
-              href="/docs/guide/index.html#gettingStarted"
-              class="inline-flex items-center gap-2.5 rounded-xl bg-ink-950 px-7 py-4 text-base font-bold text-white transition hover:bg-ink-800 dark:bg-white dark:text-ink-950 dark:hover:bg-ink-100"
-            >
+          <div class="mt-9 flex flex-wrap gap-3" id="get-started">
+            <a href="/docs/guide/index.html#gettingStarted" class={btnFlame}>
               Get started
-              <Glyph name="arrow-right" class="size-4.5 text-flame-500 dark:text-flame-600" />
+              <Glyph name="arrow-right" class="size-4" />
             </a>
-            <a
-              href="#features"
-              class="inline-flex items-center rounded-xl border border-ink-200 bg-white px-7 py-4 text-base font-bold text-ink-950 transition hover:border-ink-300 hover:bg-ink-50 dark:border-white/15 dark:bg-white/5 dark:text-white dark:hover:bg-white/10"
-            >
-              Explore the framework
-            </a>
+            <a href="#features" class={btnGhost}>Explore the framework</a>
           </div>
-          <ul class="mt-12 grid gap-x-6 gap-y-3 sm:grid-cols-2 lg:grid-cols-3 lg:gap-x-4">
-            {
-              heroChecks.map((check) => (
-                <li class="flex items-center gap-2 text-sm font-medium text-ink-600 dark:text-ink-300">
-                  <Glyph name="check" class="size-4 text-python-blue dark:text-flame-400" />
-                  {check}
-                </li>
-              ))
-            }
-          </ul>
+          <div
+            class="mt-8 flex max-w-md items-center gap-3 rounded-md border border-white/10 bg-white/[0.04] py-2 pl-4 pr-2 font-mono text-sm"
+          >
+            <span class="select-none text-flame-400">$</span>
+            <code class="flex-1 truncate text-ink-100">{createCommand}</code>
+            <button
+              type="button"
+              data-copy={createCommand}
+              class="rounded px-2 py-1 font-sans text-xs font-medium text-ink-400 transition hover:bg-white/10 hover:text-white"
+            >
+              Copy
+            </button>
+          </div>
         </div>
 
-        <!-- Artwork card with overlapping code window -->
-        <div class="relative mx-auto w-full max-w-[520px] lg:mx-0">
-          <div
-            class="overflow-hidden rounded-[1.75rem] bg-white shadow-[0_32px_64px_-32px_rgba(16,21,36,0.35)] ring-1 ring-ink-200 dark:bg-ink-100 dark:ring-white/10"
+        <div class="relative">
+          <Mascot class="mx-auto w-full max-w-lg lg:max-w-none lg:translate-x-6" />
+          <figure
+            class="code-block relative -mt-6 ml-auto w-[88%] max-w-md overflow-hidden rounded-lg border border-white/10 bg-ink-900/90 shadow-2xl shadow-black/40 backdrop-blur sm:-mt-10"
           >
-            <div class="flex items-center justify-between px-6 pt-5">
-              <span class="font-mono text-xs font-bold uppercase tracking-widest text-ember-500">
-                Pyronaut
-              </span>
-              <span class="font-mono text-[0.65rem] uppercase tracking-[0.2em] text-ink-400">
-                Python / Micronaut / GraalPy
-              </span>
-            </div>
-            <img
-              src="/pyronaut-assets/mascot.svg"
-              alt="Pyronaut mascot — an astronaut with a Python-powered flamethrower"
-              class="w-full px-3 pb-16 pt-2"
+            <figcaption class="border-b border-white/10 px-4 py-2 font-mono text-xs text-ink-400">
+              hello.py
+            </figcaption>
+            <Code
+              code={helloCode}
+              lang="python"
+              themes={{ light: "one-dark-pro", dark: "one-dark-pro" }}
+              defaultColor="light"
             />
-          </div>
-
-          <div
-            class="relative z-10 -mt-10 ml-auto w-[94%] overflow-hidden rounded-2xl bg-ink-950 shadow-2xl ring-1 ring-white/10 sm:-mt-12"
-          >
-            <div
-              class="flex items-center gap-2 border-b border-white/10 px-5 py-3"
-            >
-              <span class="size-2 rounded-full bg-ember-500"></span>
-              <span class="size-2 rounded-full bg-python-yellow"></span>
-              <span class="size-2 rounded-full bg-ink-600"></span>
-              <span
-                class="mx-auto font-mono text-xs font-medium text-ink-300"
-              >
-                hello.py
-              </span>
-              <span class="font-mono text-[0.6rem] font-bold uppercase text-flame-400">
-                py
-              </span>
-            </div>
-            <pre
-              class="overflow-x-auto px-6 py-5 font-mono text-[0.82rem] leading-7 text-ink-100"><code><span class="text-flame-400">@Get</span><span class="text-ink-400">(</span><span class="text-emerald-400">"/hello/&#123;name&#125;"</span><span class="text-ink-400">)</span>
-<span class="text-python-blue">def</span> <span class="text-sky-300">hello</span>(name: <span class="text-python-blue">str</span>):
-    <span class="text-python-blue">return</span> &#123;<span class="text-emerald-400">"message"</span>: <span class="text-python-blue">f</span><span class="text-emerald-400">"Hello, &#123;name&#125;"</span>&#125;</code></pre>
-            <div
-              class="flex items-center justify-between border-t border-white/10 px-5 py-2.5 font-mono text-xs"
-            >
-              <span class="flex items-center gap-2 text-emerald-400">
-                <span class="size-1.5 rounded-full bg-emerald-400"></span>
-                App ready
-              </span>
-              <span class="text-ink-400">localhost:8080</span>
-            </div>
-          </div>
-
-          <div
-            class="mt-8 h-1.5 w-3/4 rounded-full bg-gradient-to-r from-ember-500 via-flame-500 to-python-yellow"
-          >
-          </div>
+          </figure>
         </div>
       </div>
-
     </section>
 
     <!-- Features -->
-    <section id="features" class="border-b border-ink-200/70 dark:border-white/10">
-      <div class="mx-auto max-w-7xl px-5 py-20 md:py-24">
-        <p class="font-mono text-xs font-bold uppercase tracking-[0.2em] text-ember-500">
-          WHY PYRONAUT
-        </p>
-        <div
-          class="mt-6 flex flex-col gap-4 md:flex-row md:items-end md:justify-between"
-        >
-          <h2
-            class="max-w-xl text-4xl font-extrabold tracking-[-0.02em] text-ink-950 dark:text-white md:text-5xl"
-          >
-            Production Python, working together.
-          </h2>
-          <p class="max-w-md text-base leading-7 text-ink-500 dark:text-ink-300">
+    <section id="features">
+      <div class:list={[container, "py-20 lg:py-28"]}>
+        <div class="grid gap-6 lg:grid-cols-2 lg:items-end lg:gap-16">
+          <h2 class={h2}>Production Python, working together.</h2>
+          <p class={lead}>
             Pyronaut brings dependency injection, validation, data access, observability, testing, and packaging into one application model.
           </p>
         </div>
-        <div class="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+        <div
+          class="mt-14 grid gap-px overflow-hidden rounded-lg border border-ink-200 bg-ink-200 dark:border-white/10 dark:bg-white/10 sm:grid-cols-2 lg:grid-cols-3"
+        >
           {
-            FEATURES.map((feature, index) => (
+            FEATURES.map((feature) => (
               <a
                 href={feature.href}
-                class="group rounded-2xl bg-white p-6 ring-1 ring-ink-200 transition hover:-translate-y-1 hover:shadow-[0_24px_48px_-24px_rgba(16,21,36,0.3)] hover:ring-ink-950 dark:bg-ink-900 dark:ring-white/10 dark:hover:ring-flame-500/60"
+                class="group bg-white p-7 transition hover:bg-flame-50/50 dark:bg-ink-950 dark:hover:bg-white/[0.03]"
               >
-                <div class="flex items-center justify-between">
-                  <span class="grid size-11 place-items-center rounded-xl bg-ink-950 text-flame-400 transition group-hover:bg-flame-500 group-hover:text-white dark:bg-white/10">
-                    <Glyph name={feature.icon} class="size-5.5" />
-                  </span>
-                  <span class="font-mono text-xs font-semibold text-ink-300 dark:text-ink-500">
-                    0{index + 1}
-                  </span>
-                </div>
-                <h3 class="mt-5 text-[1.05rem] font-bold tracking-tight text-ink-950 dark:text-white">
+                <Glyph name={feature.icon} class="size-6 text-flame-600 dark:text-flame-400" />
+                <h3 class="mt-5 flex items-center gap-2 text-lg font-semibold text-ink-950 dark:text-white">
                   {feature.title}
+                  <Glyph
+                    name="arrow-right"
+                    class="size-4 -translate-x-1 text-flame-600 opacity-0 transition group-hover:translate-x-0 group-hover:opacity-100 dark:text-flame-400"
+                  />
                 </h3>
-                <p class="mt-2 text-sm leading-6 text-ink-500 dark:text-ink-300">
-                  {feature.copy}
-                </p>
+                <p class="mt-2 text-sm leading-6 text-ink-500 dark:text-ink-300">{feature.copy}</p>
               </a>
             ))
           }
@@ -252,76 +205,60 @@ const heroChecks = [
     </section>
 
     <!-- Code showcase -->
-    <section id="code" class="border-b border-ink-200/70 dark:border-white/10">
+    <section id="code" class:list={[sectionRule, "bg-ink-50 dark:bg-ink-900/40"]}>
       <div
-        class="mx-auto grid max-w-7xl gap-14 px-5 py-20 md:py-24 lg:grid-cols-[380px_minmax(0,1fr)]"
+        class:list={[container, "grid gap-12 py-20 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.5fr)] lg:gap-16 lg:py-28"]}
       >
-        <div>
-          <p class="font-mono text-xs font-bold uppercase tracking-[0.2em] text-ember-500">
-            THE APPLICATION MODEL
-          </p>
-          <h2
-            class="mt-6 text-4xl font-extrabold tracking-[-0.02em] text-ink-950 dark:text-white"
-          >
-            Write Python. Get the platform around it.
-          </h2>
-          <p class="mt-5 text-base leading-7 text-ink-500 dark:text-ink-300">
+        <div class="lg:sticky lg:top-28 lg:self-start">
+          <h2 class={h2}>Write Python. Get the platform around it.</h2>
+          <p class:list={[lead, "mt-5"]}>
             Your Python types and annotations define routing, validation, serialization, dependency injection, OpenAPI, and tests.
           </p>
-          <p class="mt-5 text-sm leading-6 text-ink-500 dark:text-ink-400">
+          <p class="mt-4 text-sm leading-6 text-ink-500 dark:text-ink-400">
             Pyronaut processes the application model before startup, enabling earlier validation and carrying the same model through development, testing, and packaging.
           </p>
-          <ul class="mt-8 grid gap-3.5">
+          <ul class="mt-8 divide-y divide-ink-200 border-y border-ink-200 dark:divide-white/10 dark:border-white/10">
             {
               CODE_PROOFS.map((proof) => (
-                <li class="flex items-start gap-3 text-sm leading-6 text-ink-700 dark:text-ink-200">
-                  <Glyph
-                    name="check"
-                    class="mt-1 size-4 shrink-0 text-python-blue dark:text-flame-400"
-                  />
-                  {proof}
-                </li>
+                <li class="py-3 text-sm font-medium leading-6 text-ink-800 dark:text-ink-100">{proof}</li>
               ))
             }
           </ul>
-          <div class="mt-8">
-            <DefineOnce />
-          </div>
         </div>
-        <CodeTabs id="ig-code" />
+        <CodeTabs id="home-code" />
       </div>
     </section>
 
-    <!-- Workflow -->
-    <section id="workflow" class="border-b border-ink-200/70 bg-white dark:border-white/10 dark:bg-ink-900/40">
-      <div class="mx-auto max-w-7xl px-5 py-20 md:py-24">
-        <p class="font-mono text-xs font-bold uppercase tracking-[0.2em] text-ember-500">
-          THE APPLICATION LIFECYCLE
-        </p>
-        <h2
-          class="mt-6 max-w-2xl text-4xl font-extrabold tracking-[-0.02em] text-ink-950 dark:text-white md:text-5xl"
-        >
-          From Python source to a production artifact.
-        </h2>
-        <p class="mt-5 max-w-xl text-base leading-7 text-ink-500 dark:text-ink-300">
+    <!-- Workflow: the CLI as a pipeline -->
+    <section id="workflow" class={sectionRule}>
+      <div class:list={[container, "py-20 lg:py-28"]}>
+        <h2 class:list={[h2, "max-w-3xl"]}>From Python source to a production artifact.</h2>
+        <p class:list={[lead, "mt-5 max-w-xl"]}>
           One CLI coordinates creation, development, testing, validation, and packaging.
         </p>
-        <ol class="mt-12 grid gap-px overflow-hidden rounded-2xl bg-ink-200 ring-1 ring-ink-200 dark:bg-white/10 dark:ring-white/10 md:grid-cols-5">
+        <ol class="relative mt-14 grid gap-10 md:grid-cols-5 md:gap-6">
+          <span
+            class="absolute left-[7px] top-2 h-[calc(100%-1rem)] w-px bg-gradient-to-b from-flame-500 via-flame-500/40 to-ink-200 dark:to-white/10 md:left-0 md:top-[7px] md:h-px md:w-full md:bg-gradient-to-r"
+            aria-hidden="true"
+          >
+          </span>
           {
             WORKFLOW.map((stage, index) => (
-              <li class="bg-ink-50 p-6 dark:bg-ink-950">
-                <span class="font-mono text-xs font-bold text-ember-500">
-                  0{index + 1}
-                </span>
-                <h3 class="mt-3 text-base font-bold tracking-tight text-ink-950 dark:text-white">
-                  {stage.title}
-                </h3>
-                <code class="mt-1 block font-mono text-xs text-ink-500 dark:text-ink-400">
+              <li class="relative pl-8 md:pl-0 md:pt-9">
+                <span
+                  class:list={[
+                    "absolute left-0 top-0.5 size-[15px] rounded-full border-[3px] md:top-0",
+                    index === WORKFLOW.length - 1
+                      ? "border-flame-500 bg-flame-500"
+                      : "border-flame-500 bg-white dark:bg-ink-950",
+                  ]}
+                  aria-hidden="true"
+                />
+                <h3 class="text-lg font-semibold text-ink-950 dark:text-white">{stage.title}</h3>
+                <code class="mt-2 inline-block rounded bg-ink-100 px-2 py-1 font-mono text-xs text-ink-800 dark:bg-white/10 dark:text-ink-100">
                   {stage.command}
                 </code>
-                <p class="mt-3 text-sm leading-6 text-ink-500 dark:text-ink-300">
-                  {stage.copy}
-                </p>
+                <p class="mt-3 text-sm leading-6 text-ink-500 dark:text-ink-300">{stage.copy}</p>
               </li>
             ))
           }
@@ -330,134 +267,114 @@ const heroChecks = [
     </section>
 
     <!-- Stack comparison -->
-    <section class="border-b border-ink-200/70 bg-ink-950 text-white dark:border-white/10">
-      <div class="mx-auto max-w-7xl px-5 py-20 md:py-24">
-        <p class="font-mono text-xs font-bold uppercase tracking-[0.2em] text-flame-400">
-          THE TRADE-OFF
-        </p>
-        <h2
-          class="mt-6 max-w-2xl text-4xl font-extrabold tracking-[-0.02em] md:text-5xl"
-        >
-          A representative FastAPI stack vs. Pyronaut
-        </h2>
-        <p class="mt-5 max-w-xl text-base leading-7 text-ink-300">
+    <section id="compare" class={sectionRule}>
+      <div class:list={[container, "py-20 lg:py-28"]}>
+        <h2 class:list={[h2, "max-w-3xl"]}>A representative FastAPI stack vs. Pyronaut</h2>
+        <p class:list={[lead, "mt-5 max-w-2xl"]}>
           FastAPI is a strong HTTP framework. Pyronaut takes a different approach, combining high performance with data access, observability, build-time validation, testing, and production packaging.
         </p>
-        <div class="mt-12 grid gap-6 md:grid-cols-2">
-          <div class="rounded-2xl border border-white/10 bg-white/[0.04] p-8">
-            <h3 class="font-mono text-sm font-bold uppercase tracking-[0.2em] text-ink-400">
-              {STACK_COMPARISON.conventional.title}
-            </h3>
-            <ul class="mt-6 grid gap-3">
+        <div class="mt-14 overflow-x-auto">
+          <table class="w-full min-w-[640px] border-collapse text-left text-sm">
+            <thead>
+              <tr>
+                <th scope="col" class="w-[18%] border-b border-ink-300 py-4 pr-6 dark:border-white/20">
+                  <span class="sr-only">Area</span>
+                </th>
+                <th
+                  scope="col"
+                  class="border-b border-ink-300 py-4 pr-6 font-semibold text-ink-500 dark:border-white/20 dark:text-ink-400"
+                >
+                  {STACK_COMPARISON.conventionalTitle}
+                </th>
+                <th
+                  scope="col"
+                  class="rounded-t-lg border-b border-flame-500/40 bg-ink-950 px-5 py-4 font-semibold text-white dark:bg-ink-900"
+                >
+                  <span class="inline-flex items-center gap-2">
+                    <Glyph name="flame" class="size-4 text-flame-400" />
+                    {STACK_COMPARISON.pyronautTitle}
+                  </span>
+                </th>
+              </tr>
+            </thead>
+            <tbody>
               {
-                STACK_COMPARISON.conventional.items.map((item) => (
-                  <li class="flex items-center gap-3 text-[0.95rem] text-ink-300">
-                    <span class="size-1.5 shrink-0 rounded-full bg-ink-500" />
-                    {item}
-                  </li>
+                STACK_COMPARISON.rows.map((row) => (
+                  <tr class="align-top">
+                    <th
+                      scope="row"
+                      class="border-b border-ink-200 py-4 pr-6 font-medium text-ink-500 dark:border-white/10 dark:text-ink-400"
+                    >
+                      {row.area}
+                    </th>
+                    <td class="border-b border-ink-200 py-4 pr-6 text-ink-600 dark:border-white/10 dark:text-ink-300">
+                      {row.conventional}
+                    </td>
+                    <td class="border-b border-white/10 bg-ink-950 px-5 py-4 text-ink-100 dark:bg-ink-900">{row.pyronaut}</td>
+                  </tr>
                 ))
               }
-            </ul>
-          </div>
-          <div class="rounded-2xl bg-white p-8 text-ink-950">
-            <h3 class="font-mono text-sm font-bold uppercase tracking-[0.2em] text-ember-500">
-              {STACK_COMPARISON.pyronaut.title}
-            </h3>
-            <ul class="mt-6 grid gap-3">
-              {
-                STACK_COMPARISON.pyronaut.items.map((item) => (
-                  <li class="flex items-center gap-3 text-[0.95rem] font-medium">
-                    <Glyph name="check" class="size-4 shrink-0 text-flame-600" />
-                    {item}
-                  </li>
-                ))
-              }
-            </ul>
-          </div>
+            </tbody>
+            <tfoot>
+              <tr>
+                <td class="py-4 pr-6"></td>
+                <td class="py-4 pr-6 italic text-ink-500 dark:text-ink-400">
+                  {STACK_COMPARISON.conventionalFootnote}
+                </td>
+                <td class="rounded-b-lg bg-ink-950 px-5 py-4 font-medium italic text-flame-300 dark:bg-ink-900">
+                  {STACK_COMPARISON.pyronautFootnote}
+                </td>
+              </tr>
+            </tfoot>
+          </table>
         </div>
-        <SkepticTest tone="dark" />
+        <SkepticTest />
       </div>
     </section>
 
     <!-- Personas -->
-    <section
-      id="teams"
-      class="border-b border-ink-200/70 bg-white dark:border-white/10 dark:bg-ink-900/40"
-    >
-      <div class="mx-auto max-w-7xl px-5 py-20 md:py-24">
-        <p class="font-mono text-xs font-bold uppercase tracking-[0.2em] text-ember-500">
-          WHO SHOULD CARE?
-        </p>
-        <h2
-          class="mt-6 max-w-2xl text-4xl font-extrabold tracking-[-0.02em] text-ink-950 dark:text-white md:text-5xl"
-        >
-          For teams building production Python services.
-        </h2>
-        <p class="mt-5 max-w-xl text-base leading-7 text-ink-500 dark:text-ink-300">
+    <section id="teams" class:list={[sectionRule, "bg-ink-50 dark:bg-ink-900/40"]}>
+      <div class:list={[container, "py-20 lg:py-28"]}>
+        <h2 class:list={[h2, "max-w-3xl"]}>For teams building production Python services.</h2>
+        <p class:list={[lead, "mt-5 max-w-xl"]}>
           Choose Pyronaut when your Python services need high performance and deeper production capabilities.
         </p>
-        <div class="mt-12 grid gap-5 md:grid-cols-2 lg:grid-cols-4">
+        <dl class="mt-14 grid gap-x-10 gap-y-10 sm:grid-cols-2 lg:grid-cols-4">
           {
             PERSONAS.map((persona) => (
-              <div class="rounded-2xl bg-ink-50 p-6 ring-1 ring-ink-200 dark:bg-ink-950 dark:ring-white/10">
-                <p class="font-mono text-xs font-bold uppercase tracking-[0.15em] text-ember-500">
-                  {persona.role}
-                </p>
-                <p class="mt-4 text-sm leading-7 text-ink-700 dark:text-ink-200">
-                  {persona.value}
-                </p>
+              <div class="border-l-2 border-flame-500 pl-5">
+                <dt class="text-lg font-semibold text-ink-950 dark:text-white">{persona.role}</dt>
+                <dd class="mt-2 text-sm leading-6 text-ink-500 dark:text-ink-300">{persona.value}</dd>
               </div>
             ))
           }
-        </div>
+        </dl>
       </div>
     </section>
 
     <!-- CTA -->
-    <section class="relative overflow-hidden">
+    <section class="relative isolate overflow-hidden bg-ink-950 text-white">
+      <svg class="absolute inset-0 -z-10 size-full" aria-hidden="true">
+        {stars.slice(0, 35).map((s) => <circle cx={`${s.y}%`} cy={`${s.x}%`} r={s.r} fill="#fff" opacity={s.o} />)}
+      </svg>
       <div
-        class="pointer-events-none absolute -left-32 bottom-0 size-[420px] rounded-full border border-ink-200 dark:border-white/10"
+        class="absolute inset-0 -z-10 bg-[radial-gradient(50rem_22rem_at_50%_120%,rgba(249,115,22,0.35),transparent_70%)]"
+        aria-hidden="true"
       >
       </div>
-      <div
-        class="relative mx-auto flex max-w-7xl flex-col items-start gap-10 px-5 py-20 md:flex-row md:items-center md:justify-between md:py-24"
-      >
-        <div class="flex items-center gap-8">
-          <img
-            src="/pyronaut-assets/logo-full.svg"
-            alt="Pyronaut logo"
-            class="hidden w-40 shrink-0 md:block dark:md:hidden"
-          />
-          <img
-            src="/pyronaut-assets/logo-full-dark.svg"
-            alt="Pyronaut logo"
-            class="hidden w-40 shrink-0 dark:md:block"
-          />
-          <div>
-            <h2
-              class="max-w-lg text-4xl font-extrabold tracking-[-0.02em] text-ink-950 dark:text-white"
-            >
-              Build your first Pyronaut service.
-            </h2>
-            <p class="mt-3 max-w-md text-base leading-7 text-ink-500 dark:text-ink-300">
-              Start with HTTP, data access, validation, observability, testing, and production packaging in one Python project.
-            </p>
-          </div>
-        </div>
-        <div class="flex flex-wrap gap-4">
-          <a
-            href="/docs/"
-            class="inline-flex items-center gap-2.5 rounded-xl bg-ink-950 px-7 py-4 text-base font-bold text-white transition hover:bg-ink-800 dark:bg-white dark:text-ink-950 dark:hover:bg-ink-100"
-          >
+      <div class:list={[container, "flex flex-col items-center py-24 text-center lg:py-32"]}>
+        <h2 class="font-display max-w-3xl text-balance text-5xl font-bold leading-[1] tracking-[-0.03em] md:text-6xl">
+          Build your first Pyronaut service.
+        </h2>
+        <p class="mt-6 max-w-xl text-lg leading-8 text-ink-300">
+          Start with HTTP, data access, validation, observability, testing, and production packaging in one Python project.
+        </p>
+        <div class="mt-10 flex flex-wrap justify-center gap-3">
+          <a href="/docs/" class={btnFlame}>
             Read the docs
-            <Glyph name="arrow-right" class="size-4.5 text-flame-500 dark:text-flame-600" />
+            <Glyph name="arrow-right" class="size-4" />
           </a>
-          <a
-            href="https://github.com/micronaut-projects/pyronaut"
-            class="inline-flex items-center rounded-xl border border-ink-200 bg-white px-7 py-4 text-base font-bold text-ink-950 transition hover:bg-ink-50 dark:border-white/15 dark:bg-white/5 dark:text-white dark:hover:bg-white/10"
-          >
-            View the repository
-          </a>
+          <a href="https://github.com/micronaut-projects/pyronaut" class={btnGhost}>View the repository</a>
         </div>
       </div>
     </section>
@@ -466,22 +383,12 @@ const heroChecks = [
   </main>
 
   <!-- Footer -->
-  <footer class="border-t border-ink-200/70 bg-white dark:border-white/10 dark:bg-ink-950">
-    <div class="mx-auto max-w-7xl px-5 py-14">
-      <div
-        class="grid gap-10 md:grid-cols-[minmax(0,1.2fr)_repeat(3,minmax(0,1fr))]"
-      >
+  <footer class="border-t border-ink-200 dark:border-white/10">
+    <div class:list={[container, "py-14"]}>
+      <div class="grid gap-10 md:grid-cols-[minmax(0,1.2fr)_repeat(3,minmax(0,1fr))]">
         <div>
-          <img
-            src="/pyronaut-assets/logo-header.svg"
-            alt="Pyronaut"
-            class="h-9 w-auto dark:hidden"
-          />
-          <img
-            src="/pyronaut-assets/logo-header-dark.svg"
-            alt="Pyronaut"
-            class="hidden h-9 w-auto dark:block"
-          />
+          <img src="/pyronaut-assets/logo-header.svg" alt="Pyronaut" class="h-8 w-auto dark:hidden" />
+          <img src="/pyronaut-assets/logo-header-dark.svg" alt="Pyronaut" class="hidden h-8 w-auto dark:block" />
           <p class="mt-4 max-w-xs text-sm leading-6 text-ink-500 dark:text-ink-400">
             A high-performance Python framework for production services.
           </p>
@@ -492,15 +399,13 @@ const heroChecks = [
         {
           FOOTER_COLUMNS.map((column) => (
             <div>
-              <h3 class="font-mono text-xs font-bold uppercase tracking-[0.2em] text-ink-950 dark:text-white">
-                {column.title}
-              </h3>
+              <h3 class="text-sm font-semibold text-ink-950 dark:text-white">{column.title}</h3>
               <ul class="mt-4 grid gap-2.5">
                 {column.links.map((link) => (
                   <li>
                     <a
                       href={link.href}
-                      class="text-sm text-ink-500 transition hover:text-flame-600 dark:text-ink-400 dark:hover:text-flame-400"
+                      class="text-sm text-ink-500 transition hover:text-ink-950 dark:text-ink-400 dark:hover:text-white"
                     >
                       {link.label}
                     </a>
@@ -513,5 +418,18 @@ const heroChecks = [
       </div>
     </div>
   </footer>
-
 </BaseLayout>
+
+<script>
+  for (const button of document.querySelectorAll<HTMLButtonElement>("[data-copy]")) {
+    button.addEventListener("click", async () => {
+      try {
+        await navigator.clipboard.writeText(button.dataset.copy ?? "");
+        button.textContent = "Copied";
+        setTimeout(() => (button.textContent = "Copy"), 1500);
+      } catch {
+        /* clipboard unavailable: leave the text selectable */
+      }
+    });
+  }
+</script>
