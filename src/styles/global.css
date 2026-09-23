@@ -32,35 +32,9 @@
   --color-python-blue: #3776ab;
   --color-python-yellow: #ffd43b;
 
-  --font-display: "Space Grotesk", "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Bricolage Grotesque", "Inter", ui-sans-serif, system-ui, sans-serif;
   --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
-
-  --font-poster: "Bricolage Grotesque", "Space Grotesk", ui-sans-serif, sans-serif;
-
-  --animate-flame-pulse: flame-pulse 5s ease-in-out infinite;
-  --animate-drift: drift 14s ease-in-out infinite;
-
-  @keyframes flame-pulse {
-    0%,
-    100% {
-      opacity: 0.55;
-      transform: scale(1);
-    }
-    50% {
-      opacity: 0.9;
-      transform: scale(1.06);
-    }
-  }
-  @keyframes drift {
-    0%,
-    100% {
-      transform: translateY(0);
-    }
-    50% {
-      transform: translateY(-10px);
-    }
-  }
 }
 
 html {
@@ -68,20 +42,20 @@ html {
 }
 
 /* Shiki blocks: let the design control the frame, keep the code scrollable. */
-.code-tabs pre {
+.code-block pre {
   margin: 0;
-  padding: 1.1rem 1.25rem;
-  font-size: 0.82rem;
+  padding: 1rem 1.25rem;
+  font-size: 0.8125rem;
   line-height: 1.65;
   overflow-x: auto;
   background-color: transparent !important;
 }
-.code-tabs pre code {
+.code-block pre code {
   font-family: var(--font-mono);
 }
 
 /* Shiki dual themes: switch token colors when `.dark` is active. */
-.dark .code-tabs .astro-code span {
+.dark .code-block .astro-code span {
   color: var(--shiki-dark) !important;
   font-style: var(--shiki-dark-font-style) !important;
   font-weight: var(--shiki-dark-font-weight) !important;
@@ -116,26 +90,4 @@ html {
   color: var(--shiki-dark) !important;
   font-style: var(--shiki-dark-font-style) !important;
   font-weight: var(--shiki-dark-font-weight) !important;
-}
-
-/* Scroll-reveal: activated by JS (BaseLayout) so content is never hidden
-   without it; skipped entirely under prefers-reduced-motion. */
-html.reveal-ready main section {
-  opacity: 0;
-  transform: translateY(18px);
-  transition:
-    opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
-    transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
-}
-html.reveal-ready main section.is-revealed {
-  opacity: 1;
-  transform: none;
-}
-
-/* Fiery gradient text used across designs. */
-.text-flame-gradient {
-  background: linear-gradient(92deg, #fbbf24 0%, #f97316 38%, #ef4444 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
 }

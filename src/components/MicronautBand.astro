@@ -1,28 +1,18 @@
 ---
 import { MICRONAUT_AUDIENCE } from "@/lib/site-content";
-
-interface Props {
-  tone?: "adaptive" | "dark";
-}
-
-const { tone = "adaptive" } = Astro.props;
-
-const section =
-  tone === "dark"
-    ? "border-t border-white/10 bg-ink-900/60"
-    : "border-t border-ink-200/70 bg-ink-50 dark:border-white/10 dark:bg-ink-900/60";
-const strong =
-  tone === "dark" ? "font-semibold text-white" : "font-semibold text-ink-900 dark:text-white";
-const copy = tone === "dark" ? "text-ink-300" : "text-ink-500 dark:text-ink-300";
 ---
 
-<section class={section}>
-  <div
-    class="mx-auto flex max-w-7xl flex-col gap-4 px-5 py-7 md:flex-row md:items-center md:justify-between"
-  >
-    <p class:list={["text-sm leading-6", copy]}>
-      <span class={strong}>{MICRONAUT_AUDIENCE.kicker}</span>{" "}
-      {MICRONAUT_AUDIENCE.copy}
+<section class="border-t border-ink-200 bg-ink-50 dark:border-white/10 dark:bg-ink-900/60">
+  <div class="mx-auto max-w-6xl px-5 py-6">
+    <p class="text-sm leading-6 text-ink-500 dark:text-ink-300">
+      <span class="font-semibold text-ink-900 dark:text-white">{MICRONAUT_AUDIENCE.kicker}</span>{" "}
+      {MICRONAUT_AUDIENCE.copy}{" "}
+      <a
+        href={MICRONAUT_AUDIENCE.href}
+        class="font-medium text-flame-700 underline decoration-flame-700/30 underline-offset-4 hover:decoration-flame-700 dark:text-flame-400 dark:decoration-flame-400/30 dark:hover:decoration-flame-400"
+      >
+        {MICRONAUT_AUDIENCE.linkLabel}
+      </a>
     </p>
   </div>
 </section>

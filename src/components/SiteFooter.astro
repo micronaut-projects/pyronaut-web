@@ -2,22 +2,12 @@
 import { FOOTER_COLUMNS } from "@/lib/site-content";
 ---
 
-<footer class="border-t border-ink-200/70 bg-white dark:border-white/10 dark:bg-ink-950">
-  <div class="mx-auto max-w-7xl px-5 py-14">
-    <div
-      class="grid gap-10 md:grid-cols-[minmax(0,1.2fr)_repeat(3,minmax(0,1fr))]"
-    >
+<footer class="border-t border-ink-200 dark:border-white/10">
+  <div class="mx-auto max-w-6xl px-5 py-14">
+    <div class="grid gap-10 md:grid-cols-[minmax(0,1.2fr)_repeat(3,minmax(0,1fr))]">
       <div>
-        <img
-          src="/pyronaut-assets/logo-header.svg"
-          alt="Pyronaut"
-          class="h-9 w-auto dark:hidden"
-        />
-        <img
-          src="/pyronaut-assets/logo-header-dark.svg"
-          alt="Pyronaut"
-          class="hidden h-9 w-auto dark:block"
-        />
+        <img src="/pyronaut-assets/logo-header.svg" alt="Pyronaut" class="h-8 w-auto dark:hidden" />
+        <img src="/pyronaut-assets/logo-header-dark.svg" alt="Pyronaut" class="hidden h-8 w-auto dark:block" />
         <p class="mt-4 max-w-xs text-sm leading-6 text-ink-500 dark:text-ink-400">
           A high-performance Python framework for production services.
         </p>
@@ -28,15 +18,13 @@ import { FOOTER_COLUMNS } from "@/lib/site-content";
       {
         FOOTER_COLUMNS.map((column) => (
           <div>
-            <h3 class="font-mono text-xs font-bold uppercase tracking-[0.2em] text-ink-950 dark:text-white">
-              {column.title}
-            </h3>
+            <h3 class="text-sm font-semibold text-ink-950 dark:text-white">{column.title}</h3>
             <ul class="mt-4 grid gap-2.5">
               {column.links.map((link) => (
                 <li>
                   <a
                     href={link.href}
-                    class="text-sm text-ink-500 transition hover:text-flame-600 dark:text-ink-400 dark:hover:text-flame-400"
+                    class="text-sm text-ink-500 transition hover:text-ink-950 dark:text-ink-400 dark:hover:text-white"
                   >
                     {link.label}
                   </a>
