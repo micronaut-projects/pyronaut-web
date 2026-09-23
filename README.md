@@ -7,12 +7,14 @@ and TypeScript, mirroring the page structure of `micronaut-web`.
 
 ## Design
 
-The site is a single page built from the **Ignition** design direction:
-editorial startup style — announcement bar, mono uppercase kickers, a huge
-tight-tracking headline, dark pill buttons, a mascot artwork card with an
-overlapping code window, and a foundation logo strip. Structure runs hero →
-features → code showcase → workflow → deep dives → stack comparison →
-personas → CTA → footer.
+The site is a single page where the mascot's flame is the light source:
+the dark hero and CTA bands sit in a sparse seeded starfield, lit warm from
+where the flamethrower points. Headings use Bricolage Grotesque; flame
+orange is kept for things you act on (buttons, commands, the active tab).
+Code panels are always editor-dark, the CLI workflow is drawn as a
+pipeline, and the FastAPI comparison is a real table. No fake window
+chrome, decorative shapes or scroll animations. Structure runs hero → features → code showcase → workflow →
+stack comparison → personas → CTA → footer.
 
 **Light and dark mode are both supported** — the moon/sun toggle in the
 header persists the choice (`localStorage`, class-based Tailwind `dark:`

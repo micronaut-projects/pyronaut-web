@@ -217,19 +217,6 @@ export const CODE_PROOFS = [
   "One application model spans development, tests, and packaging",
 ];
 
-export const DEFINE_ONCE = {
-  source: "Python types and annotations",
-  targets: [
-    "HTTP routing",
-    "Validation",
-    "Serialization",
-    "OpenAPI & Swagger",
-    "Dependency injection",
-    "Editor completion",
-    "Tests",
-  ],
-};
-
 export const SKEPTIC = {
   question:
     "Why not assemble a stack from the Python frameworks and tools I already know?",
@@ -318,35 +305,51 @@ export const PERSONAS: Persona[] = [
       "Give teams one path from project creation to production artifact.",
   },
   {
-    role: "ENGINEERING LEADERSHIP",
+    role: "Engineering leadership",
     value:
       "Adopt a high-performance Python framework with enterprise support.",
   },
 ];
 
+export interface ComparisonRow {
+  area: string;
+  conventional: string;
+  pyronaut: string;
+}
+
 export const STACK_COMPARISON = {
-  conventional: {
-    title: "A representative FastAPI stack",
-    items: [
-      "FastAPI + Uvicorn + SQLAlchemy",
-      "Pydantic + Pydantic Settings",
-      "pytest + Testcontainers + fixtures",
-      "structlog + OpenTelemetry + OpenAPI",
-      "Dockerfiles + CI templates",
-      "…and every integration between them",
-    ],
-  },
-  pyronaut: {
-    title: "Pyronaut platform",
-    items: [
-      "Micronaut HTTP on Netty + Micronaut Data",
-      "Build-time processing for DI, validation, and serialization",
-      "pytest + Micronaut Test + Test Resources",
-      "Micrometer metrics + OpenTelemetry tracing + observability integrations",
-      "Production packaging + supported cloud integrations",
-      "…designed to work together",
-    ],
-  },
+  conventionalTitle: "A representative FastAPI stack",
+  pyronautTitle: "Pyronaut",
+  rows: [
+    {
+      area: "HTTP & data",
+      conventional: "FastAPI + Uvicorn + SQLAlchemy",
+      pyronaut: "Micronaut HTTP on Netty + Micronaut Data",
+    },
+    {
+      area: "Types & config",
+      conventional: "Pydantic + Pydantic Settings",
+      pyronaut: "Build-time processing for DI, validation, and serialization",
+    },
+    {
+      area: "Testing",
+      conventional: "pytest + Testcontainers + fixtures",
+      pyronaut: "pytest + Micronaut Test + Test Resources",
+    },
+    {
+      area: "Observability",
+      conventional: "structlog + OpenTelemetry + OpenAPI",
+      pyronaut:
+        "Micrometer metrics + OpenTelemetry tracing + observability integrations",
+    },
+    {
+      area: "Deployment",
+      conventional: "Dockerfiles + CI templates",
+      pyronaut: "Production packaging + supported cloud integrations",
+    },
+  ] satisfies ComparisonRow[],
+  conventionalFootnote: "…and every integration between them",
+  pyronautFootnote: "…designed to work together",
 };
 
 export const FOOTER_COLUMNS = [
