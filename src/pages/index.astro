@@ -3,6 +3,7 @@ import BaseLayout from "@/layouts/BaseLayout.astro";
 import CodeTabs from "@/components/CodeTabs.astro";
 import DefineOnce from "@/components/DefineOnce.astro";
 import Glyph from "@/components/Glyph.astro";
+import Mascot from "@/components/Mascot.astro";
 import MicronautBand from "@/components/MicronautBand.astro";
 import SkepticTest from "@/components/SkepticTest.astro";
 import ThemeToggle from "@/components/ThemeToggle.astro";
@@ -156,11 +157,7 @@ const heroChecks = [
                 Python / Micronaut / GraalPy
               </span>
             </div>
-            <img
-              src="/pyronaut-assets/mascot.svg"
-              alt="Pyronaut mascot — an astronaut with a Python-powered flamethrower"
-              class="w-full px-3 pb-16 pt-2"
-            />
+            <Mascot class="mx-3 mb-16 mt-2" />
           </div>
 
           <div
