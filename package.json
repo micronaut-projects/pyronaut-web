@@ -10,7 +10,7 @@
     "typecheck": "astro check"
   },
   "dependencies": {
-    "astro": "^7.2.4",
+    "astro": "^7.2.8",
     "shiki": "^4.0.2",
     "tailwindcss": "^4.3.3",
     "@tailwindcss/vite": "^4.3.3"
