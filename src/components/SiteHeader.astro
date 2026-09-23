@@ -4,6 +4,7 @@ import ThemeToggle from "@/components/ThemeToggle.astro";
 const navLinks = [
   { label: "Docs", href: "/docs/" },
   { label: "Guides", href: "/guides/" },
+  { label: "Launch", href: "/launch/" },
   { label: "Blog", href: "/blog/" },
   {
     label: "Releases",
@@ -12,18 +13,23 @@ const navLinks = [
 ];
 
 const container = "mx-auto max-w-6xl px-5";
+const current = Astro.url.pathname;
 ---
 
 <!-- Header: always dark, it sits on the hero -->
 <header class="sticky top-0 z-40 border-b border-white/10 bg-ink-950/90 backdrop-blur">
   <div class:list={[container, "flex h-16 items-center gap-8"]}>
     <a href="/" class="flex shrink-0 items-center">
-      <img src="/pyronaut-assets/logo-header-dark.svg" alt="Pyronaut" class="h-9 w-auto" />
+      <img src="/pyronaut-assets/logo-header-dark.svg" alt="Pyronaut" class="h-8 w-auto sm:h-9" />
     </a>
     <nav class="hidden gap-6 md:flex">
       {
         navLinks.map((link) => (
-          <a href={link.href} class="text-sm font-medium text-ink-300 transition hover:text-white">
+          <a
+            href={link.href}
+            aria-current={current.startsWith(link.href) ? "page" : undefined}
+            class="text-sm font-medium text-ink-300 transition hover:text-white aria-[current=page]:text-flame-400"
+          >
             {link.label}
           </a>
         ))
