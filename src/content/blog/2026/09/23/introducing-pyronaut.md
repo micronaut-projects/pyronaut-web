@@ -54,6 +54,64 @@ Pyronaut compiles the module, starts a server on port 8080, and reloads it when 
 - **Java libraries are one import away.** JDBC drivers, Kafka and RabbitMQ clients, cloud SDKs, and thousands of other Java libraries can be declared in `pyproject.toml` and imported from Python.
 - **Threads and asyncio both work.** Plain `def` routes run on a thread pool, `async def` routes run on the Netty event loop, and GraalPy runs Python in several interpreter contexts inside one process.
 
+## Python and Java in one application
+
+Python is the right language for most of an application, but a CPU-bound loop or a tight parsing routine can be faster on the JVM. Instead of writing a C extension, add a Java class to the project's `src-java` directory and make it a bean:
+
+```java
+package bookstore;
+
+import jakarta.inject.Singleton;
+
+@Singleton
+public class PriceCalculator {
+    public double total(double[] prices, double taxRate) {
+        double sum = 0;
+        for (double price : prices) {
+            sum += price;
+        }
+        return sum * (1 + taxRate);
+    }
+}
+```
+
+Java and Python sources are compiled together, so the bean is injected into Python code by its type hint:
+
+```python
+from bookstore import PriceCalculator
+from micronaut.http.annotation import Controller, Get
+
+
+@Controller("/orders")
+class OrderController:
+    def __init__(self, calculator: PriceCalculator):
+        self.calculator = calculator
+
+    @Get("/{order_id}/total")
+    def total(self, order_id: int) -> float:
+        prices = load_prices(order_id)
+        return self.calculator.total(prices, 0.2)
+```
+
+Python lists convert to Java arrays and collections automatically, and the Java class shares the same dependency injection, configuration, and tests as the rest of the application. The reverse works too: Java code can inject Python beans and call `async def` methods as `CompletionStage` values.
+
+Existing Java libraries are just as close. Declare one in `pyproject.toml`:
+
+```toml
+[tool.pyronaut.dependencies]
+runtime = [
+  "org.apache.commons:commons-lang3:3.20.0"
+]
+```
+
+Then run `pyronaut install` and import it like any Python module:
+
+```python
+from org.apache.commons.lang3 import StringUtils
+
+print(StringUtils.capitalize("hello from java"))
+```
+
 ## One CLI for the whole lifecycle
 
 The `pyronaut` command covers the application from creation to production:
