@@ -1,7 +1,7 @@
 ---
 slug: 2026/09/23/introducing-pyronaut
 title: Introducing Pyronaut
-description: Pyronaut is a batteries-included Python framework built on Micronaut and GraalPy, bringing HTTP, dependency injection, validation, data access, observability, testing, and packaging into one application model.
+description: Pyronaut is a high-performance Python web framework for building production services with rich data access, observability, cloud integrations, build-time validation, integrated testing, and enterprise support.
 date: '2026-09-23T10:00:00'
 category: announcements
 categories:
@@ -17,7 +17,7 @@ Welcome to the Pyronaut blog! This is where we will share release announcements,
 
 ## What is Pyronaut?
 
-Pyronaut is a batteries-included framework for building cloud-ready Python applications. It runs your Python code on [GraalPy](https://www.graalvm.org/python/), a Python implementation for the JVM, and gives it the full [Micronaut](https://micronaut.io) framework: an HTTP server built on Netty, dependency injection, configuration management, validation, serialization, data access, observability, and a test framework, all resolved at build time rather than at startup.
+Pyronaut is a high-performance Python web framework for building production services with rich data access, observability, cloud integrations, build-time validation, integrated testing, and enterprise support. It runs your Python code on [GraalPy](https://graalpy.org/), a Python implementation for the JVM, and gives it the full [Micronaut](https://micronaut.io) framework: an HTTP server built on Netty, dependency injection, configuration management, validation, serialization, data access, observability, and a test framework, all resolved at build time rather than at startup.
 
 A typical production Python service is assembled from separate projects: an HTTP framework, an ASGI or WSGI server, a validation library, a settings library, pytest fixtures for Testcontainers, a logging setup, OpenAPI configuration, a Dockerfile, and CI templates. Each piece is good, but the integration work between them is yours. Pyronaut ships those concerns as one application model, so the same Python types and decorators drive HTTP, validation, serialization, OpenAPI, dependency injection, editor completion, and tests.
 
