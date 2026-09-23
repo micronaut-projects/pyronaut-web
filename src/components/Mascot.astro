@@ -2,9 +2,8 @@
 /**
  * The Pyronaut mascot with a starfield drifting across its visor and a sheen
  * sweeping the glass now and then — the same treatment Sally gets on
- * micronaut.io, plus firelight from the flamethrower flickering along the
- * bottom of the glass. The mascot stays a plain image; the animation is a
- * separate SVG overlay because CSS animation does not run inside an <img>.
+ * micronaut.io. The mascot stays a plain image; the animation is a separate
+ * SVG overlay because CSS animation does not run inside an <img>.
  * Coordinates are mascot.svg's own, so the overlay tracks the artwork.
  */
 interface Props {
@@ -198,54 +197,8 @@ const visorField = starMarks
   >
     <defs>
       <clipPath id="pyronautVisorClip"><path d={visorPath}></path></clipPath>
-      {
-        /* Firelight thrown back by the glass. The flame burns below and to
-        the mascot's right, so the glow pools along the bottom of the visor,
-        leaning toward the flame, and falls away up the dome. */
-      }
-      <radialGradient
-        id="pyronautFireGlow"
-        gradientUnits="userSpaceOnUse"
-        cx="545"
-        cy="430"
-        r="190"
-      >
-        <stop offset="0" stop-color="#ffd24a" stop-opacity=".85"></stop>
-        <stop offset=".3" stop-color="#ff8a1f" stop-opacity=".55"></stop>
-        <stop offset=".65" stop-color="#ff4d12" stop-opacity=".18"></stop>
-        <stop offset="1" stop-color="#ff3b0a" stop-opacity="0"></stop>
-      </radialGradient>
-      <radialGradient
-        id="pyronautFireCore"
-        gradientUnits="userSpaceOnUse"
-        cx="565"
-        cy="412"
-        r="100"
-      >
-        <stop offset="0" stop-color="#fff1b0" stop-opacity=".75"></stop>
-        <stop offset=".45" stop-color="#ffb13a" stop-opacity=".35"></stop>
-        <stop offset="1" stop-color="#ff7a1a" stop-opacity="0"></stop>
-      </radialGradient>
     </defs>
     <g transform="translate(-77 -6)">
-      <g clip-path="url(#pyronautVisorClip)">
-        <rect
-          class="pv-fire"
-          x="368"
-          y="230"
-          width="278"
-          height="176"
-          fill="url(#pyronautFireGlow)"
-        ></rect>
-        <rect
-          class="pv-fire-core"
-          x="440"
-          y="300"
-          width="206"
-          height="106"
-          fill="url(#pyronautFireCore)"
-        ></rect>
-      </g>
       <g clip-path="url(#pyronautVisorClip)" set:html={visorField} />
       <g clip-path="url(#pyronautVisorClip)">
         {
@@ -420,60 +373,6 @@ const visorField = starMarks
       transform: translateX(250px) rotate(22deg) scale(0.84);
     }
   }
-  /* Firelight flicker. The steps are uneven and the two layers run on
-     durations that share no common beat, so the glow never settles into a
-     rhythm the eye can count. It swells up from the bottom of the glass, where
-     the firelight lands, rather than from its own centre. */
-  @keyframes pyronautFlicker {
-    0%,
-    100% {
-      opacity: 0.8;
-      transform: scale(1);
-    }
-    9% {
-      opacity: 0.95;
-      transform: scale(1.03);
-    }
-    17% {
-      opacity: 0.7;
-    }
-    31% {
-      opacity: 1;
-      transform: scale(1.05);
-    }
-    38% {
-      opacity: 0.78;
-    }
-    52% {
-      opacity: 0.9;
-      transform: scale(0.98);
-    }
-    61% {
-      opacity: 0.66;
-    }
-    74% {
-      opacity: 0.96;
-      transform: scale(1.04);
-    }
-    86% {
-      opacity: 0.74;
-    }
-  }
-  .pyronaut-visor .pv-fire,
-  .pyronaut-visor .pv-fire-core {
-    transform-box: fill-box;
-    transform-origin: bottom center;
-    animation-name: pyronautFlicker;
-    animation-timing-function: ease-in-out;
-    animation-iteration-count: infinite;
-  }
-  .pyronaut-visor .pv-fire {
-    animation-duration: 2.3s;
-  }
-  .pyronaut-visor .pv-fire-core {
-    animation-duration: 1.37s;
-    animation-delay: -0.6s;
-  }
   /* Backwards fill is what keeps the visor clear on arrival: through its
      delay each mark takes the 0% frame, which parks it off the right of the
      glass at zero opacity, rather than the still position on its own style
@@ -542,11 +441,6 @@ const visorField = starMarks
     .pyronaut-visor .pv-glint {
       animation: none;
       opacity: 0;
-    }
-    .pyronaut-visor .pv-fire,
-    .pyronaut-visor .pv-fire-core {
-      animation: none;
-      opacity: 0.85;
     }
   }
 </style>
