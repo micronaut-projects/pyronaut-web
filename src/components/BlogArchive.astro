@@ -1,0 +1,127 @@
+---
+import Glyph from "@/components/Glyph.astro";
+import {
+  categoryLabel,
+  formatPostDate,
+  postCategories,
+  type BlogPostModel,
+} from "@/lib/blog";
+
+/**
+ * A blog listing: kicker, heading, intro, post cards and optional pagination.
+ * Shared by the blog index, its numbered pages, and tag/category archives.
+ */
+interface Props {
+  eyebrow: string;
+  title: string;
+  intro?: string;
+  posts: BlogPostModel[];
+  page?: number;
+  totalPages?: number;
+}
+
+const { eyebrow, title, intro, posts, page = 1, totalPages = 1 } = Astro.props;
+const pageHref = (target: number) =>
+  target === 1 ? "/blog/" : `/blog/page/${target}/`;
+---
+
+<section class="border-b border-ink-200/70 dark:border-white/10">
+  <div class="mx-auto max-w-6xl px-5 py-16 md:py-20">
+    <p
+      class="font-mono text-xs font-bold uppercase tracking-[0.2em] text-ember-500"
+    >
+      {eyebrow}
+    </p>
+    <h1
+      class="mt-6 max-w-3xl text-4xl font-extrabold tracking-[-0.02em] text-ink-950 dark:text-white md:text-5xl"
+    >
+      {title}
+    </h1>
+    {
+      intro && (
+        <p class="mt-5 max-w-2xl text-lg leading-8 text-ink-500 dark:text-ink-300">
+          {intro}
+        </p>
+      )
+    }
+
+    {
+      posts.length === 0 ? (
+        <p class="mt-12 text-base text-ink-500 dark:text-ink-300">
+          No posts yet.
+        </p>
+      ) : (
+        <ul class="mt-12 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+          {posts.map((post) => (
+            <li>
+              <a
+                href={post.href}
+                class="group flex h-full flex-col rounded-2xl bg-white p-6 ring-1 ring-ink-200 transition hover:-translate-y-1 hover:shadow-[0_24px_48px_-24px_rgba(16,21,36,0.3)] hover:ring-ink-950 dark:bg-ink-900 dark:ring-white/10 dark:hover:ring-flame-500/60"
+              >
+                <div class="flex flex-wrap items-center gap-x-3 gap-y-1 font-mono text-xs font-semibold uppercase tracking-wider">
+                  <time
+                    datetime={post.entry.data.date.toISOString()}
+                    class="text-ink-400"
+                  >
+                    {formatPostDate(post.entry.data.date)}
+                  </time>
+                  {postCategories(post)
+                    .slice(0, 1)
+                    .map((category) => (
+                      <span class="text-ember-500">{categoryLabel(category)}</span>
+                    ))}
+                </div>
+                <h2 class="mt-4 text-lg font-bold tracking-tight text-ink-950 dark:text-white">
+                  {post.entry.data.title}
+                </h2>
+                <p class="mt-2 flex-1 text-sm leading-6 text-ink-500 dark:text-ink-300">
+                  {post.entry.data.description}
+                </p>
+                <span class="mt-5 inline-flex items-center gap-2 text-sm font-bold text-ink-950 dark:text-white">
+                  Read post
+                  <Glyph
+                    name="arrow-right"
+                    class="size-4 text-flame-500 transition group-hover:translate-x-0.5"
+                  />
+                </span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      )
+    }
+
+    {
+      totalPages > 1 && (
+        <nav
+          aria-label="Blog pages"
+          class="mt-12 flex items-center justify-between text-sm font-semibold"
+        >
+          {page > 1 ? (
+            <a
+              href={pageHref(page - 1)}
+              class="text-ink-700 transition hover:text-flame-600 dark:text-ink-300 dark:hover:text-flame-400"
+            >
+              ← Newer posts
+            </a>
+          ) : (
+            <span />
+          )}
+          <span class="font-mono text-xs text-ink-400">
+            Page {page} of {totalPages}
+          </span>
+          {page < totalPages ? (
+            <a
+              href={pageHref(page + 1)}
+              class="text-ink-700 transition hover:text-flame-600 dark:text-ink-300 dark:hover:text-flame-400"
+            >
+              Older posts →
+            </a>
+          ) : (
+            <span />
+          )}
+        </nav>
+      )
+    }
+  </div>
+</section>

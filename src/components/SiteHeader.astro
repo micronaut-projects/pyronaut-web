@@ -1,8 +1,6 @@
 ---
 import ThemeToggle from "@/components/ThemeToggle.astro";
 
-/** Site header: always dark (it sits on the homepage hero). */
-
 const navLinks = [
   { label: "Docs", href: "/docs/" },
   { label: "Guides", href: "/guides/" },
@@ -14,11 +12,13 @@ const navLinks = [
   },
 ];
 
+const container = "mx-auto max-w-6xl px-5";
 const current = Astro.url.pathname;
 ---
 
+<!-- Header: always dark, it sits on the hero -->
 <header class="sticky top-0 z-40 border-b border-white/10 bg-ink-950/90 backdrop-blur">
-  <div class="mx-auto flex h-16 max-w-6xl items-center gap-8 px-5">
+  <div class:list={[container, "flex h-16 items-center gap-8"]}>
     <a href="/" class="flex shrink-0 items-center">
       <img src="/pyronaut-assets/logo-header-dark.svg" alt="Pyronaut" class="h-8 w-auto sm:h-9" />
     </a>
