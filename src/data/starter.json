@@ -1,0 +1,2176 @@
+{
+  "api": "https://snapshot.micronaut.io",
+  "micronautVersion": "5.2.0-SNAPSHOT",
+  "lang": "PYTHON",
+  "build": "PYRONAUT",
+  "test": "PYTEST",
+  "applicationTypes": [
+    {
+      "value": "DEFAULT",
+      "title": "Micronaut Application",
+      "description": "A Micronaut Application",
+      "features": [
+        "acme",
+        "amazon-cognito",
+        "annotation-api",
+        "arm",
+        "asciidoctor",
+        "aws-cdk",
+        "aws-lambda-events-serde",
+        "aws-v2-sdk",
+        "azure-cosmos-db",
+        "azure-tracing",
+        "cache-caffeine",
+        "cache-coherence",
+        "cache-ehcache",
+        "cache-hazelcast",
+        "cache-infinispan",
+        "cassandra",
+        "coherence",
+        "coherence-data",
+        "coherence-session",
+        "control-panel",
+        "data-azure-cosmos",
+        "data-jdbc",
+        "data-jpa",
+        "data-mongodb",
+        "data-mongodb-reactive",
+        "data-r2dbc",
+        "data-spring-jdbc",
+        "dekorate-halkyon",
+        "dekorate-jaeger",
+        "dekorate-knative",
+        "dekorate-kubernetes",
+        "dekorate-openshift",
+        "dekorate-prometheus",
+        "dekorate-servicecatalog",
+        "develocity",
+        "discovery-client",
+        "discovery-consul",
+        "discovery-core",
+        "discovery-eureka",
+        "dynamodb",
+        "eclipsestore",
+        "eclipsestore-rest",
+        "elasticsearch",
+        "email-amazon-ses",
+        "email-javamail",
+        "email-mailjet",
+        "email-mailpit-http-client",
+        "email-mailtrap",
+        "email-postmark",
+        "email-sendgrid",
+        "email-template",
+        "flyway",
+        "gcp-cloud-trace",
+        "gcp-pubsub",
+        "google-cloud-function",
+        "graalvm",
+        "graphql",
+        "guice",
+        "h2",
+        "hibernate-jpamodelgen",
+        "htmx",
+        "http-client",
+        "http-session",
+        "jackson-xml",
+        "jakarta-data",
+        "jax-rs",
+        "jdbc-dbcp",
+        "jdbc-hikari",
+        "jdbc-tomcat",
+        "jdbc-ucp",
+        "jms-activemq-artemis",
+        "jms-activemq-classic",
+        "jms-core",
+        "jms-oracle-aq",
+        "jms-sqs",
+        "jrebel",
+        "json-schema",
+        "json-schema-generator",
+        "json-schema-validation",
+        "jspecify",
+        "kafka",
+        "kafka-streams",
+        "kubernetes-client",
+        "kubernetes-informer",
+        "kubernetes-reactor-client",
+        "langchain4j-agentic",
+        "langchain4j-anthropic",
+        "langchain4j-azure",
+        "langchain4j-bedrock",
+        "langchain4j-googleai-gemini",
+        "langchain4j-hugging-face",
+        "langchain4j-mistralai",
+        "langchain4j-ollama",
+        "langchain4j-openai",
+        "langchain4j-store-elasticsearch",
+        "langchain4j-store-mongodb-atlas",
+        "langchain4j-store-neo4j",
+        "langchain4j-store-opensearch",
+        "langchain4j-store-oracle",
+        "langchain4j-store-pgvector",
+        "langchain4j-store-qdrant",
+        "langchain4j-vertexai",
+        "langchain4j-vertexai-gemini",
+        "liquibase",
+        "localstack",
+        "logback",
+        "management",
+        "mariadb",
+        "mcp-client-java-sdk",
+        "mcp-client-langchain4j",
+        "mcp-http",
+        "mcp-stdio",
+        "micrometer-annotation",
+        "micrometer-appoptics",
+        "micrometer-atlas",
+        "micrometer-azure-monitor",
+        "micrometer-cloudwatch",
+        "micrometer-datadog",
+        "micrometer-dynatrace",
+        "micrometer-elastic",
+        "micrometer-ganglia",
+        "micrometer-graphite",
+        "micrometer-humio",
+        "micrometer-influx",
+        "micrometer-jmx",
+        "micrometer-kairos",
+        "micrometer-new-relic",
+        "micrometer-observation",
+        "micrometer-observation-http",
+        "micrometer-oracle-cloud",
+        "micrometer-prometheus",
+        "micrometer-prometheus-pushgateway",
+        "micrometer-signalfx",
+        "micrometer-stackdriver",
+        "micrometer-statsd",
+        "micrometer-wavefront",
+        "micronaut-aop",
+        "micronaut-http-validation",
+        "micronaut-test-rest-assured",
+        "mockserver-client-java",
+        "mongo-reactive",
+        "mongo-sync",
+        "mqtt",
+        "mqtt-hivemq",
+        "mqttv3",
+        "multi-tenancy",
+        "mysql",
+        "nats",
+        "neo4j-bolt",
+        "netflix-hystrix",
+        "netflix-ribbon",
+        "netty-server",
+        "object-storage-aws",
+        "object-storage-azure",
+        "object-storage-gcp",
+        "object-storage-local",
+        "object-storage-oracle-cloud",
+        "openapi",
+        "openapi-adoc",
+        "openapi-explorer",
+        "opendi",
+        "opensearch-amazon",
+        "opensearch-httpclient5",
+        "oracle",
+        "oracle-cloud-atp",
+        "oracle-cloud-httpclient-netty",
+        "oracle-cloud-sdk",
+        "postgres",
+        "problem-json",
+        "pyronaut-requests",
+        "r2dbc",
+        "rabbitmq",
+        "rapidoc",
+        "reactor",
+        "reactor-http-client",
+        "redis-lettuce",
+        "redoc",
+        "retry",
+        "rss",
+        "rss-itunes-podcast",
+        "rxjava3",
+        "rxjava3-http-client",
+        "security",
+        "security-csrf",
+        "security-html-sanitizer",
+        "security-jwt",
+        "security-ldap",
+        "security-oauth2",
+        "security-ojdbc-extensions",
+        "security-session",
+        "serialization-bson",
+        "serialization-jackson",
+        "serialization-jsonp",
+        "spring",
+        "spring-boot",
+        "spring-data-jdbc",
+        "spring-data-jpa",
+        "spring-security-crypto",
+        "spring-web",
+        "sql-jdbi",
+        "sqlite",
+        "sqlserver",
+        "swagger-ui",
+        "test-resources",
+        "testcontainers",
+        "toml",
+        "tracing-jaeger",
+        "tracing-opentelemetry-exporter-logging",
+        "tracing-opentelemetry-exporter-otlp",
+        "tracing-opentelemetry-gcp",
+        "tracing-opentelemetry-jaeger",
+        "tracing-opentelemetry-xray",
+        "tracing-opentelemetry-zipkin",
+        "tracing-zipkin",
+        "turbo",
+        "validation",
+        "vertx-mysql-client",
+        "vertx-pg-client",
+        "views-fieldset",
+        "views-freemarker",
+        "views-handlebars",
+        "views-jinjava",
+        "views-jte",
+        "views-pebble",
+        "views-rocker",
+        "views-soy",
+        "views-thymeleaf",
+        "views-velocity",
+        "websocket",
+        "x86"
+      ]
+    },
+    {
+      "value": "CLI",
+      "title": "Micronaut CLI Application",
+      "description": "A Command Line Application",
+      "features": [
+        "annotation-api",
+        "arm",
+        "asciidoctor",
+        "aws-lambda-events-serde",
+        "aws-v2-sdk",
+        "azure-cosmos-db",
+        "azure-tracing",
+        "cache-caffeine",
+        "cache-coherence",
+        "cache-ehcache",
+        "cache-hazelcast",
+        "cache-infinispan",
+        "cassandra",
+        "coherence",
+        "coherence-data",
+        "coherence-session",
+        "data-azure-cosmos",
+        "data-jdbc",
+        "data-jpa",
+        "data-mongodb",
+        "data-mongodb-reactive",
+        "data-r2dbc",
+        "data-spring-jdbc",
+        "develocity",
+        "dynamodb",
+        "eclipsestore",
+        "eclipsestore-rest",
+        "elasticsearch",
+        "email-amazon-ses",
+        "email-javamail",
+        "email-mailjet",
+        "email-mailpit-http-client",
+        "email-mailtrap",
+        "email-postmark",
+        "email-sendgrid",
+        "email-template",
+        "flyway",
+        "gcp-cloud-trace",
+        "gcp-pubsub",
+        "graalvm",
+        "graphql",
+        "guice",
+        "h2",
+        "hibernate-jpamodelgen",
+        "htmx",
+        "http-client",
+        "http-session",
+        "jackson-xml",
+        "jakarta-data",
+        "jdbc-dbcp",
+        "jdbc-hikari",
+        "jdbc-tomcat",
+        "jdbc-ucp",
+        "jms-activemq-artemis",
+        "jms-activemq-classic",
+        "jms-core",
+        "jms-oracle-aq",
+        "jms-sqs",
+        "jrebel",
+        "json-schema",
+        "json-schema-generator",
+        "json-schema-validation",
+        "jspecify",
+        "kafka",
+        "kafka-streams",
+        "kubernetes-client",
+        "kubernetes-informer",
+        "kubernetes-reactor-client",
+        "langchain4j-agentic",
+        "langchain4j-anthropic",
+        "langchain4j-azure",
+        "langchain4j-bedrock",
+        "langchain4j-googleai-gemini",
+        "langchain4j-hugging-face",
+        "langchain4j-mistralai",
+        "langchain4j-ollama",
+        "langchain4j-openai",
+        "langchain4j-store-elasticsearch",
+        "langchain4j-store-mongodb-atlas",
+        "langchain4j-store-neo4j",
+        "langchain4j-store-opensearch",
+        "langchain4j-store-oracle",
+        "langchain4j-store-pgvector",
+        "langchain4j-store-qdrant",
+        "langchain4j-vertexai",
+        "langchain4j-vertexai-gemini",
+        "liquibase",
+        "localstack",
+        "logback",
+        "mariadb",
+        "mcp-client-java-sdk",
+        "mcp-client-langchain4j",
+        "mcp-http",
+        "mcp-stdio",
+        "micronaut-aop",
+        "micronaut-test-rest-assured",
+        "mockserver-client-java",
+        "mongo-reactive",
+        "mongo-sync",
+        "mqtt",
+        "mqtt-hivemq",
+        "mqttv3",
+        "multi-tenancy",
+        "mysql",
+        "nats",
+        "neo4j-bolt",
+        "netflix-hystrix",
+        "netflix-ribbon",
+        "object-storage-aws",
+        "object-storage-azure",
+        "object-storage-gcp",
+        "object-storage-local",
+        "object-storage-oracle-cloud",
+        "opendi",
+        "opensearch-amazon",
+        "opensearch-httpclient5",
+        "oracle",
+        "oracle-cloud-atp",
+        "oracle-cloud-httpclient-netty",
+        "oracle-cloud-sdk",
+        "postgres",
+        "problem-json",
+        "r2dbc",
+        "rabbitmq",
+        "reactor",
+        "reactor-http-client",
+        "redis-lettuce",
+        "retry",
+        "rxjava3",
+        "rxjava3-http-client",
+        "security",
+        "security-csrf",
+        "security-html-sanitizer",
+        "security-jwt",
+        "security-ldap",
+        "security-oauth2",
+        "security-ojdbc-extensions",
+        "security-session",
+        "serialization-bson",
+        "serialization-jackson",
+        "serialization-jsonp",
+        "spring",
+        "spring-boot",
+        "spring-data-jdbc",
+        "spring-data-jpa",
+        "spring-security-crypto",
+        "sql-jdbi",
+        "sqlite",
+        "sqlserver",
+        "test-resources",
+        "testcontainers",
+        "toml",
+        "turbo",
+        "validation",
+        "vertx-mysql-client",
+        "vertx-pg-client",
+        "websocket",
+        "x86"
+      ]
+    },
+    {
+      "value": "FUNCTION",
+      "title": "Micronaut Serverless Function",
+      "description": "A Function Application for Serverless",
+      "features": [
+        "annotation-api",
+        "arm",
+        "asciidoctor",
+        "aws-cdk",
+        "aws-lambda-events-serde",
+        "aws-lambda-function-url",
+        "aws-lambda-s3-event-notification",
+        "aws-lambda-scheduled-event",
+        "aws-v2-sdk",
+        "azure-cosmos-db",
+        "azure-tracing",
+        "cache-caffeine",
+        "cache-coherence",
+        "cache-ehcache",
+        "cache-hazelcast",
+        "cache-infinispan",
+        "cassandra",
+        "chatbots-basecamp-azure-function",
+        "chatbots-basecamp-gcp-function",
+        "chatbots-basecamp-lambda",
+        "chatbots-telegram-azure-function",
+        "chatbots-telegram-gcp-function",
+        "chatbots-telegram-lambda",
+        "coherence",
+        "coherence-data",
+        "coherence-session",
+        "data-azure-cosmos",
+        "data-jdbc",
+        "data-jpa",
+        "data-mongodb",
+        "data-mongodb-reactive",
+        "data-r2dbc",
+        "data-spring-jdbc",
+        "develocity",
+        "discovery-client",
+        "discovery-consul",
+        "discovery-core",
+        "discovery-eureka",
+        "dynamodb",
+        "eclipsestore",
+        "eclipsestore-rest",
+        "elasticsearch",
+        "email-amazon-ses",
+        "email-javamail",
+        "email-mailjet",
+        "email-mailpit-http-client",
+        "email-mailtrap",
+        "email-postmark",
+        "email-sendgrid",
+        "email-template",
+        "flyway",
+        "gcp-cloud-trace",
+        "gcp-pubsub",
+        "google-cloud-function",
+        "google-cloud-function-cloudevents",
+        "graalvm",
+        "graphql",
+        "guice",
+        "h2",
+        "hibernate-jpamodelgen",
+        "htmx",
+        "http-client",
+        "http-session",
+        "jackson-xml",
+        "jakarta-data",
+        "jdbc-dbcp",
+        "jdbc-hikari",
+        "jdbc-tomcat",
+        "jdbc-ucp",
+        "jms-activemq-artemis",
+        "jms-activemq-classic",
+        "jms-core",
+        "jms-oracle-aq",
+        "jms-sqs",
+        "jrebel",
+        "json-schema",
+        "json-schema-generator",
+        "json-schema-validation",
+        "jspecify",
+        "kafka",
+        "kafka-streams",
+        "kubernetes-client",
+        "kubernetes-informer",
+        "kubernetes-reactor-client",
+        "langchain4j-agentic",
+        "langchain4j-anthropic",
+        "langchain4j-azure",
+        "langchain4j-bedrock",
+        "langchain4j-googleai-gemini",
+        "langchain4j-hugging-face",
+        "langchain4j-mistralai",
+        "langchain4j-ollama",
+        "langchain4j-openai",
+        "langchain4j-store-elasticsearch",
+        "langchain4j-store-mongodb-atlas",
+        "langchain4j-store-neo4j",
+        "langchain4j-store-opensearch",
+        "langchain4j-store-oracle",
+        "langchain4j-store-pgvector",
+        "langchain4j-store-qdrant",
+        "langchain4j-vertexai",
+        "langchain4j-vertexai-gemini",
+        "liquibase",
+        "localstack",
+        "logback",
+        "mariadb",
+        "mcp-client-java-sdk",
+        "mcp-client-langchain4j",
+        "mcp-http",
+        "mcp-stdio",
+        "micronaut-aop",
+        "micronaut-test-rest-assured",
+        "mockserver-client-java",
+        "mongo-reactive",
+        "mongo-sync",
+        "mqtt",
+        "mqtt-hivemq",
+        "mqttv3",
+        "multi-tenancy",
+        "mysql",
+        "nats",
+        "neo4j-bolt",
+        "netflix-hystrix",
+        "netflix-ribbon",
+        "object-storage-aws",
+        "object-storage-azure",
+        "object-storage-gcp",
+        "object-storage-local",
+        "object-storage-oracle-cloud",
+        "opendi",
+        "opensearch-amazon",
+        "opensearch-httpclient5",
+        "oracle",
+        "oracle-cloud-atp",
+        "oracle-cloud-httpclient-netty",
+        "oracle-cloud-sdk",
+        "postgres",
+        "problem-json",
+        "r2dbc",
+        "rabbitmq",
+        "reactor",
+        "reactor-http-client",
+        "redis-lettuce",
+        "retry",
+        "rxjava3",
+        "rxjava3-http-client",
+        "security",
+        "security-csrf",
+        "security-html-sanitizer",
+        "security-jwt",
+        "security-ldap",
+        "security-oauth2",
+        "security-ojdbc-extensions",
+        "security-session",
+        "serialization-bson",
+        "serialization-jackson",
+        "serialization-jsonp",
+        "spring",
+        "spring-boot",
+        "spring-data-jdbc",
+        "spring-data-jpa",
+        "spring-security-crypto",
+        "sql-jdbi",
+        "sqlite",
+        "sqlserver",
+        "test-resources",
+        "testcontainers",
+        "toml",
+        "tracing-jaeger",
+        "tracing-opentelemetry-exporter-logging",
+        "tracing-opentelemetry-exporter-otlp",
+        "tracing-opentelemetry-gcp",
+        "tracing-opentelemetry-jaeger",
+        "tracing-opentelemetry-xray",
+        "tracing-opentelemetry-zipkin",
+        "tracing-zipkin",
+        "turbo",
+        "validation",
+        "vertx-mysql-client",
+        "vertx-pg-client",
+        "websocket",
+        "x86"
+      ]
+    },
+    {
+      "value": "GRPC",
+      "title": "Micronaut gRPC Application",
+      "description": "A gRPC Application",
+      "features": [
+        "annotation-api",
+        "arm",
+        "asciidoctor",
+        "aws-lambda-events-serde",
+        "aws-v2-sdk",
+        "azure-cosmos-db",
+        "azure-tracing",
+        "cache-caffeine",
+        "cache-coherence",
+        "cache-ehcache",
+        "cache-hazelcast",
+        "cache-infinispan",
+        "cassandra",
+        "coherence",
+        "coherence-data",
+        "coherence-session",
+        "data-azure-cosmos",
+        "data-jdbc",
+        "data-jpa",
+        "data-mongodb",
+        "data-mongodb-reactive",
+        "data-r2dbc",
+        "data-spring-jdbc",
+        "dekorate-halkyon",
+        "dekorate-jaeger",
+        "dekorate-knative",
+        "dekorate-kubernetes",
+        "dekorate-openshift",
+        "dekorate-prometheus",
+        "dekorate-servicecatalog",
+        "develocity",
+        "discovery-client",
+        "discovery-consul",
+        "discovery-core",
+        "discovery-eureka",
+        "dynamodb",
+        "eclipsestore",
+        "eclipsestore-rest",
+        "elasticsearch",
+        "email-amazon-ses",
+        "email-javamail",
+        "email-mailjet",
+        "email-mailpit-http-client",
+        "email-mailtrap",
+        "email-postmark",
+        "email-sendgrid",
+        "email-template",
+        "flyway",
+        "gcp-cloud-trace",
+        "gcp-pubsub",
+        "graalvm",
+        "graphql",
+        "guice",
+        "h2",
+        "hibernate-jpamodelgen",
+        "htmx",
+        "http-client",
+        "http-session",
+        "jackson-xml",
+        "jakarta-data",
+        "jdbc-dbcp",
+        "jdbc-hikari",
+        "jdbc-tomcat",
+        "jdbc-ucp",
+        "jms-activemq-artemis",
+        "jms-activemq-classic",
+        "jms-core",
+        "jms-oracle-aq",
+        "jms-sqs",
+        "jrebel",
+        "json-schema",
+        "json-schema-generator",
+        "json-schema-validation",
+        "jspecify",
+        "kafka",
+        "kafka-streams",
+        "kubernetes-client",
+        "kubernetes-informer",
+        "kubernetes-reactor-client",
+        "langchain4j-agentic",
+        "langchain4j-anthropic",
+        "langchain4j-azure",
+        "langchain4j-bedrock",
+        "langchain4j-googleai-gemini",
+        "langchain4j-hugging-face",
+        "langchain4j-mistralai",
+        "langchain4j-ollama",
+        "langchain4j-openai",
+        "langchain4j-store-elasticsearch",
+        "langchain4j-store-mongodb-atlas",
+        "langchain4j-store-neo4j",
+        "langchain4j-store-opensearch",
+        "langchain4j-store-oracle",
+        "langchain4j-store-pgvector",
+        "langchain4j-store-qdrant",
+        "langchain4j-vertexai",
+        "langchain4j-vertexai-gemini",
+        "liquibase",
+        "localstack",
+        "logback",
+        "mariadb",
+        "mcp-client-java-sdk",
+        "mcp-client-langchain4j",
+        "mcp-http",
+        "mcp-stdio",
+        "micronaut-aop",
+        "micronaut-test-rest-assured",
+        "mockserver-client-java",
+        "mongo-reactive",
+        "mongo-sync",
+        "mqtt",
+        "mqtt-hivemq",
+        "mqttv3",
+        "multi-tenancy",
+        "mysql",
+        "nats",
+        "neo4j-bolt",
+        "netflix-hystrix",
+        "netflix-ribbon",
+        "object-storage-aws",
+        "object-storage-azure",
+        "object-storage-gcp",
+        "object-storage-local",
+        "object-storage-oracle-cloud",
+        "opendi",
+        "opensearch-amazon",
+        "opensearch-httpclient5",
+        "oracle",
+        "oracle-cloud-atp",
+        "oracle-cloud-httpclient-netty",
+        "oracle-cloud-sdk",
+        "postgres",
+        "problem-json",
+        "r2dbc",
+        "rabbitmq",
+        "reactor",
+        "reactor-http-client",
+        "redis-lettuce",
+        "retry",
+        "rxjava3",
+        "rxjava3-http-client",
+        "security",
+        "security-csrf",
+        "security-html-sanitizer",
+        "security-jwt",
+        "security-ldap",
+        "security-oauth2",
+        "security-ojdbc-extensions",
+        "security-session",
+        "serialization-bson",
+        "serialization-jackson",
+        "serialization-jsonp",
+        "spring",
+        "spring-boot",
+        "spring-data-jdbc",
+        "spring-data-jpa",
+        "spring-security-crypto",
+        "sql-jdbi",
+        "sqlite",
+        "sqlserver",
+        "test-resources",
+        "testcontainers",
+        "toml",
+        "tracing-jaeger",
+        "tracing-opentelemetry-exporter-logging",
+        "tracing-opentelemetry-exporter-otlp",
+        "tracing-opentelemetry-gcp",
+        "tracing-opentelemetry-jaeger",
+        "tracing-opentelemetry-xray",
+        "tracing-opentelemetry-zipkin",
+        "tracing-zipkin",
+        "turbo",
+        "validation",
+        "vertx-mysql-client",
+        "vertx-pg-client",
+        "websocket",
+        "x86"
+      ]
+    },
+    {
+      "value": "MESSAGING",
+      "title": "Micronaut Messaging Application",
+      "description": "A Messaging-Driven Application",
+      "features": [
+        "annotation-api",
+        "arm",
+        "asciidoctor",
+        "aws-lambda-events-serde",
+        "aws-v2-sdk",
+        "azure-cosmos-db",
+        "azure-tracing",
+        "cache-caffeine",
+        "cache-coherence",
+        "cache-ehcache",
+        "cache-hazelcast",
+        "cache-infinispan",
+        "cassandra",
+        "coherence",
+        "coherence-data",
+        "coherence-session",
+        "data-azure-cosmos",
+        "data-jdbc",
+        "data-jpa",
+        "data-mongodb",
+        "data-mongodb-reactive",
+        "data-r2dbc",
+        "data-spring-jdbc",
+        "develocity",
+        "discovery-client",
+        "discovery-consul",
+        "discovery-core",
+        "discovery-eureka",
+        "dynamodb",
+        "eclipsestore",
+        "eclipsestore-rest",
+        "elasticsearch",
+        "email-amazon-ses",
+        "email-javamail",
+        "email-mailjet",
+        "email-mailpit-http-client",
+        "email-mailtrap",
+        "email-postmark",
+        "email-sendgrid",
+        "email-template",
+        "flyway",
+        "gcp-cloud-trace",
+        "gcp-pubsub",
+        "graalvm",
+        "graphql",
+        "guice",
+        "h2",
+        "hibernate-jpamodelgen",
+        "htmx",
+        "http-client",
+        "http-session",
+        "jackson-xml",
+        "jakarta-data",
+        "jdbc-dbcp",
+        "jdbc-hikari",
+        "jdbc-tomcat",
+        "jdbc-ucp",
+        "jms-activemq-artemis",
+        "jms-activemq-classic",
+        "jms-core",
+        "jms-oracle-aq",
+        "jms-sqs",
+        "jrebel",
+        "json-schema",
+        "json-schema-generator",
+        "json-schema-validation",
+        "jspecify",
+        "kafka",
+        "kafka-streams",
+        "kubernetes-client",
+        "kubernetes-informer",
+        "kubernetes-reactor-client",
+        "langchain4j-agentic",
+        "langchain4j-anthropic",
+        "langchain4j-azure",
+        "langchain4j-bedrock",
+        "langchain4j-googleai-gemini",
+        "langchain4j-hugging-face",
+        "langchain4j-mistralai",
+        "langchain4j-ollama",
+        "langchain4j-openai",
+        "langchain4j-store-elasticsearch",
+        "langchain4j-store-mongodb-atlas",
+        "langchain4j-store-neo4j",
+        "langchain4j-store-opensearch",
+        "langchain4j-store-oracle",
+        "langchain4j-store-pgvector",
+        "langchain4j-store-qdrant",
+        "langchain4j-vertexai",
+        "langchain4j-vertexai-gemini",
+        "liquibase",
+        "localstack",
+        "logback",
+        "mariadb",
+        "mcp-client-java-sdk",
+        "mcp-client-langchain4j",
+        "mcp-http",
+        "mcp-stdio",
+        "micronaut-aop",
+        "micronaut-test-rest-assured",
+        "mockserver-client-java",
+        "mongo-reactive",
+        "mongo-sync",
+        "mqtt",
+        "mqtt-hivemq",
+        "mqttv3",
+        "multi-tenancy",
+        "mysql",
+        "nats",
+        "neo4j-bolt",
+        "netflix-hystrix",
+        "netflix-ribbon",
+        "object-storage-aws",
+        "object-storage-azure",
+        "object-storage-gcp",
+        "object-storage-local",
+        "object-storage-oracle-cloud",
+        "opendi",
+        "opensearch-amazon",
+        "opensearch-httpclient5",
+        "oracle",
+        "oracle-cloud-atp",
+        "oracle-cloud-httpclient-netty",
+        "oracle-cloud-sdk",
+        "postgres",
+        "problem-json",
+        "r2dbc",
+        "rabbitmq",
+        "reactor",
+        "reactor-http-client",
+        "redis-lettuce",
+        "retry",
+        "rxjava3",
+        "rxjava3-http-client",
+        "security",
+        "security-csrf",
+        "security-html-sanitizer",
+        "security-jwt",
+        "security-ldap",
+        "security-oauth2",
+        "security-ojdbc-extensions",
+        "security-session",
+        "serialization-bson",
+        "serialization-jackson",
+        "serialization-jsonp",
+        "spring",
+        "spring-boot",
+        "spring-data-jdbc",
+        "spring-data-jpa",
+        "spring-security-crypto",
+        "sql-jdbi",
+        "sqlite",
+        "sqlserver",
+        "test-resources",
+        "testcontainers",
+        "toml",
+        "tracing-jaeger",
+        "tracing-opentelemetry-exporter-logging",
+        "tracing-opentelemetry-exporter-otlp",
+        "tracing-opentelemetry-gcp",
+        "tracing-opentelemetry-jaeger",
+        "tracing-opentelemetry-xray",
+        "tracing-opentelemetry-zipkin",
+        "tracing-zipkin",
+        "turbo",
+        "validation",
+        "vertx-mysql-client",
+        "vertx-pg-client",
+        "websocket",
+        "x86"
+      ]
+    }
+  ],
+  "features": {
+    "acme": {
+      "title": "ACME",
+      "description": "Adds support for ACME (Automated Certificate Management Environment)",
+      "category": "SSL"
+    },
+    "amazon-cognito": {
+      "title": "Amazon Cognito",
+      "description": "Applies Micronaut Security OAuth 2.0 and provides configuration. Can be used in combination with aws-cdk to generate a Cognito User Pool with a OAuth 2.0 application.",
+      "category": "Security"
+    },
+    "annotation-api": {
+      "title": "Jakarta Annotations API",
+      "description": "Adds Jakarta annotations API dependency. For example, to use @PostConstruct or @PreDestroy",
+      "category": "API"
+    },
+    "arm": {
+      "title": "ARM CPU Architecture",
+      "description": "It can be used in combination with aws-cdk and aws-lambda to generate infrastructure for the Lambda CPU architecture",
+      "category": "Cloud"
+    },
+    "asciidoctor": {
+      "title": "Asciidoctor Documentation",
+      "description": "Adds support for creating Asciidoctor documentation",
+      "category": "Documentation"
+    },
+    "aws-cdk": {
+      "title": "AWS CDK (Cloud Development Kit)",
+      "description": "Adds Amazon Web Services CDK (Cloud Development Kit) support",
+      "category": "Cloud"
+    },
+    "aws-lambda-events-serde": {
+      "title": "AWS Lambda Events Serde",
+      "description": "It adds support for Micronaut Serialization with AWS Lambda Java Events.",
+      "category": "Serverless"
+    },
+    "aws-lambda-function-url": {
+      "title": "AWS Lambda Function URLs",
+      "description": "A function URL is a dedicated HTTP(S) endpoint for a Lambda function. This features combines with CDK to configure a function URL for Lambda",
+      "category": "Serverless"
+    },
+    "aws-lambda-s3-event-notification": {
+      "title": "AWS S3 Notification Event",
+      "description": "Creates a function handler that subscribes to a S3 notification event.",
+      "category": "Serverless"
+    },
+    "aws-lambda-scheduled-event": {
+      "title": "AWS Lambda Scheduled Event",
+      "description": "Creates a function handler that subscribes to a scheduled event.",
+      "category": "Serverless"
+    },
+    "aws-v2-sdk": {
+      "title": "AWS SDK 2.x",
+      "description": "Provides integration with the AWS SDK 2.x",
+      "category": "Cloud"
+    },
+    "azure-cosmos-db": {
+      "title": "Azure Cosmos DB",
+      "description": "Enables access to Azure Cosmos DB",
+      "category": "Database"
+    },
+    "azure-tracing": {
+      "title": "Azure Tracing",
+      "description": "Provides integration with Azure Monitor Tracing",
+      "category": "Distributed Tracing"
+    },
+    "cache-caffeine": {
+      "title": "Caffeine Cache",
+      "description": "Adds support for caching using Caffeine",
+      "category": "Cache"
+    },
+    "cache-coherence": {
+      "title": "Coherence Cache",
+      "description": "Adds support for caching using Coherence",
+      "category": "Cache"
+    },
+    "cache-ehcache": {
+      "title": "EHCache Cache",
+      "description": "Adds support for caching using EHCache",
+      "category": "Cache"
+    },
+    "cache-hazelcast": {
+      "title": "Hazelcast Cache",
+      "description": "Adds support for caching using Hazelcast",
+      "category": "Cache"
+    },
+    "cache-infinispan": {
+      "title": "Infinispan Cache",
+      "description": "Adds support for caching using Infinispan",
+      "category": "Cache"
+    },
+    "cassandra": {
+      "title": "Cassandra Driver",
+      "description": "Adds support for Cassandra persistence",
+      "category": "Database"
+    },
+    "chatbots-basecamp-azure-function": {
+      "title": "Basecamp ChatBot as an Azure Function",
+      "description": "Generates an application that can be deployed as an Azure Function that implements a Basecamp ChatBot",
+      "category": "ChatBots"
+    },
+    "chatbots-basecamp-gcp-function": {
+      "title": "Basecamp ChatBot as a Google Cloud Function",
+      "description": "Generates an application that can be deployed as a Google Cloud Function that implements a Basecamp ChatBot",
+      "category": "ChatBots"
+    },
+    "chatbots-basecamp-lambda": {
+      "title": "Basecamp ChatBot as AWS Lambda function",
+      "description": "Generates an application that can be deployed as an AWS Lambda function that implements a Basecamp ChatBot",
+      "category": "ChatBots"
+    },
+    "chatbots-telegram-azure-function": {
+      "title": "Telegram ChatBot as an Azure Function",
+      "description": "Generates an application that can be deployed as an Azure Function that implements a Telegram ChatBot",
+      "category": "ChatBots"
+    },
+    "chatbots-telegram-gcp-function": {
+      "title": "Telegram ChatBot as a Google Cloud Function",
+      "description": "Generates an application that can be deployed as a Google Cloud Function that implements a Telegram ChatBot",
+      "category": "ChatBots"
+    },
+    "chatbots-telegram-lambda": {
+      "title": "Telegram ChatBot as AWS Lambda function",
+      "description": "Generates an application that can be deployed as an AWS Lambda function that implements a Telegram ChatBot",
+      "category": "ChatBots"
+    },
+    "coherence": {
+      "title": "Coherence",
+      "description": "Adds support for using Coherence",
+      "category": "Database"
+    },
+    "coherence-data": {
+      "title": "Coherence Data",
+      "description": "Adds support for using Micronaut Data with Coherence",
+      "category": "Database"
+    },
+    "coherence-session": {
+      "title": "Coherence HTTP Session Store",
+      "description": "Adds support for storing HTTP sessions in Coherence",
+      "category": "Client"
+    },
+    "control-panel": {
+      "title": "Micronaut Control Panel",
+      "description": "The Micronaut Control Panel module provides a web UI that allows you to view and manage the state of your Micronaut application, typically in a development environment",
+      "category": "Development Tools",
+      "preview": true
+    },
+    "data-azure-cosmos": {
+      "title": "Micronaut Data Azure Cosmos",
+      "description": "Adds support for defining data repositories for Azure Cosmos Db",
+      "category": "Database"
+    },
+    "data-jdbc": {
+      "title": "Micronaut Data JDBC",
+      "description": "Adds support for Micronaut Data JDBC",
+      "category": "Database"
+    },
+    "data-jpa": {
+      "title": "Micronaut Data JPA",
+      "description": "Adds support for Micronaut Data Hibernate/JPA",
+      "category": "Database"
+    },
+    "data-mongodb": {
+      "title": "Micronaut Data MongoDB",
+      "description": "Adds support for defining synchronous data repositories for MongoDB",
+      "category": "Database"
+    },
+    "data-mongodb-reactive": {
+      "title": "Micronaut Data MongoDB Reactive",
+      "description": "Adds support for defining reactive data repositories for MongoDB",
+      "category": "Database"
+    },
+    "data-r2dbc": {
+      "title": "Micronaut Data R2DBC",
+      "description": "Micronaut Data support for Reactive Database Connectivity (R2DBC)",
+      "category": "Database"
+    },
+    "data-spring-jdbc": {
+      "title": "Micronaut Data Spring JDBC",
+      "description": "Adds support for Micronaut Data Spring JDBC",
+      "category": "Database"
+    },
+    "dekorate-halkyon": {
+      "title": "Dekorate Halkyon Support",
+      "description": "Extends Decorates generated Kubernetes deployment manifests with Halkyon resources using Dekorate Halkyon Support",
+      "category": "Cloud",
+      "preview": true
+    },
+    "dekorate-jaeger": {
+      "title": "Dekorate Jaeger Support",
+      "description": "Adds to Decorate deployment manifests Jaeger sidecar container",
+      "category": "Cloud",
+      "preview": true
+    },
+    "dekorate-knative": {
+      "title": "Dekorate Knative Support",
+      "description": "Generates Knative Kubernetes deployment manifest using Dekorate Knative Support",
+      "category": "Cloud",
+      "preview": true
+    },
+    "dekorate-kubernetes": {
+      "title": "Dekorate Kubernetes Support",
+      "description": "Generates Kubernetes deployment manifest using Dekorate Kubernetes Support",
+      "category": "Cloud",
+      "preview": true
+    },
+    "dekorate-openshift": {
+      "title": "Dekorate Openshift Support",
+      "description": "Generates OpenShift deployment manifest using Dekorate OpenShift Support",
+      "category": "Cloud",
+      "preview": true
+    },
+    "dekorate-prometheus": {
+      "title": "Dekorate Prometheus Support",
+      "description": "Extends Decorates generated Kubernetes deployment manifests with Prometheus ServiceMonitor resource using Dekorate Prometheus Support.",
+      "category": "Cloud",
+      "preview": true
+    },
+    "dekorate-servicecatalog": {
+      "title": "Dekorate Service Catalog Support",
+      "description": "Extends Decorates generated Kubernetes deployment manifests with Service Catalog resources using Dekorate Service Catalog Support",
+      "category": "Cloud",
+      "preview": true
+    },
+    "develocity": {
+      "title": "Develocity",
+      "description": "Develocity provides comprehensive observability, build and test acceleration technologies, and rapid troubleshooting features for Apache Maven, Bazel, sbt, npm, Python, and Gradle Build Tool",
+      "category": "Development Tools"
+    },
+    "discovery-client": {
+      "title": "Micronaut Discovery Client",
+      "description": "Adds micronaut-discovery-client dependency which provides an implmentation of the DiscoveryClient API.",
+      "category": "Service Discovery"
+    },
+    "discovery-consul": {
+      "title": "Consul Service Discovery",
+      "description": "Adds support for Service Discovery with Consul",
+      "category": "Service Discovery"
+    },
+    "discovery-core": {
+      "title": "Micronaut Discovery Core",
+      "description": "Adds micronaut-discovery-core dependency for base service discovery features.",
+      "category": "Service Discovery"
+    },
+    "discovery-eureka": {
+      "title": "Eureka Service Discovery",
+      "description": "Adds support for Service Discovery with Eureka",
+      "category": "Service Discovery"
+    },
+    "dynamodb": {
+      "title": "Amazon DynamoDB",
+      "description": "Integrates with Amazon DynamoDB a NoSQL database service",
+      "category": "Database"
+    },
+    "eclipsestore": {
+      "title": "EclipseStore",
+      "description": "Adds support for using EclipseStore with Micronaut",
+      "category": "Database"
+    },
+    "eclipsestore-rest": {
+      "title": "EclipseStore REST",
+      "description": "Adds the EclipseStore REST API to your Micronaut project for development",
+      "category": "Development Tools"
+    },
+    "elasticsearch": {
+      "title": "Elasticsearch Driver",
+      "description": "Adds support for Elasticsearch",
+      "category": "Search Engine"
+    },
+    "email-amazon-ses": {
+      "title": "SES Email",
+      "description": "Integration with Amazon Simple Email Service to send transactional emails",
+      "category": "Email"
+    },
+    "email-javamail": {
+      "title": "Javamail Email",
+      "description": "Integration with Javamail to send transactional emails",
+      "category": "Email"
+    },
+    "email-mailjet": {
+      "title": "Mailjet Email",
+      "description": "Integration with Mailjet to send transactional emails",
+      "category": "Email"
+    },
+    "email-mailpit-http-client": {
+      "title": "Mailpit HTTP Client",
+      "description": "Mailpit HTTP Client",
+      "category": "Email"
+    },
+    "email-mailtrap": {
+      "title": "Mailtrap Email",
+      "description": "Integration with Mailtrap to send transactional emails",
+      "category": "Email"
+    },
+    "email-postmark": {
+      "title": "Postmark Email",
+      "description": "Integration with Postmark to send transactional emails",
+      "category": "Email"
+    },
+    "email-sendgrid": {
+      "title": "Sendgrid Email",
+      "description": "Integration with SendGrid to send transactional emails",
+      "category": "Email"
+    },
+    "email-template": {
+      "title": "Email Templates",
+      "description": "Send emails using Templates with Micronaut Views",
+      "category": "Email"
+    },
+    "flyway": {
+      "title": "Flyway Database Migration",
+      "description": "Adds support for Flyway database migrations",
+      "category": "Database"
+    },
+    "gcp-cloud-trace": {
+      "title": "Google Cloud Trace",
+      "description": "Adds support for distributed tracing Google Cloud Trace",
+      "category": "Distributed Tracing"
+    },
+    "gcp-pubsub": {
+      "title": "Google Cloud Pub/Sub",
+      "description": "Adds support for Google Cloud Pub/Sub real-time messaging service",
+      "category": "Messaging"
+    },
+    "google-cloud-function": {
+      "title": "Google Cloud Function",
+      "description": "Adds support for writing functions to deploy to Google Cloud Function",
+      "category": "Serverless"
+    },
+    "google-cloud-function-cloudevents": {
+      "title": "Google CloudEvent Function",
+      "description": "Adds support for writing functions to deploy to Google Cloud Function",
+      "category": "Serverless"
+    },
+    "graalvm": {
+      "title": "GraalVM Native Image",
+      "description": "Allows Building a GraalVM Native Image",
+      "category": "Packaging"
+    },
+    "graphql": {
+      "title": "GraphQL",
+      "description": "Adds support for GraphQL",
+      "category": "API"
+    },
+    "guice": {
+      "title": "Micronaut Guice",
+      "description": "Micronaut Guice allows importing Guice modules into a Micronaut application, making the Guice bindings available for Dependency Injection.",
+      "category": "Dependency Injection"
+    },
+    "h2": {
+      "title": "H2 Database",
+      "description": "Adds the H2 driver and default config",
+      "category": "Database"
+    },
+    "hibernate-jpamodelgen": {
+      "title": "Hibernate JPA Static Metamodel Generator",
+      "description": "Generator for compile time static metamodel classes",
+      "category": "Database"
+    },
+    "htmx": {
+      "title": "htmx",
+      "description": "Adds support for htmx",
+      "category": "View Rendering"
+    },
+    "http-client": {
+      "title": "HTTP Client",
+      "description": "Adds support for the Micronaut HTTP client",
+      "category": "Client"
+    },
+    "http-session": {
+      "title": "HTTP Sessions",
+      "description": "Adds support for HTTP Sessions",
+      "category": "Client"
+    },
+    "jackson-xml": {
+      "title": "Jackson XML serialization/deserialization",
+      "description": "Adds support for using Jackson XML serialization/deserialization",
+      "category": "View Rendering"
+    },
+    "jakarta-data": {
+      "title": "Jakarta Data",
+      "description": "Adds the Jakarta Data API dependency to your project.",
+      "category": "Database"
+    },
+    "jax-rs": {
+      "title": "JAX-RS support",
+      "description": "Adds support for using JAX-RS annotations",
+      "category": "Server"
+    },
+    "jdbc-dbcp": {
+      "title": "Commons DBCP JDBC Connection Pool",
+      "description": "Configures SQL DataSources using Commons DBCP",
+      "category": "Database"
+    },
+    "jdbc-hikari": {
+      "title": "Hikari JDBC Connection Pool",
+      "description": "Configures SQL DataSources using Hikari Connection Pool",
+      "category": "Database"
+    },
+    "jdbc-tomcat": {
+      "title": "Tomcat JDBC Connection Pool",
+      "description": "Configures SQL DataSources using Tomcat Connection Pool",
+      "category": "Database"
+    },
+    "jdbc-ucp": {
+      "title": "Oracle UCP JDBC Connection Pool",
+      "description": "Configures SQL DataSources using Oracle UCP",
+      "category": "Database"
+    },
+    "jms-activemq-artemis": {
+      "title": "ActiveMQ Artemis JMS Messaging",
+      "description": "Adds support for ActiveMQ Artemis JMS messaging",
+      "category": "Messaging",
+      "preview": true
+    },
+    "jms-activemq-classic": {
+      "title": "ActiveMQ Classic JMS Messaging",
+      "description": "Adds support for ActiveMQ Classic JMS messaging",
+      "category": "Messaging",
+      "preview": true
+    },
+    "jms-core": {
+      "title": "Micronaut JMS",
+      "description": "Adds Micronaut support for JMS",
+      "category": "Messaging",
+      "preview": true
+    },
+    "jms-oracle-aq": {
+      "title": "Oracle Advanced Queuing",
+      "description": "Adds support for Oracle Advanced Queuing JMS messaging",
+      "category": "Messaging",
+      "preview": true
+    },
+    "jms-sqs": {
+      "title": "AWS SQS JMS Messaging",
+      "description": "Adds support for AWS SQS JMS messaging",
+      "category": "Messaging",
+      "preview": true
+    },
+    "jrebel": {
+      "title": "JRebel JVM Agent",
+      "description": "Adds support for class reloading with JRebel (requires separate JRebel installation)",
+      "category": "Development Tools"
+    },
+    "json-schema": {
+      "title": "JSON Schema",
+      "description": "Adds capability to generate JSON Schema from Java beans to a Micronaut Application",
+      "category": "API"
+    },
+    "json-schema-generator": {
+      "title": "JSON Schema Generator",
+      "description": "Adds capability to generate source classes from JSON schema definitions to a Micronaut Application.",
+      "category": "API"
+    },
+    "json-schema-validation": {
+      "title": "JSON Schema Validation",
+      "description": "Adds JSON Schema Validation to a Micronaut Application",
+      "category": "API"
+    },
+    "jspecify": {
+      "title": "JSpecify Nullability Annotations",
+      "description": "It adds the JSpecify Nullability Annotations dependency.",
+      "category": "Validation"
+    },
+    "kafka": {
+      "title": "Kafka Messaging",
+      "description": "Adds support for Kafka messaging",
+      "category": "Messaging"
+    },
+    "kafka-streams": {
+      "title": "Kafka Streams",
+      "description": "Adds support for Kafka Streams",
+      "category": "Messaging"
+    },
+    "kubernetes-client": {
+      "title": "Official Kubernetes Java Client",
+      "description": "Adds official Kubernetes java client with Micronaut support",
+      "category": "Client"
+    },
+    "kubernetes-informer": {
+      "title": "Kubernetes Informer Support",
+      "description": "Adds Micronaut Kubernetes Informer support",
+      "category": "Cloud"
+    },
+    "kubernetes-reactor-client": {
+      "title": "Kubernetes Reactor Client",
+      "description": "Adds Official Kubernetes Java Client with Reactor interface",
+      "category": "Client"
+    },
+    "langchain4j-agentic": {
+      "title": "Micronaut LangChain4j Agentic",
+      "description": "Enables the declaration of LangChain4j Agentic services",
+      "category": "AI"
+    },
+    "langchain4j-anthropic": {
+      "title": "Azure Langchain4j",
+      "description": "Integration with Azure Langchain4j Language Model.",
+      "category": "Language Models"
+    },
+    "langchain4j-azure": {
+      "title": "Azure Langchain4j",
+      "description": "Integration with Azure Langchain4j Language Model.",
+      "category": "Language Models"
+    },
+    "langchain4j-bedrock": {
+      "title": "Bedrock Langchain4j",
+      "description": "Integration with Bedrock Langchain4j Language Model.",
+      "category": "Language Models"
+    },
+    "langchain4j-googleai-gemini": {
+      "title": "Google AI Gemini Langchain4j",
+      "description": "Integration with Google AI Gemini Langchain4j Language Model.",
+      "category": "Language Models"
+    },
+    "langchain4j-hugging-face": {
+      "title": "Hugging Face Langchain4j",
+      "description": "Integration with Hugging Face Langchain4j Language Model.",
+      "category": "Language Models"
+    },
+    "langchain4j-mistralai": {
+      "title": "Mistral AI Langchain4j",
+      "description": "Integration with Mistral AI Langchain4j Language Model.",
+      "category": "Language Models"
+    },
+    "langchain4j-ollama": {
+      "title": "Ollama Langchain4j",
+      "description": "Integration with Ollama Langchain4j Language Model.",
+      "category": "Language Models"
+    },
+    "langchain4j-openai": {
+      "title": "Open AI Langchain4j",
+      "description": "Integration with Open AI Langchain4j Language Model.",
+      "category": "Language Models"
+    },
+    "langchain4j-store-elasticsearch": {
+      "title": "Elastic Search Langchain4j Embedded Store",
+      "description": "Integration with Elastic Search Langchain4j Embedded Store Embedded Store.",
+      "category": "Embedded Store"
+    },
+    "langchain4j-store-mongodb-atlas": {
+      "title": "Elastic Search Langchain4j Embedded Store",
+      "description": "Integration with Elastic Search Langchain4j Embedded Store Embedded Store.",
+      "category": "Embedded Store"
+    },
+    "langchain4j-store-neo4j": {
+      "title": "Elastic Search Langchain4j Embedded Store",
+      "description": "Integration with Elastic Search Langchain4j Embedded Store Embedded Store.",
+      "category": "Embedded Store"
+    },
+    "langchain4j-store-opensearch": {
+      "title": "Elastic Search Langchain4j Embedded Store",
+      "description": "Integration with Elastic Search Langchain4j Embedded Store Embedded Store.",
+      "category": "Embedded Store"
+    },
+    "langchain4j-store-oracle": {
+      "title": "Elastic Search Langchain4j Embedded Store",
+      "description": "Integration with Elastic Search Langchain4j Embedded Store Embedded Store.",
+      "category": "Embedded Store"
+    },
+    "langchain4j-store-pgvector": {
+      "title": "Elastic Search Langchain4j Embedded Store",
+      "description": "Integration with Elastic Search Langchain4j Embedded Store Embedded Store.",
+      "category": "Embedded Store"
+    },
+    "langchain4j-store-qdrant": {
+      "title": "Elastic Search Langchain4j Embedded Store",
+      "description": "Integration with Elastic Search Langchain4j Embedded Store Embedded Store.",
+      "category": "Embedded Store"
+    },
+    "langchain4j-vertexai": {
+      "title": "Vertex Ai Langchain4j",
+      "description": "Integration with Vertex Ai Langchain4j Language Model.",
+      "category": "Language Models"
+    },
+    "langchain4j-vertexai-gemini": {
+      "title": "Vertex Ai Gemini Langchain4j",
+      "description": "Integration with Vertex Ai Gemini Langchain4j Language Model.",
+      "category": "Language Models"
+    },
+    "liquibase": {
+      "title": "Liquibase Database Migration",
+      "description": "Adds support for Liquibase database migrations",
+      "category": "Database"
+    },
+    "localstack": {
+      "title": "LocalStack",
+      "description": "A fully functional local cloud stack to develop and test your cloud and serverless apps offline, integrated via Testcontainers",
+      "category": "Development Tools"
+    },
+    "logback": {
+      "title": "Logback Logging",
+      "description": "Adds Logback Logging",
+      "category": "Logging"
+    },
+    "management": {
+      "title": "Micronaut Management",
+      "description": "Adds support for management endpoints",
+      "category": "Management"
+    },
+    "mariadb": {
+      "title": "MariaDB Server",
+      "description": "Adds the MariaDB driver and default config",
+      "category": "Database"
+    },
+    "mcp-client-java-sdk": {
+      "title": "Micronaut Mcp Client Java SDK",
+      "description": "Provides integration with the Model Context Protocol (MCP) Java SDK",
+      "category": "MCP"
+    },
+    "mcp-client-langchain4j": {
+      "title": "Micronaut MCP Client LangChain4j",
+      "description": "Use LangChain4j MCP Clients",
+      "category": "MCP"
+    },
+    "mcp-http": {
+      "title": "MCP HTTP",
+      "description": "Provides integration with the Model Context Protocol (MCP) using the http transport",
+      "category": "MCP"
+    },
+    "mcp-stdio": {
+      "title": "MCP STDIO",
+      "description": "Provides integration with the Model Context Protocol (MCP) using the stdio transport (stdin/stdout)",
+      "category": "MCP"
+    },
+    "micrometer-annotation": {
+      "title": "Micrometer Annotation",
+      "description": "Adds support for Micrometer annotations (@Timed and @Counted)",
+      "category": "Management"
+    },
+    "micrometer-appoptics": {
+      "title": "Micrometer Appoptics",
+      "description": "Adds support for Micrometer metrics (w/ AppOptics reporter)",
+      "category": "Metrics"
+    },
+    "micrometer-atlas": {
+      "title": "Micrometer Atlas",
+      "description": "Adds support for Micrometer metrics (w/ Atlas reporter)",
+      "category": "Metrics"
+    },
+    "micrometer-azure-monitor": {
+      "title": "Micrometer Azure Monitor",
+      "description": "Adds support for Micrometer metrics (w/ Azure Monitor reporter)",
+      "category": "Metrics"
+    },
+    "micrometer-cloudwatch": {
+      "title": "Micrometer Cloudwatch",
+      "description": "Adds support for Micrometer metrics (w/ AWS Cloudwatch reporter)",
+      "category": "Metrics"
+    },
+    "micrometer-datadog": {
+      "title": "Micrometer Datadog",
+      "description": "Adds support for Micrometer metrics (w/ Datadog reporter)",
+      "category": "Metrics"
+    },
+    "micrometer-dynatrace": {
+      "title": "Micrometer Dynatrace",
+      "description": "Adds support for Micrometer metrics (w/ Dynatrace reporter)",
+      "category": "Metrics"
+    },
+    "micrometer-elastic": {
+      "title": "Micrometer Elastic",
+      "description": "Adds support for Micrometer metrics (w/ Elastic reporter)",
+      "category": "Metrics"
+    },
+    "micrometer-ganglia": {
+      "title": "Micrometer Ganglia",
+      "description": "Adds support for Micrometer metrics (w/ Ganglia reporter)",
+      "category": "Metrics"
+    },
+    "micrometer-graphite": {
+      "title": "Micrometer Graphite",
+      "description": "Adds support for Micrometer metrics (w/ Graphite reporter)",
+      "category": "Metrics"
+    },
+    "micrometer-humio": {
+      "title": "Micrometer Humio",
+      "description": "Adds support for Micrometer metrics (w/ Humio reporter)",
+      "category": "Metrics"
+    },
+    "micrometer-influx": {
+      "title": "Micrometer Influx",
+      "description": "Adds support for Micrometer metrics (w/ Influx reporter)",
+      "category": "Metrics"
+    },
+    "micrometer-jmx": {
+      "title": "Micrometer JMX",
+      "description": "Adds support for Micrometer metrics (w/ JMX reporter)",
+      "category": "Metrics"
+    },
+    "micrometer-kairos": {
+      "title": "Micrometer Kairos",
+      "description": "Adds support for Micrometer metrics (w/ Kairos reporter)",
+      "category": "Metrics"
+    },
+    "micrometer-new-relic": {
+      "title": "Micrometer New Relic",
+      "description": "Adds support for Micrometer metrics (w/ New Relic reporter)",
+      "category": "Metrics"
+    },
+    "micrometer-observation": {
+      "title": "Micronaut Micrometer Observation",
+      "description": "Simplifies code instrumentation for gathering traces and metrics",
+      "category": "Metrics"
+    },
+    "micrometer-observation-http": {
+      "title": "Micronaut Micrometer Observation HTTP",
+      "description": "Automates code instrumentation for Micronaut HTTP server and Micronaut HTTP clients",
+      "category": "Metrics"
+    },
+    "micrometer-oracle-cloud": {
+      "title": "Micrometer Oracle Cloud",
+      "description": "Adds support for Micrometer metrics (w/ Oracle Cloud reporter)",
+      "category": "Metrics"
+    },
+    "micrometer-prometheus": {
+      "title": "Micrometer Prometheus",
+      "description": "Adds support for Micrometer metrics (w/ Prometheus reporter)",
+      "category": "Metrics"
+    },
+    "micrometer-prometheus-pushgateway": {
+      "title": "Micrometer Prometheus Pushgateway",
+      "description": "Includes Prometheus Pushgateway reporter",
+      "category": "Metrics"
+    },
+    "micrometer-signalfx": {
+      "title": "Micrometer Signalfx",
+      "description": "Adds support for Micrometer metrics (w/ SignalFx reporter)",
+      "category": "Metrics"
+    },
+    "micrometer-stackdriver": {
+      "title": "Micrometer Stackdriver",
+      "description": "Adds support for Micrometer metrics (w/ Stackdriver reporter)",
+      "category": "Metrics"
+    },
+    "micrometer-statsd": {
+      "title": "Micrometer Statsd",
+      "description": "Adds support for Micrometer metrics (w/ Statsd reporter)",
+      "category": "Metrics"
+    },
+    "micrometer-wavefront": {
+      "title": "Micrometer Wavefront",
+      "description": "Adds support for Micrometer metrics (w/ Wavefront reporter)",
+      "category": "Metrics"
+    },
+    "micronaut-aop": {
+      "title": "Micronaut Aspect-Oriented Programming (AOP)",
+      "description": "Adds support for Micronaut Aspect-Oriented Programming (AOP) API",
+      "category": "API"
+    },
+    "micronaut-http-validation": {
+      "title": "Micronaut HTTP Validation",
+      "description": "Adds support for validating route arguments at compile time",
+      "category": "Validation"
+    },
+    "micronaut-test-rest-assured": {
+      "title": "Micronaut-Test REST-assured",
+      "description": "A small Micronaut-Test utility module that helps integrate the REST-assured library",
+      "category": "Development Tools"
+    },
+    "mockserver-client-java": {
+      "title": "Java Client for Mockserver",
+      "description": "Provides capability to connect to a MockServer",
+      "category": "Development Tools"
+    },
+    "mongo-reactive": {
+      "title": "MongoDB Reactive Driver",
+      "description": "Adds support for the MongoDB Reactive Streams Driver",
+      "category": "Database"
+    },
+    "mongo-sync": {
+      "title": "MongoDB Synchronous Driver",
+      "description": "Adds support for the MongoDB Synchronous Driver",
+      "category": "Database"
+    },
+    "mqtt": {
+      "title": "MQTT v5 Messaging",
+      "description": "Adds support for MQTT messaging",
+      "category": "Messaging"
+    },
+    "mqtt-hivemq": {
+      "title": "MQTT HiveMQ",
+      "description": "Adds support for MQTT HiveMQ",
+      "category": "Messaging"
+    },
+    "mqttv3": {
+      "title": "MQTT v3 Messaging",
+      "description": "Adds support for MQTT messaging",
+      "category": "Messaging"
+    },
+    "multi-tenancy": {
+      "title": "Multitenancy",
+      "description": "Adds multitenancy (tenant resolution, tenant propagation) capabilities",
+      "category": "Database"
+    },
+    "mysql": {
+      "title": "MySQL",
+      "description": "Adds the MySQL driver and default config",
+      "category": "Database"
+    },
+    "nats": {
+      "title": "Nats.io Messaging",
+      "description": "Adds support for Nats.io messaging",
+      "category": "Messaging"
+    },
+    "neo4j-bolt": {
+      "title": "Neo4j Bolt Driver",
+      "description": "Adds support for the Neo4j Bolt Driver",
+      "category": "Database"
+    },
+    "netflix-hystrix": {
+      "title": "Netflix Hystrix",
+      "description": "Adds support for Netflix Hystrix",
+      "category": "Resilience"
+    },
+    "netflix-ribbon": {
+      "title": "Netflix Ribbon LoadBalancer",
+      "description": "Adds support for client side load balancing using Netflix Ribbon",
+      "category": "Client"
+    },
+    "netty-server": {
+      "title": "Netty Server",
+      "description": "Adds support for a Netty server",
+      "category": "Server"
+    },
+    "object-storage-aws": {
+      "title": "Object Storage - AWS",
+      "description": "Micronaut Object Storage provides a uniform API to create, read and delete objects in the major cloud providers. This feature adds the AWS implementation",
+      "category": "Cloud"
+    },
+    "object-storage-azure": {
+      "title": "Object Storage - Azure",
+      "description": "Micronaut Object Storage provides a uniform API to create, read and delete objects in the major cloud providers. This feature adds the Azure implementation",
+      "category": "Cloud"
+    },
+    "object-storage-gcp": {
+      "title": "Object Storage - GCP",
+      "description": "Micronaut Object Storage provides a uniform API to create, read and delete objects in the major cloud providers. This feature adds the GCP implementation",
+      "category": "Cloud"
+    },
+    "object-storage-local": {
+      "title": "Object Storage - Local",
+      "description": "Micronaut Object Storage provides a uniform API to create, read and delete objects in the major cloud providers. This feature adds a local implementation to save to a folder in your computer which you may want to use during testing and development.",
+      "category": "Development Tools"
+    },
+    "object-storage-oracle-cloud": {
+      "title": "Object Storage - Oracle Cloud",
+      "description": "Micronaut Object Storage provides a uniform API to create, read and delete objects in the major cloud providers. This feature adds the Oracle Cloud implementation",
+      "category": "Cloud"
+    },
+    "openapi": {
+      "title": "OpenAPI Support",
+      "description": "Adds support for OpenAPI (Swagger)",
+      "category": "API"
+    },
+    "openapi-adoc": {
+      "title": "OpenAPI Conversion to AsciiDoc",
+      "description": "Adds and enables document conversion to AsciiDoc",
+      "category": "API"
+    },
+    "openapi-explorer": {
+      "title": "OpenAPI Explorer View",
+      "description": "Adds and enables OpenAPI Explorer view for OpenAPI",
+      "category": "API"
+    },
+    "opendi": {
+      "title": "Open DI",
+      "description": "CDI Lite implementation backed by Micronaut",
+      "category": "AI"
+    },
+    "opensearch-amazon": {
+      "title": "Open Search Amazon",
+      "description": "Adds support for Amazon OpenSearch Service",
+      "category": "Search Engine"
+    },
+    "opensearch-httpclient5": {
+      "title": "OpenSearch HttpClient 5",
+      "description": "Adds support for OpenSearch using Apache HttpClient 5 Transport",
+      "category": "Search Engine"
+    },
+    "oracle": {
+      "title": "Oracle Database Server",
+      "description": "Adds the Oracle driver and default config",
+      "category": "Database"
+    },
+    "oracle-cloud-atp": {
+      "title": "Oracle Cloud Autonomous Transaction Processing (ATP)",
+      "description": "Provides integration with Oracle Cloud Autonomous Database",
+      "category": "Cloud"
+    },
+    "oracle-cloud-httpclient-netty": {
+      "title": "Micronaut Netty Oracle Cloud Client",
+      "description": "Provides the netty micronaut client for oraclecloud",
+      "category": "Cloud"
+    },
+    "oracle-cloud-sdk": {
+      "title": "Oracle Cloud SDK",
+      "description": "Provides integration with the Oracle Cloud SDK",
+      "category": "Cloud"
+    },
+    "postgres": {
+      "title": "PostgresSQL",
+      "description": "Adds the PostgresSQL driver and default config",
+      "category": "Database"
+    },
+    "problem-json": {
+      "title": "Problem JSON",
+      "description": "Produce REST API error responses in application/problem+json format",
+      "category": "Validation"
+    },
+    "pyronaut-requests": {
+      "title": "Pyronaut Requests",
+      "description": "drop-in compatible replacement for the Python requests library that runs on GraalPy and delegates HTTP operations to the Micronaut HTTP Client.",
+      "category": "Testing"
+    },
+    "r2dbc": {
+      "title": "R2DBC",
+      "description": "R2DBC - Reactive Database Connectivity",
+      "category": "Database"
+    },
+    "rabbitmq": {
+      "title": "RabbitMQ Messaging",
+      "description": "Adds support for RabbitMQ messaging",
+      "category": "Messaging"
+    },
+    "rapidoc": {
+      "title": "RapiDoc View",
+      "description": "Adds and enables RapiDoc view for OpenAPI",
+      "category": "API"
+    },
+    "reactor": {
+      "title": "Reactor",
+      "description": "Adds Reactive support using Project Reactor",
+      "category": "Reactive"
+    },
+    "reactor-http-client": {
+      "title": "Reactor HTTP Client",
+      "description": "Version of the Http client which supports Project Reactor",
+      "category": "Client"
+    },
+    "redis-lettuce": {
+      "title": "Lettuce Redis Driver",
+      "description": "Configures the Lettuce driver for Redis",
+      "category": "Database"
+    },
+    "redoc": {
+      "title": "Redoc View",
+      "description": "Adds and enables Redoc view for OpenAPI",
+      "category": "API"
+    },
+    "retry": {
+      "title": "Micronaut Retry",
+      "description": "Adds support for fallbacks or retries from operation failure.",
+      "category": "API"
+    },
+    "rss": {
+      "title": "RSS Feed",
+      "description": "Adds support for generating RSS feeds",
+      "category": "View Rendering"
+    },
+    "rss-itunes-podcast": {
+      "title": "RSS iTunes Podcast Feed",
+      "description": "Adds support for generating iTunes Podcast RSS feeds",
+      "category": "View Rendering"
+    },
+    "rxjava3": {
+      "title": "RxJava 3",
+      "description": "Adds Reactive support using RxJava 3",
+      "category": "Reactive"
+    },
+    "rxjava3-http-client": {
+      "title": "RxJava 3 HTTP Client",
+      "description": "RxJava 3 variation of the Micronaut HTTP client.",
+      "category": "Client"
+    },
+    "security": {
+      "title": "Micronaut Security",
+      "description": "Adds a full featured and customizable security solution",
+      "category": "Security"
+    },
+    "security-csrf": {
+      "title": "Micronaut Security CSRF",
+      "description": "Adds Cross Site Request Forgery (CSRF) mitigation APIs",
+      "category": "Security"
+    },
+    "security-html-sanitizer": {
+      "title": "Micronaut Security HTML Sanitizer",
+      "description": "HTML sanitizer backed by the OWASP Java HTML Sanitizer",
+      "category": "Security"
+    },
+    "security-jwt": {
+      "title": "Micronaut Security JWT",
+      "description": "Adds support for JWT (JSON Web Token) based Authentication",
+      "category": "Security"
+    },
+    "security-ldap": {
+      "title": "Micronaut Security LDAP",
+      "description": "Adds support for authentication with LDAP servers",
+      "category": "Security"
+    },
+    "security-oauth2": {
+      "title": "Micronaut Security OAuth 2.0",
+      "description": "Adds support for authentication with OAuth 2.0 providers",
+      "category": "Security"
+    },
+    "security-ojdbc-extensions": {
+      "title": "Micronaut Security Oracle JDBC Extensions",
+      "description": "Module that registers an Oracle JDBC EndUserSecurityContextProvider",
+      "category": "Security"
+    },
+    "security-session": {
+      "title": "Micronaut Security Session",
+      "description": "Adds support for Session based Authentication",
+      "category": "Security"
+    },
+    "serialization-bson": {
+      "title": "Micronaut Serialization BSON",
+      "description": "Adds support using Micronaut Serialization with BSON",
+      "category": "API"
+    },
+    "serialization-jackson": {
+      "title": "Micronaut Serialization Jackson Core",
+      "description": "Adds support using Micronaut Serialization with Jackson Core",
+      "category": "API"
+    },
+    "serialization-jsonp": {
+      "title": "Micronaut Serialization JSON-B and JSON-P",
+      "description": "Adds support using Micronaut Serialization with JSON-B and JSON-P",
+      "category": "API"
+    },
+    "spring": {
+      "title": "Spring Framework Annotations",
+      "description": "Adds support for using Spring Framework Annotations",
+      "category": "Spring Framework"
+    },
+    "spring-boot": {
+      "title": "Spring Boot Annotations",
+      "description": "Adds support for using Spring Boot Annotations",
+      "category": "Spring Framework"
+    },
+    "spring-data-jdbc": {
+      "title": "Spring Data JDBC Annotations",
+      "description": "Adds support for using Spring Data JDBC Annotations",
+      "category": "Spring Framework"
+    },
+    "spring-data-jpa": {
+      "title": "Spring Data JPA Annotations",
+      "description": "Adds support for using Spring Data JPA Annotations",
+      "category": "Spring Framework"
+    },
+    "spring-security-crypto": {
+      "title": "Spring Security Crypto",
+      "description": "Adds Spring Security Crypto password encoding support",
+      "category": "Security"
+    },
+    "spring-web": {
+      "title": "Spring MVC Annotations",
+      "description": "Adds support for using Spring MVC Controller Annotations",
+      "category": "Spring Framework"
+    },
+    "sql-jdbi": {
+      "title": "Jdbi",
+      "description": "Adds support for persistence with Jdbi",
+      "category": "Database"
+    },
+    "sqlite": {
+      "title": "SQLite",
+      "description": "It adds the Micronaut SQLite dependency",
+      "category": "Database"
+    },
+    "sqlserver": {
+      "title": "Microsoft SQL Server",
+      "description": "Adds the SQL Server driver and default config",
+      "category": "Database"
+    },
+    "swagger-ui": {
+      "title": "Swagger UI",
+      "description": "Adds and enables Swagger UI by default",
+      "category": "API"
+    },
+    "test-resources": {
+      "title": "Micronaut Test Resources",
+      "description": "Adds support for managing external resources which are required during development or testing.",
+      "category": "Development Tools"
+    },
+    "testcontainers": {
+      "title": "Testcontainers",
+      "description": "Use Testcontainers to run a database or other software in a Docker container for tests",
+      "category": "Database"
+    },
+    "toml": {
+      "title": "TOML configuration",
+      "description": "Creates a TOML configuration file",
+      "category": "Configuration"
+    },
+    "tracing-jaeger": {
+      "title": "Jaeger Tracing",
+      "description": "Adds support for distributed tracing with Jaeger",
+      "category": "Distributed Tracing"
+    },
+    "tracing-opentelemetry-exporter-logging": {
+      "title": "OpenTelemetry Exporter Logging",
+      "description": "Adds the open telemetry exporter depedendency for Logging",
+      "category": "Distributed Tracing"
+    },
+    "tracing-opentelemetry-exporter-otlp": {
+      "title": "OpenTelemetry Exporter OTLP",
+      "description": "Adds the open telemetry exporter depedendency for OTLP",
+      "category": "Distributed Tracing"
+    },
+    "tracing-opentelemetry-gcp": {
+      "title": "OpenTelemetry Google Cloud Trace",
+      "description": "It adds Micronaut integration with OpenTelemetry and sets Google Cloud Trace as the exporter.",
+      "category": "Distributed Tracing"
+    },
+    "tracing-opentelemetry-jaeger": {
+      "title": "OpenTelemetry Jaeger",
+      "description": "It adds Micronaut integration with OpenTelemetry and sets Jaeger as the exporter.",
+      "category": "Distributed Tracing"
+    },
+    "tracing-opentelemetry-xray": {
+      "title": "OpenTelemetry XRay Tracing",
+      "description": "Adds support for distributed tracing with XRay via Open Telemetry",
+      "category": "Distributed Tracing"
+    },
+    "tracing-opentelemetry-zipkin": {
+      "title": "OpenTelemetry Zipkin",
+      "description": "It adds Micronaut integration with OpenTelemetry and sets Zipkin as the exporter.",
+      "category": "Distributed Tracing"
+    },
+    "tracing-zipkin": {
+      "title": "Zipkin Tracing",
+      "description": "Adds support for distributed tracing with Zipkin",
+      "category": "Distributed Tracing"
+    },
+    "turbo": {
+      "title": "Turbo",
+      "description": "Adds support for Turbo",
+      "category": "View Rendering"
+    },
+    "validation": {
+      "title": "Micronaut Validation",
+      "description": "Adds support for Micronaut Validation",
+      "category": "Validation"
+    },
+    "vertx-mysql-client": {
+      "title": "Vertx Reactive MySQL Client",
+      "description": "Add support for the Vertx Reactive MySQL Client",
+      "category": "Database"
+    },
+    "vertx-pg-client": {
+      "title": "Vertx Reactive PostgreSQL Client",
+      "description": "Add support for the Vertx Reactive PostgreSQL Client",
+      "category": "Database"
+    },
+    "views-fieldset": {
+      "title": "Form & Fieldset Generator",
+      "description": "Adds the views-fieldset dependency, which provides an API to simplify the generation of an HTML Fieldset representation for a given type or instance.",
+      "category": "View Rendering"
+    },
+    "views-freemarker": {
+      "title": "Freemarker Views",
+      "description": "Adds support for Server-Side View Rendering using Apache Freemarker",
+      "category": "View Rendering"
+    },
+    "views-handlebars": {
+      "title": "Handlebars Views",
+      "description": "Adds support for Server-Side View Rendering using Handlebars",
+      "category": "View Rendering"
+    },
+    "views-jinjava": {
+      "title": "Jinjava Views",
+      "description": "Adds support for Server-Side View Rendering using Jinjava",
+      "category": "View Rendering"
+    },
+    "views-jte": {
+      "title": "JTE Views",
+      "description": "Adds support for Server-Side View Rendering using JTE",
+      "category": "View Rendering"
+    },
+    "views-pebble": {
+      "title": "Pebble Views",
+      "description": "Adds support for Server-Side View Rendering using Pebble",
+      "category": "View Rendering"
+    },
+    "views-rocker": {
+      "title": "Rocker Views",
+      "description": "Adds support for Server-Side View Rendering using Rocker",
+      "category": "View Rendering"
+    },
+    "views-soy": {
+      "title": "Soy Yiews",
+      "description": "Adds support for Server-Side View Rendering using Soy (Closure Templates)",
+      "category": "View Rendering"
+    },
+    "views-thymeleaf": {
+      "title": "Thymeleaf Views",
+      "description": "Adds support for Server-Side View Rendering using Thymeleaf",
+      "category": "View Rendering"
+    },
+    "views-velocity": {
+      "title": "Velocity Views",
+      "description": "Adds support for Server-Side View Rendering using Apache Velocity",
+      "category": "View Rendering"
+    },
+    "websocket": {
+      "title": "Websocket",
+      "description": "Adds support for creating WebSocket clients and servers.",
+      "category": "Server"
+    },
+    "x86": {
+      "title": "x86 CPU Architecture",
+      "description": "It can be used in combination with aws-cdk and aws-lambda to generate infrastructure for the Lambda CPU architecture",
+      "category": "Cloud"
+    }
+  }
+}

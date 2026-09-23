@@ -5,12 +5,12 @@ import CodeTabs from "@/components/CodeTabs.astro";
 import Glyph from "@/components/Glyph.astro";
 import Mascot from "@/components/Mascot.astro";
 import MicronautBand from "@/components/MicronautBand.astro";
+import SiteFooter from "@/components/SiteFooter.astro";
+import SiteHeader from "@/components/SiteHeader.astro";
 import SkepticTest from "@/components/SkepticTest.astro";
-import ThemeToggle from "@/components/ThemeToggle.astro";
 import {
   CODE_PROOFS,
   FEATURES,
-  FOOTER_COLUMNS,
   PERSONAS,
   SITE_NAME,
   STACK_COMPARISON,
@@ -23,16 +23,6 @@ import {
  * for things you act on — buttons, commands, the active tab. Everything else
  * is ink and hairlines.
  */
-
-const navLinks = [
-  { label: "Docs", href: "/docs/" },
-  { label: "Guides", href: "/guides/" },
-  { label: "Blog", href: "/blog/" },
-  {
-    label: "Releases",
-    href: "https://github.com/micronaut-projects/pyronaut/releases",
-  },
-];
 
 const helloCode = `@Get("/hello/{name}")
 def hello(name: str):
@@ -66,44 +56,7 @@ const btnGhost =
   title={`${SITE_NAME} — High-performance Python web framework`}
   bodyClass="bg-white font-sans text-ink-900 antialiased dark:bg-ink-950 dark:text-ink-100"
 >
-  <!-- Header: always dark, it sits on the hero -->
-  <header class="sticky top-0 z-40 border-b border-white/10 bg-ink-950/90 backdrop-blur">
-    <div class:list={[container, "flex h-16 items-center gap-8"]}>
-      <a href="/" class="flex shrink-0 items-center">
-        <img src="/pyronaut-assets/logo-header-dark.svg" alt="Pyronaut" class="h-9 w-auto" />
-      </a>
-      <nav class="hidden gap-6 md:flex">
-        {
-          navLinks.map((link) => (
-            <a href={link.href} class="text-sm font-medium text-ink-300 transition hover:text-white">
-              {link.label}
-            </a>
-          ))
-        }
-      </nav>
-      <div class="ml-auto flex items-center gap-5">
-        <a
-          href="https://github.com/micronaut-projects/pyronaut"
-          class="rounded-md p-1.5 text-ink-400 transition hover:bg-white/10 hover:text-white"
-          aria-label="Pyronaut on GitHub"
-          title="GitHub"
-        >
-          <svg viewBox="0 0 16 16" fill="currentColor" class="size-5" aria-hidden="true">
-            <path
-              d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"
-            ></path>
-          </svg>
-        </a>
-        <ThemeToggle class="rounded-md p-1.5 text-ink-400 transition hover:bg-white/10 hover:text-white" />
-        <a
-          href="/docs/guide/index.html#gettingStarted"
-          class="hidden rounded-md bg-flame-500 px-3.5 py-1.5 text-sm font-semibold text-ink-950 transition hover:bg-flame-400 sm:inline-flex"
-        >
-          Get started
-        </a>
-      </div>
-    </div>
-  </header>
+  <SiteHeader />
 
   <main>
     <!-- Hero -->
@@ -388,42 +341,7 @@ const btnGhost =
     <MicronautBand />
   </main>
 
-  <!-- Footer -->
-  <footer class="border-t border-ink-200 dark:border-white/10">
-    <div class:list={[container, "py-14"]}>
-      <div class="grid gap-10 md:grid-cols-[minmax(0,1.2fr)_repeat(3,minmax(0,1fr))]">
-        <div>
-          <img src="/pyronaut-assets/logo-header.svg" alt="Pyronaut" class="h-8 w-auto dark:hidden" />
-          <img src="/pyronaut-assets/logo-header-dark.svg" alt="Pyronaut" class="hidden h-8 w-auto dark:block" />
-          <p class="mt-4 max-w-xs text-sm leading-6 text-ink-500 dark:text-ink-400">
-            A high-performance Python framework for production services.
-          </p>
-          <p class="mt-2 max-w-xs text-xs leading-5 text-ink-400 dark:text-ink-500">
-            Pyronaut is part of Micronaut, a Commonhaus Foundation project.
-          </p>
-        </div>
-        {
-          FOOTER_COLUMNS.map((column) => (
-            <div>
-              <h3 class="text-sm font-semibold text-ink-950 dark:text-white">{column.title}</h3>
-              <ul class="mt-4 grid gap-2.5">
-                {column.links.map((link) => (
-                  <li>
-                    <a
-                      href={link.href}
-                      class="text-sm text-ink-500 transition hover:text-ink-950 dark:text-ink-400 dark:hover:text-white"
-                    >
-                      {link.label}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))
-        }
-      </div>
-    </div>
-  </footer>
+  <SiteFooter />
 </BaseLayout>
 
 <script>

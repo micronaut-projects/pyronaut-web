@@ -55,7 +55,142 @@ html {
 }
 
 /* Shiki dual themes: switch token colors when `.dark` is active. */
-.dark .code-block .astro-code span {
+.dark .code-block .astro-code span,
+.dark .blog-prose .astro-code,
+.dark .blog-prose .astro-code span {
+  color: var(--shiki-dark) !important;
+  font-style: var(--shiki-dark-font-style) !important;
+  font-weight: var(--shiki-dark-font-weight) !important;
+}
+
+.dark .blog-prose .astro-code {
+  background-color: var(--shiki-dark-bg) !important;
+}
+
+/* Blog post bodies are rendered Markdown, so they are styled by element. */
+.blog-prose {
+  font-size: 1.0625rem;
+  line-height: 1.8;
+  color: var(--color-ink-700);
+}
+.dark .blog-prose {
+  color: var(--color-ink-200);
+}
+.blog-prose > * + * {
+  margin-top: 1.25rem;
+}
+.blog-prose h2,
+.blog-prose h3 {
+  color: var(--color-ink-950);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.25;
+}
+.dark .blog-prose h2,
+.dark .blog-prose h3 {
+  color: white;
+}
+.blog-prose h2 {
+  margin-top: 3rem;
+  font-size: 1.75rem;
+}
+.blog-prose h3 {
+  margin-top: 2.25rem;
+  font-size: 1.3rem;
+}
+.blog-prose a {
+  color: var(--color-flame-600);
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.dark .blog-prose a {
+  color: var(--color-flame-400);
+}
+.blog-prose strong {
+  color: var(--color-ink-950);
+  font-weight: 700;
+}
+.dark .blog-prose strong {
+  color: white;
+}
+.blog-prose ul,
+.blog-prose ol {
+  padding-left: 1.5rem;
+}
+.blog-prose ul {
+  list-style: disc;
+}
+.blog-prose ol {
+  list-style: decimal;
+}
+.blog-prose li + li {
+  margin-top: 0.5rem;
+}
+.blog-prose li::marker {
+  color: var(--color-flame-500);
+}
+.blog-prose blockquote {
+  border-left: 3px solid var(--color-flame-500);
+  padding-left: 1.25rem;
+  color: var(--color-ink-500);
+}
+.blog-prose :not(pre) > code {
+  border-radius: 0.375rem;
+  background-color: var(--color-ink-100);
+  padding: 0.125rem 0.375rem;
+  font-family: var(--font-mono);
+  font-size: 0.875em;
+  color: var(--color-ink-950);
+}
+.dark .blog-prose :not(pre) > code {
+  background-color: rgb(255 255 255 / 0.08);
+  color: var(--color-ink-100);
+}
+.blog-prose pre {
+  overflow-x: auto;
+  border-radius: 1rem;
+  border: 1px solid var(--color-ink-200);
+  padding: 1.1rem 1.25rem;
+  font-size: 0.85rem;
+  line-height: 1.65;
+}
+.dark .blog-prose pre {
+  border-color: rgb(255 255 255 / 0.1);
+}
+.blog-prose pre code {
+  font-family: var(--font-mono);
+}
+.blog-prose img {
+  border-radius: 1rem;
+}
+
+/* Launch preview: Shiki (or plain) `<pre>` with CSS line numbers. */
+.preview-code pre {
+  margin: 0;
+  padding: 1.25rem 1.25rem 1.25rem 0;
+  min-width: max-content;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  line-height: 1.5rem;
+  background-color: transparent !important;
+  counter-reset: line;
+}
+.preview-code .line::before {
+  counter-increment: line;
+  content: counter(line);
+  display: inline-block;
+  width: 3rem;
+  margin-right: 1.25rem;
+  text-align: right;
+  color: var(--color-ink-300);
+  user-select: none;
+}
+.dark .preview-code .line::before {
+  color: var(--color-ink-600);
+}
+.dark .preview-code .shiki,
+.dark .preview-code .shiki span {
   color: var(--shiki-dark) !important;
   font-style: var(--shiki-dark-font-style) !important;
   font-weight: var(--shiki-dark-font-weight) !important;

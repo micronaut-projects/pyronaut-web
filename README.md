@@ -32,11 +32,43 @@ variant, falls back to the OS preference).
 - `src/layouts/BaseLayout.astro` — shared head/meta/fonts + pre-paint theme
   script
 - `src/pages/index.astro` — the site homepage
+- `src/pages/launch.astro` + `src/lib/launcher.ts` — Pyronaut Launch, the
+  project generator (see below)
+- `src/components/SiteHeader.astro`, `src/components/SiteFooter.astro` —
+  header and footer shared by every page
+- `src/content/blog/` — blog posts (see [Blog](#blog))
 - `resources/` — pristine mirror of the upstream artwork from
   [micronaut-projects/pyronaut](https://github.com/micronaut-projects/pyronaut)
   (`media/`); not served directly
 - `public/pyronaut-assets/` — the logos and mascot actually shipped, generated
   from `resources/` by `scripts/build-logos.mjs`
+
+## Blog
+
+The blog mirrors the micronaut-web structure. Each post is a Markdown file
+under `src/content/blog/YYYY/MM/DD/<name>.md`:
+
+```md
+---
+slug: 2026/09/23/introducing-pyronaut
+title: Introducing Pyronaut
+description: One or two sentences shown on the blog index and in meta tags.
+date: '2026-09-23T10:00:00'
+category: announcements
+categories:
+  - announcements
+tags:
+  - pyronaut
+href: /2026/09/23/introducing-pyronaut/
+---
+```
+
+The schema is in `src/content.config.ts` and the helpers in `src/lib/blog.ts`.
+Routes:
+
+- `/blog/` and `/blog/page/<n>/` — newest first, 24 posts per page
+- `/<slug>/` — the post itself, e.g. `/2026/09/23/introducing-pyronaut/`
+- `/category/<category>/` and `/tag/<tag>/` — archives
 
 ## Logo assets
 
@@ -54,6 +86,39 @@ real ink bounds, crops a mascot-only variant, puts the Python mark on the
 narrow header's nozzle to match the mascot's flamethrower, and re-encodes the
 embedded rasters as palette PNGs (~1.2 MB total instead of ~4.9 MB). It also
 emits `mascot.png` and `favicon.png`, since social cards cannot use SVG.
+
+## Pyronaut Launch (`/launch/`)
+
+A Python-only take on [micronaut.io/launch](https://micronaut.io/launch/),
+backed by the same [Micronaut Starter](https://github.com/micronaut-projects/micronaut-starter)
+API with `lang=PYTHON`, `build=PYRONAUT`, `test=PYTEST`. It is the web
+counterpart of the Pyronaut CLI from
+[micronaut-projects/pyronaut@0.0.x](https://github.com/micronaut-projects/pyronaut/tree/0.0.x):
+it always generates an Application, and shows the equivalent
+`pyronaut create-app` (or curl) command. Name the project, pick features, then
+preview the generated files, copy a link, or download the ZIP.
+
+- **Feature catalog** — `src/data/starter.json` is a committed snapshot of
+  the starter's Python options, minus the JVM-only features that
+  `pyronaut create --list-features` hides (the denylist in
+  `scripts/sync-starter.mjs` mirrors the Pyronaut CLI's). Builds need no
+  network. Refresh it when the starter or the denylist changes:
+
+  ```sh
+  node scripts/sync-starter.mjs                    # snapshot.micronaut.io
+  node scripts/sync-starter.mjs https://launch.micronaut.io
+  ```
+
+- **API endpoint** — defaults to the API the snapshot was taken from;
+  override with `PUBLIC_STARTER_API` at build time.
+- **CORS** — the starter API only allows `micronaut.io` origins. In
+  `npm run dev` requests go through a Vite proxy (`/starter-api`), so
+  everything works locally. In production, Preview needs the API to allow
+  `pyronaut.io`; until then it shows a notice, and Generate falls back to
+  navigating to the ZIP URL (served as an attachment).
+- **Archived design** — the first launcher (application type picker and
+  feature dialog) is kept in `src/archive/LaunchV1.astro`, outside
+  `src/pages`, so it is not published.
 
 ## Commands
 
