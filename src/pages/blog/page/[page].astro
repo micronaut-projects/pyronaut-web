@@ -1,0 +1,30 @@
+---
+import BlogArchive from "@/components/BlogArchive.astro";
+import PageLayout from "@/layouts/PageLayout.astro";
+import { SITE_NAME } from "@/lib/site-content";
+import { getBlogPosts, paginate, totalPages } from "@/lib/blog";
+
+export async function getStaticPaths() {
+  const posts = await getBlogPosts();
+  const pages = totalPages(posts);
+  // Page 1 is /blog/ itself.
+  return Array.from({ length: pages - 1 }, (_item, index) => ({
+    params: { page: String(index + 2) },
+    props: { page: index + 2, totalPages: pages },
+  }));
+}
+
+const { page, totalPages: pages } = Astro.props;
+const posts = paginate(await getBlogPosts(), page);
+---
+
+<PageLayout title={`${SITE_NAME} Blog - Page ${page}`}>
+  <BlogArchive
+    eyebrow="Blog"
+    title={`${SITE_NAME} Blog`}
+    intro="Browse Pyronaut project news, release announcements, and technical articles."
+    posts={posts}
+    page={page}
+    totalPages={pages}
+  />
+</PageLayout>

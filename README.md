@@ -32,11 +32,41 @@ variant, falls back to the OS preference).
 - `src/layouts/BaseLayout.astro` — shared head/meta/fonts + pre-paint theme
   script
 - `src/pages/index.astro` — the site homepage
+- `src/components/SiteHeader.astro`, `src/components/SiteFooter.astro` —
+  header and footer shared by every page
+- `src/content/blog/` — blog posts (see [Blog](#blog))
 - `resources/` — pristine mirror of the upstream artwork from
   [micronaut-projects/pyronaut](https://github.com/micronaut-projects/pyronaut)
   (`media/`); not served directly
 - `public/pyronaut-assets/` — the logos and mascot actually shipped, generated
   from `resources/` by `scripts/build-logos.mjs`
+
+## Blog
+
+The blog mirrors the micronaut-web structure. Each post is a Markdown file
+under `src/content/blog/YYYY/MM/DD/<name>.md`:
+
+```md
+---
+slug: 2026/09/23/introducing-pyronaut
+title: Introducing Pyronaut
+description: One or two sentences shown on the blog index and in meta tags.
+date: '2026-09-23T10:00:00'
+category: announcements
+categories:
+  - announcements
+tags:
+  - pyronaut
+href: /2026/09/23/introducing-pyronaut/
+---
+```
+
+The schema is in `src/content.config.ts` and the helpers in `src/lib/blog.ts`.
+Routes:
+
+- `/blog/` and `/blog/page/<n>/` — newest first, 24 posts per page
+- `/<slug>/` — the post itself, e.g. `/2026/09/23/introducing-pyronaut/`
+- `/category/<category>/` and `/tag/<tag>/` — archives
 
 ## Logo assets
 

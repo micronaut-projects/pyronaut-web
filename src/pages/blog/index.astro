@@ -1,0 +1,22 @@
+---
+import BlogArchive from "@/components/BlogArchive.astro";
+import PageLayout from "@/layouts/PageLayout.astro";
+import { SITE_NAME } from "@/lib/site-content";
+import { getBlogPosts, paginate, totalPages } from "@/lib/blog";
+
+const posts = await getBlogPosts();
+---
+
+<PageLayout
+  title={`${SITE_NAME} Blog`}
+  description="Pyronaut project news, release announcements, and technical articles."
+>
+  <BlogArchive
+    eyebrow="Blog"
+    title={`${SITE_NAME} Blog`}
+    intro="Read Pyronaut project news, release announcements, technical articles, and community updates."
+    posts={paginate(posts, 1)}
+    page={1}
+    totalPages={totalPages(posts)}
+  />
+</PageLayout>

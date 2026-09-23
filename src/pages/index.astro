@@ -5,12 +5,12 @@ import CodeTabs from "@/components/CodeTabs.astro";
 import Glyph from "@/components/Glyph.astro";
 import Mascot from "@/components/Mascot.astro";
 import MicronautBand from "@/components/MicronautBand.astro";
+import SiteFooter from "@/components/SiteFooter.astro";
+import SiteHeader from "@/components/SiteHeader.astro";
 import SkepticTest from "@/components/SkepticTest.astro";
-import ThemeToggle from "@/components/ThemeToggle.astro";
 import {
   CODE_PROOFS,
   FEATURES,
-  FOOTER_COLUMNS,
   PERSONAS,
   SITE_NAME,
   STACK_COMPARISON,
@@ -23,16 +23,6 @@ import {
  * for things you act on — buttons, commands, the active tab. Everything else
  * is ink and hairlines.
  */
-
-const navLinks = [
-  { label: "Docs", href: "/docs/" },
-  { label: "Guides", href: "/guides/" },
-  { label: "Blog", href: "/blog/" },
-  {
-    label: "Releases",
-    href: "https://github.com/micronaut-projects/pyronaut/releases",
-  },
-];
 
 const helloCode = `@Get("/hello/{name}")
 def hello(name: str):
@@ -66,38 +56,7 @@ const btnGhost =
   title={`${SITE_NAME} — High-performance Python web framework`}
   bodyClass="bg-white font-sans text-ink-900 antialiased dark:bg-ink-950 dark:text-ink-100"
 >
-  <!-- Header: always dark, it sits on the hero -->
-  <header class="sticky top-0 z-40 border-b border-white/10 bg-ink-950/90 backdrop-blur">
-    <div class:list={[container, "flex h-16 items-center gap-8"]}>
-      <a href="/" class="flex shrink-0 items-center">
-        <img src="/pyronaut-assets/logo-header-dark.svg" alt="Pyronaut" class="h-9 w-auto" />
-      </a>
-      <nav class="hidden gap-6 md:flex">
-        {
-          navLinks.map((link) => (
-            <a href={link.href} class="text-sm font-medium text-ink-300 transition hover:text-white">
-              {link.label}
-            </a>
-          ))
-        }
-      </nav>
-      <div class="ml-auto flex items-center gap-5">
-        <a
-          href="https://github.com/micronaut-projects/pyronaut"
-          class="hidden text-sm font-medium text-ink-300 transition hover:text-white lg:block"
-        >
-          GitHub
-        </a>
-        <ThemeToggle class="rounded-md p-1.5 text-ink-400 transition hover:bg-white/10 hover:text-white" />
-        <a
-          href="/docs/guide/index.html#gettingStarted"
-          class="hidden rounded-md bg-flame-500 px-3.5 py-1.5 text-sm font-semibold text-ink-950 transition hover:bg-flame-400 sm:inline-flex"
-        >
-          Get started
-        </a>
-      </div>
-    </div>
-  </header>
+  <SiteHeader />
 
   <main>
     <!-- Hero -->
@@ -382,42 +341,7 @@ const btnGhost =
     <MicronautBand />
   </main>
 
-  <!-- Footer -->
-  <footer class="border-t border-ink-200 dark:border-white/10">
-    <div class:list={[container, "py-14"]}>
-      <div class="grid gap-10 md:grid-cols-[minmax(0,1.2fr)_repeat(3,minmax(0,1fr))]">
-        <div>
-          <img src="/pyronaut-assets/logo-header.svg" alt="Pyronaut" class="h-8 w-auto dark:hidden" />
-          <img src="/pyronaut-assets/logo-header-dark.svg" alt="Pyronaut" class="hidden h-8 w-auto dark:block" />
-          <p class="mt-4 max-w-xs text-sm leading-6 text-ink-500 dark:text-ink-400">
-            A high-performance Python framework for production services.
-          </p>
-          <p class="mt-2 max-w-xs text-xs leading-5 text-ink-400 dark:text-ink-500">
-            Pyronaut is part of Micronaut, a Commonhaus Foundation project.
-          </p>
-        </div>
-        {
-          FOOTER_COLUMNS.map((column) => (
-            <div>
-              <h3 class="text-sm font-semibold text-ink-950 dark:text-white">{column.title}</h3>
-              <ul class="mt-4 grid gap-2.5">
-                {column.links.map((link) => (
-                  <li>
-                    <a
-                      href={link.href}
-                      class="text-sm text-ink-500 transition hover:text-ink-950 dark:text-ink-400 dark:hover:text-white"
-                    >
-                      {link.label}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))
-        }
-      </div>
-    </div>
-  </footer>
+  <SiteFooter />
 </BaseLayout>
 
 <script>
