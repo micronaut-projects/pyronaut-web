@@ -104,46 +104,60 @@ export const CODE_EXAMPLES: CodeExample[] = [
     filename: "rockets.py",
     language: "python",
     caption:
-      "Use Micronaut annotations directly from Python for routing, dependency injection, validation, and serialization.",
+      "Use Micronaut annotations directly from Python for data access, routing, dependency injection, validation, and serialization.",
     code: `from dataclasses import dataclass
+from typing import Annotated, List
 
-from micronaut.http.annotation import Body, Get, Post
-from micronaut.context.annotation import Prototype
-from micronaut.serde.annotation import Serdeable
 from jakarta.inject import Inject
-from typing import Annotated
 from jakarta.validation import Valid
 from jakarta.validation.constraints import NotBlank, Positive
+from micronaut.data.annotation import GeneratedValue, Id, MappedEntity
+from micronaut.data.jdbc.annotation import JdbcRepository
+from micronaut.data.repository import CrudRepository
+from micronaut.http import HttpResponse
+from micronaut.http.annotation import Body, Get, Post
+from micronaut.serde.annotation import Serdeable
+
+
+@dataclass
+@MappedEntity
+@Serdeable
+class Rocket:
+    id: Annotated[int | None, Id, GeneratedValue]
+    name: str
+    thrust_kn: float
+
 
 @Serdeable
 @dataclass
-class Rocket:
+class LaunchCommand:
     name: Annotated[str, NotBlank]
     thrust_kn: Annotated[float, Positive]
 
 
-@Prototype
-class RocketService:
-    def __init__(self):
-        self._fleet: list[Rocket] = []
+@JdbcRepository(dialect="MYSQL")
+class RocketRepository(CrudRepository[Rocket, int]):
 
-    def launch(self, rocket: Rocket) -> Rocket:
-        self._fleet.append(rocket)
-        return rocket
-
-    def fleet(self) -> list[Rocket]:
-        return list(self._fleet)
+    def findByNameContains(self, fragment: str) -> List[Rocket]: ...
 
 
-service: Annotated[RocketService, Inject]
+rockets: Annotated[RocketRepository, Inject]
+
 
 @Get("/rockets")
-def list(self) -> list[Rocket]:
-    return service.fleet()
+def fleet() -> List[Rocket]:
+    return rockets.findAll()
+
+
+@Get("/rockets/search/{fragment}")
+def search(fragment: str) -> List[Rocket]:
+    return rockets.findByNameContains(fragment)
+
 
 @Post("/rockets")
-def launch(self, rocket: Body[Rocket, Valid]) -> Rocket:
-    return service.launch(rocket)`,
+def launch(command: Annotated[LaunchCommand, Body, Valid]) -> HttpResponse:
+    rocket = Rocket(None, command.name, command.thrust_kn)
+    return HttpResponse.created(rockets.save(rocket))`,
   },
   {
     id: "test",
@@ -151,33 +165,37 @@ def launch(self, rocket: Body[Rocket, Valid]) -> Rocket:
     filename: "test_rockets.py",
     language: "python",
     caption:
-      "pytest runs against the same embedded server, DI context, and Test Resources the application uses.",
-    code: `import pytest
+      "pytest runs against the same embedded server, DI context, and Test Resources database the application uses.",
+    code: `from typing import Any
+
+import pytest
+import requests
 
 from pyronaut.test import MicronautTest, micronaut_test_fixture
-import pyronaut.requests
+
 
 @pytest.fixture
 def application_context(request: Any) -> Any:
-    fixture = micronaut_test_fixture(
-        request,
-        MicronautTest()
-    )
+    fixture = micronaut_test_fixture(request, MicronautTest())
     yield fixture
     fixture.stop()
+
 
 @pytest.fixture
 def client(application_context: Any) -> requests.Session:
     return requests.with_context(application_context)
 
+
 def test_launch(client: requests.Session):
     rocket = {"name": "Ariane 7", "thrust_kn": 15000}
 
     created = client.post("/rockets", json=rocket)
-    assert created.status_code == 200
+    assert created.status_code == 201
+    assert created.json()["id"] is not None
 
-    fleet = client.get("/rockets").json()
-    assert fleet[0]["name"] == "Ariane 7"
+    found = client.get("/rockets/search/Ariane").json()
+    assert "Ariane 7" in [r["name"] for r in found]
+
 
 def test_validation(client: requests.Session):
     response = client.post(
