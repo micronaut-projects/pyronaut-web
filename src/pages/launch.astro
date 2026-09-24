@@ -209,62 +209,52 @@ const secondaryButton =
             </p>
             <pre
               class="mt-3 overflow-x-auto rounded-xl bg-white/5 px-3.5 py-3 font-mono text-[0.75rem] leading-6 text-ink-100"><code id="next-steps-code"></code></pre>
-            <p class="mt-2 text-xs leading-5 text-ink-400">
-              These commands need the Pyronaut CLI —{" "}<a href="/docs/guide/index.html#installation" class={docLinkClass}>install it</a>{" "}first.
-            </p>
             <ul class="mt-4 grid gap-1.5 text-sm">
-              <li><a href="/docs/guide/index.html#installation" class={docLinkClass}>Installing Pyronaut</a></li>
-              <li><a href="/docs/guide/index.html#gettingStarted" class={docLinkClass}>Getting started</a></li>
-              <li><a href="/docs/cli/" class={docLinkClass}>CLI reference</a>{" "}<span class="text-ink-400">— <code class="font-mono text-xs">setup</code>, <code class="font-mono text-xs">dev</code>, <code class="font-mono text-xs">test</code></span></li>
+              <li><a href="/docs/guide/index.html#installation" target="_blank" rel="noopener" class={docLinkClass}>Installing Pyronaut</a></li>
+              <li><a href="/docs/guide/index.html#gettingStarted" target="_blank" rel="noopener" class={docLinkClass}>Getting started</a></li>
+              <li><a href="/docs/cli/" target="_blank" rel="noopener" class={docLinkClass}>CLI reference</a>{" "}<span class="text-ink-400">— <code class="font-mono text-xs">setup</code>, <code class="font-mono text-xs">dev</code>, <code class="font-mono text-xs">test</code></span></li>
             </ul>
           </div>
+
+          <!-- Terminal alternative: the same project from the CLI or curl -->
+          <details id="terminal" class="group mt-6 border-t border-white/10 pt-5">
+            <summary class="flex cursor-pointer list-none items-center gap-2.5 text-sm font-semibold text-white [&::-webkit-details-marker]:hidden">
+              <Glyph name="terminal" class="size-4.5 text-flame-400" />
+              <span class="flex-1">Prefer the terminal?</span>
+              <span class="text-xs font-normal text-ink-400 group-open:hidden">CLI or curl</span>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="size-4 text-ink-400 transition group-open:rotate-180" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+            </summary>
+            <p class="mt-3 text-xs leading-5 text-ink-400">
+              Create the same project with the Pyronaut CLI, or download it
+              with curl. The command follows the name and features above.
+            </p>
+            <div class="mt-3 flex items-center justify-between gap-3">
+              <div role="tablist" aria-label="Command" class="flex rounded-lg bg-white/5 p-0.5 text-xs font-semibold">
+                <button type="button" role="tab" data-command="cli" aria-selected="true" class="rounded-md px-2.5 py-1 text-ink-300 transition aria-selected:bg-white/10 aria-selected:text-white">
+                  Pyronaut CLI
+                </button>
+                <button type="button" role="tab" data-command="curl" aria-selected="false" class="rounded-md px-2.5 py-1 text-ink-300 transition aria-selected:bg-white/10 aria-selected:text-white">
+                  curl
+                </button>
+              </div>
+              <button
+                type="button"
+                id="copy-command"
+                class="inline-flex items-center gap-1.5 rounded-lg px-2 py-1 text-xs font-semibold text-ink-300 transition hover:bg-white/10 hover:text-white data-[copied]:text-flame-400"
+              >
+                <Glyph name="copy" class="size-3.5" />
+                <span>Copy</span>
+              </button>
+            </div>
+            <pre
+              class="mt-3 max-h-40 overflow-y-auto whitespace-pre-wrap break-all rounded-xl bg-white/5 px-3.5 py-3 font-mono text-[0.75rem] leading-5 text-ink-100"><code id="command"></code></pre>
+            <p id="command-hint" class="mt-2 text-xs leading-5 text-ink-400">
+              New to the CLI? See{" "}<a href="/docs/guide/index.html#installation" target="_blank" rel="noopener" class={docLinkClass}>Installing Pyronaut</a>.
+            </p>
+          </details>
         </aside>
       </section>
     </form>
-
-    <!-- Terminal alternative -->
-    <section
-      class="mt-10 rounded-3xl bg-ink-950 p-6 text-white shadow-xl shadow-ink-950/10 dark:border dark:border-white/10 dark:bg-ink-900 sm:p-8"
-      aria-labelledby="terminal-title"
-    >
-      <div class="grid gap-6 lg:grid-cols-[18rem_minmax(0,1fr)] lg:items-start">
-        <div>
-          <h2 id="terminal-title" class="flex items-center gap-2.5 text-lg font-bold">
-            <Glyph name="terminal" class="size-5 text-flame-400" />
-            Prefer the terminal?
-          </h2>
-          <p class="mt-2 text-sm leading-6 text-ink-300">
-            Create the same project with the Pyronaut CLI, or download it with
-            curl. The command follows the name and features picked above.
-          </p>
-          <p id="command-hint" class="mt-3 text-sm leading-6 text-ink-300">
-            New to the CLI? See{" "}<a href="/docs/guide/index.html#installation" class={docLinkClass}>Installing Pyronaut</a>.
-          </p>
-        </div>
-        <div class="min-w-0">
-          <div class="flex items-center justify-between gap-3">
-            <div role="tablist" aria-label="Command" class="flex rounded-lg bg-white/5 p-0.5 text-xs font-semibold">
-              <button type="button" role="tab" data-command="cli" aria-selected="true" class="rounded-md px-2.5 py-1 text-ink-300 transition aria-selected:bg-white/10 aria-selected:text-white">
-                Pyronaut CLI
-              </button>
-              <button type="button" role="tab" data-command="curl" aria-selected="false" class="rounded-md px-2.5 py-1 text-ink-300 transition aria-selected:bg-white/10 aria-selected:text-white">
-                curl
-              </button>
-            </div>
-            <button
-              type="button"
-              id="copy-command"
-              class="inline-flex items-center gap-1.5 rounded-lg px-2 py-1 text-xs font-semibold text-ink-300 transition hover:bg-white/10 hover:text-white data-[copied]:text-flame-400"
-            >
-              <Glyph name="copy" class="size-3.5" />
-              <span>Copy</span>
-            </button>
-          </div>
-          <pre
-            class="mt-3 max-h-40 overflow-y-auto whitespace-pre-wrap break-all rounded-xl bg-white/5 px-3.5 py-3 font-mono text-[0.75rem] leading-5 text-ink-100"><code id="command"></code></pre>
-        </div>
-      </div>
-    </section>
   </main>
 
   <!-- Mobile action bar -->
@@ -748,9 +738,11 @@ const secondaryButton =
 
   function showNextSteps() {
     $("next-steps-title").textContent = `${project.name}.zip generated`;
-    $("next-steps-code").textContent = [
-      `unzip ${project.name}.zip -d ${project.name}`,
-      `cd ${project.name}`,
+    const name = escapeHtml(project.name);
+    $("next-steps-code").innerHTML = [
+      `unzip ${name}.zip -d ${name}`,
+      `cd ${name}`,
+      `<span class="text-ink-400"># first, <a href="/docs/guide/index.html#installation" target="_blank" rel="noopener" class="text-flame-400 underline underline-offset-4">install the Pyronaut CLI</a></span>`,
       `pyronaut setup   # once per install`,
       `pyronaut dev     # run with reload`,
       `pyronaut test`,
