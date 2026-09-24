@@ -1,17 +1,57 @@
 ---
 import { Code } from "astro:components";
+import Glyph from "@/components/Glyph.astro";
 import { CODE_EXAMPLES } from "@/lib/site-content";
 
 /**
  * Tabbed code showcase. Renders dual Shiki themes (light + dark);
  * global.css switches token colors when `.dark` is active.
- * Tabs are labelled by filename, like an editor.
+ * Tabs are labelled by filename, like an editor. A leading Python import
+ * block is folded away by default and expands on click, like an IDE fold.
  */
 interface Props {
   id?: string;
 }
 
 const { id = "code-tabs" } = Astro.props;
+
+const IMPORT_LINE = /^(from\s+\S+\s+import\b|import\s)/;
+
+/**
+ * Split a Python sample into its leading import block and the rest.
+ * Blank lines between imports stay in the block; parenthesised
+ * multi-line imports are followed to their closing paren.
+ */
+function splitImports(code: string, language: string) {
+  if (language !== "python") return { imports: "", count: 0, body: code };
+  const lines = code.split("\n");
+  let end = 0;
+  let count = 0;
+  let open = 0;
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i];
+    if (open > 0) {
+      open += (line.match(/\(/g) ?? []).length - (line.match(/\)/g) ?? []).length;
+      end = i + 1;
+    } else if (IMPORT_LINE.test(line)) {
+      count++;
+      open = (line.match(/\(/g) ?? []).length - (line.match(/\)/g) ?? []).length;
+      end = i + 1;
+    } else if (line.trim() !== "") {
+      break;
+    }
+  }
+  return {
+    imports: lines.slice(0, end).join("\n"),
+    count,
+    body: lines.slice(end).join("\n").replace(/^\s*\n/, ""),
+  };
+}
+
+const examples = CODE_EXAMPLES.map((example) => ({
+  ...example,
+  ...splitImports(example.code, example.language),
+}));
 
 // Always an editor-dark panel, in both site themes.
 const s = {
@@ -21,13 +61,17 @@ const s = {
   tab: "-mb-px shrink-0 border-b-2 border-transparent px-4 py-2.5 font-mono text-xs text-ink-400 transition hover:text-white",
   tabActive: "!border-flame-500 bg-ink-900 !text-white",
   caption: "border-t border-white/10 px-4 py-3 text-xs leading-5 text-ink-400",
+  // Fold row: sits where the imports were, in the code's own font metrics.
+  fold: "group/fold flex w-fit cursor-pointer list-none items-center gap-2 px-5 pt-4 font-mono text-[0.8125rem] leading-[1.65] text-[#7f848e] outline-none transition hover:text-ink-200 focus-visible:text-ink-200 [&::-webkit-details-marker]:hidden",
+  foldBox:
+    "rounded border border-white/15 bg-white/5 px-1.5 leading-[1.35] text-ink-300 transition group-hover/fold:border-flame-400/60 group-hover/fold:text-white group-focus-visible/fold:border-flame-400/60",
 };
 ---
 
 <div class:list={["code-block", s.frame]} data-code-tabs={id}>
   <div class={s.tabs} role="tablist" aria-label="Code examples">
     {
-      CODE_EXAMPLES.map((example, index) => (
+      examples.map((example, index) => (
         <button
           type="button"
           role="tab"
@@ -44,7 +88,7 @@ const s = {
     }
   </div>
   {
-    CODE_EXAMPLES.map((example, index) => (
+    examples.map((example, index) => (
       <div
         role="tabpanel"
         id={`${id}-panel-${example.id}`}
@@ -52,8 +96,25 @@ const s = {
         class:list={[index > 0 && "hidden"]}
         data-tab-panel={example.id}
       >
+        {example.count > 0 && (
+          <details class="code-imports group/imports">
+            <summary class={s.fold}>
+              <Glyph
+                name="chevron-right"
+                class="size-3.5 shrink-0 transition-transform group-open/imports:rotate-90 motion-reduce:transition-none"
+              />
+              <span class={s.foldBox}>imports</span>
+            </summary>
+            <Code
+              code={example.imports}
+              lang={example.language}
+              themes={{ light: "one-dark-pro", dark: "one-dark-pro" }}
+              defaultColor="light"
+            />
+          </details>
+        )}
         <Code
-          code={example.code}
+          code={example.body}
           lang={example.language}
           themes={{ light: "one-dark-pro", dark: "one-dark-pro" }}
           defaultColor="light"

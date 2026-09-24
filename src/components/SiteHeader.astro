@@ -1,10 +1,10 @@
 ---
+import Glyph from "@/components/Glyph.astro";
 import ThemeToggle from "@/components/ThemeToggle.astro";
 
 const navLinks = [
   { label: "Docs", href: "/docs/" },
   { label: "Guides", href: "/guides/" },
-  { label: "Launch", href: "/launch/" },
   { label: "Performance", href: "/performance/" },
   { label: "Blog", href: "/blog/" },
   {
@@ -13,17 +13,40 @@ const navLinks = [
   },
 ];
 
+const githubHref = "https://github.com/micronaut-projects/pyronaut";
+const getStartedHref = "/docs/guide/index.html#gettingStarted";
+
 const container = "mx-auto max-w-6xl px-5";
 const current = Astro.url.pathname;
+const onLaunch = current.startsWith("/launch/");
+
+const iconButton =
+  "rounded-md p-1.5 text-ink-400 transition hover:bg-white/10 hover:text-white";
+
+const launchButton =
+  "group h-9 items-center gap-2 rounded-md border border-flame-500/40 bg-flame-500/10 pl-3 pr-3.5 text-sm font-semibold text-flame-300 transition hover:border-flame-400 hover:bg-flame-500/20 hover:text-flame-200 aria-[current=page]:border-flame-400 aria-[current=page]:bg-flame-500/20 aria-[current=page]:text-flame-200";
+
+const rocketGlyph =
+  "size-[18px] shrink-0 transition-transform duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 motion-reduce:transition-none motion-reduce:group-hover:transform-none";
+
+const getStartedButton =
+  "h-9 items-center rounded-md bg-flame-500 px-3.5 text-sm font-semibold text-ink-950 transition hover:bg-flame-400";
+
+/* Rows inside the mobile menu. */
+const menuRow =
+  "flex items-center gap-3 rounded-lg px-3 py-2.5 text-base font-medium text-ink-200 transition hover:bg-white/5 hover:text-white aria-[current=page]:text-flame-400";
 ---
 
 <!-- Header: always dark, it sits on the hero -->
-<header class="sticky top-0 z-40 border-b border-white/10 bg-ink-950/90 backdrop-blur">
+<header
+  class="sticky top-0 z-40 border-b border-white/10 bg-ink-950/90 backdrop-blur"
+  data-site-header
+>
   <div class:list={[container, "flex h-16 items-center gap-8"]}>
     <a href="/" class="flex shrink-0 items-center">
       <img src="/pyronaut-assets/logo-header-dark.svg" alt="Pyronaut" class="h-8 w-auto sm:h-9" />
     </a>
-    <nav class="hidden gap-6 md:flex">
+    <nav class="hidden gap-6 lg:flex" aria-label="Primary">
       {
         navLinks.map((link) => (
           <a
@@ -36,10 +59,11 @@ const current = Astro.url.pathname;
         ))
       }
     </nav>
-    <div class="ml-auto flex items-center gap-5">
+    <div class="ml-auto flex items-center gap-3 sm:gap-4">
+      <!-- The text nav, GitHub and the theme toggle live in the menu below `lg`. -->
       <a
-        href="https://github.com/micronaut-projects/pyronaut"
-        class="rounded-md p-1.5 text-ink-400 transition hover:bg-white/10 hover:text-white"
+        href={githubHref}
+        class:list={[iconButton, "hidden lg:inline-flex"]}
         aria-label="Pyronaut on GitHub"
         title="GitHub"
       >
@@ -49,13 +73,119 @@ const current = Astro.url.pathname;
           ></path>
         </svg>
       </a>
-      <ThemeToggle class="rounded-md p-1.5 text-ink-400 transition hover:bg-white/10 hover:text-white" />
+      <ThemeToggle class:list={[iconButton, "hidden lg:inline-flex"]} />
+
+      <!--
+        Launch: the app generator gets its own button instead of a nav link.
+        Hidden on phones like "Get started"; the rocket lifts off on hover.
+      -->
       <a
-        href="/docs/guide/index.html#gettingStarted"
-        class="hidden rounded-md bg-flame-500 px-3.5 py-1.5 text-sm font-semibold text-ink-950 transition hover:bg-flame-400 sm:inline-flex"
+        href="/launch/"
+        aria-current={onLaunch ? "page" : undefined}
+        aria-label="Launch a new Pyronaut app"
+        title="Launch a new app"
+        class:list={[launchButton, "hidden sm:inline-flex"]}
       >
+        <Glyph name="rocket" class={rocketGlyph} />
+        <span>Launch</span>
+      </a>
+      <a href={getStartedHref} class:list={[getStartedButton, "hidden sm:inline-flex"]}>
         Get started
       </a>
+
+      <!-- Menu button below `lg`: hamburger that turns into a close icon when open. -->
+      <button
+        type="button"
+        data-menu-toggle
+        aria-controls="site-menu"
+        aria-expanded="false"
+        aria-label="Open menu"
+        class:list={[iconButton, "group -mr-1.5 lg:hidden"]}
+      >
+        <Glyph name="menu" class="size-6 group-aria-expanded:hidden" />
+        <Glyph name="close" class="hidden size-6 group-aria-expanded:block" />
+      </button>
     </div>
   </div>
+
+  <!-- Menu panel below `lg`: drops down under the bar, closed by default. -->
+  <div
+    id="site-menu"
+    hidden
+    class="absolute inset-x-0 top-full max-h-[calc(100dvh-4rem)] overflow-y-auto border-b border-white/10 bg-ink-950 shadow-2xl shadow-black/50 lg:hidden"
+  >
+    <nav class:list={[container, "py-3"]} aria-label="Mobile">
+      <ul class="flex flex-col gap-0.5">
+        {
+          navLinks.map((link) => (
+            <li>
+              <a
+                href={link.href}
+                aria-current={current.startsWith(link.href) ? "page" : undefined}
+                class={menuRow}
+              >
+                {link.label}
+              </a>
+            </li>
+          ))
+        }
+        <li class="sm:hidden">
+          <a
+            href="/launch/"
+            aria-current={onLaunch ? "page" : undefined}
+            class:list={[menuRow, "group"]}
+          >
+            <Glyph name="rocket" class={rocketGlyph} />
+            Launch
+          </a>
+        </li>
+        <li>
+          <a href={githubHref} class={menuRow}>
+            <Glyph name="github" class="size-[18px] shrink-0" />
+            GitHub
+          </a>
+        </li>
+      </ul>
+      <div class="mt-2 flex items-center justify-between gap-3 border-t border-white/10 pt-3">
+        <ThemeToggle label class:list={[menuRow, "text-sm"]} />
+        <a href={getStartedHref} class:list={[getStartedButton, "inline-flex sm:hidden"]}>
+          Get started
+        </a>
+      </div>
+    </nav>
+  </div>
 </header>
+
+<script>
+  const header = document.querySelector<HTMLElement>("[data-site-header]");
+  const toggle = header?.querySelector<HTMLButtonElement>("[data-menu-toggle]");
+  const menu = header?.querySelector<HTMLElement>("#site-menu");
+
+  if (header && toggle && menu) {
+    const setOpen = (open: boolean) => {
+      menu.hidden = !open;
+      toggle.setAttribute("aria-expanded", String(open));
+      toggle.setAttribute("aria-label", open ? "Close menu" : "Open menu");
+    };
+
+    toggle.addEventListener("click", () => setOpen(menu.hidden));
+
+    // Escape closes and hands focus back to the button.
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape" && !menu.hidden) {
+        setOpen(false);
+        toggle.focus();
+      }
+    });
+
+    // Tapping outside the header closes the menu.
+    document.addEventListener("click", (event) => {
+      if (!menu.hidden && !header.contains(event.target as Node)) setOpen(false);
+    });
+
+    // Don't leave a stale open menu behind when the viewport grows past `lg`.
+    window.matchMedia("(min-width: 64rem)").addEventListener("change", (event) => {
+      if (event.matches) setOpen(false);
+    });
+  }
+</script>

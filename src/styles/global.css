@@ -54,6 +54,12 @@ html {
   font-family: var(--font-mono);
 }
 
+/* Folded import block (CodeTabs): the expanded lines sit right under the fold row. */
+.code-block .code-imports pre {
+  padding-top: 0.25rem;
+  padding-bottom: 0;
+}
+
 /* Shiki dual themes: switch token colors when `.dark` is active. */
 .dark .code-block .astro-code span,
 .dark .blog-prose .astro-code,
