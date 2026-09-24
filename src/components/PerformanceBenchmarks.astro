@@ -1,0 +1,388 @@
+---
+import ThroughputBars from "@/components/ThroughputBars.astro";
+import { BENCHMARK_ENV, BENCHMARKS, SERIES_COLORS as STYLE, frameworkLabel as label, type RampStep } from "@/data/benchmarks";
+
+/**
+ * Benchmark results for the performance page: headline numbers, sustained
+ * throughput bars, and a latency-under-load chart drawn as static SVG at
+ * build time. A small script adds the percentile toggle and hover readout.
+ * Always dark.
+ */
+
+type Percentile = "p50" | "p95" | "p99";
+const PERCENTILES: Percentile[] = ["p50", "p95", "p99"];
+
+const fmtK = (n: number) => `${(n / 1000).toFixed(1)}k`;
+const fmtMs = (ms: number) =>
+  ms >= 1000 ? `${+(ms / 1000).toFixed(1)} s` : ms >= 10 ? `${Math.round(ms)} ms` : `${ms.toFixed(2)} ms`;
+
+const [pyronaut, emmett, flask] = BENCHMARKS;
+const bestAlt = Math.max(emmett.sustained, flask.sustained);
+
+// Matched-load comparison: the highest step Emmett passed in the ramp.
+const matched = emmett.ramp[emmett.ramp.length - 1];
+const pyronautAtMatched = pyronaut.ramp.find((s) => s.rps === matched.rps)!;
+const pyronautTop = pyronaut.ramp[pyronaut.ramp.length - 1];
+
+// --- Latency chart geometry --------------------------------------------------
+const W = 600;
+const H = 340;
+const M = { l: 60, r: 24, t: 20, b: 48 };
+const X_MAX = 36000;
+const Y_MIN = 0.3;
+const Y_MAX = 3000;
+const x = (rps: number) => M.l + (rps / X_MAX) * (W - M.l - M.r);
+const y = (ms: number) =>
+  M.t + (1 - (Math.log10(ms) - Math.log10(Y_MIN)) / (Math.log10(Y_MAX) - Math.log10(Y_MIN))) * (H - M.t - M.b);
+const xTicks = [0, 5000, 10000, 15000, 20000, 25000, 30000, 35000];
+const yTicks = [1, 10, 100, 1000];
+const failY = y(2000);
+
+const series = PERCENTILES.map((p) => ({
+  p,
+  sla: BENCHMARK_ENV.sla[p],
+  lines: BENCHMARKS.map((f) => ({
+    id: f.id,
+    path: f.ramp.map((s: RampStep, i: number) => `${i ? "L" : "M"}${x(s.rps).toFixed(1)},${y(s[p]).toFixed(1)}`).join(""),
+    points: f.ramp.map((s) => ({ cx: x(s.rps), cy: y(s[p]) })),
+    end: f.ramp[f.ramp.length - 1],
+  })),
+}));
+
+// Hover data: every ramp step, with each framework's reading (or failure).
+const steps = [...new Set(BENCHMARKS.flatMap((f) => [...f.ramp.map((s) => s.rps), f.failsAt]))].sort((a, b) => a - b);
+const hoverData = {
+  steps: steps.map((rps) => ({ rps, x: x(rps) })),
+  frameworks: BENCHMARKS.map((f) => ({
+    id: f.id,
+    name: label(f),
+    color: STYLE[f.id].stroke,
+    failsAt: f.failsAt,
+    ramp: Object.fromEntries(f.ramp.map((s) => [s.rps, s])),
+  })),
+  bounds: { top: M.t, bottom: H - M.b, width: W, height: H },
+};
+
+const tile = "border-t border-white/15 pt-5";
+const tileValue = "font-display text-4xl font-bold tracking-[-0.02em] text-white md:text-5xl";
+const panel = "rounded-lg border border-white/10 bg-white/[0.03] p-5 md:p-6";
+const panelTitle = "text-base font-semibold text-white";
+const panelSub = "mt-1 text-sm leading-6 text-ink-400";
+---
+
+<section id="performance" class="relative isolate overflow-hidden bg-ink-950 text-white">
+  <div class="mx-auto max-w-6xl px-5 pb-20 pt-16 lg:pb-24 lg:pt-20">
+    <div class="grid gap-6 lg:grid-cols-2 lg:items-end lg:gap-16">
+      <div>
+        <p class="font-mono text-xs uppercase tracking-[0.18em] text-flame-400">Performance</p>
+        <h1
+          class="font-display mt-4 text-balance text-4xl font-bold leading-[1.05] tracking-[-0.02em] text-white md:text-5xl"
+        >
+          More requests. Lower latency. Same hardware.
+        </h1>
+      </div>
+      <p class="text-base leading-7 text-ink-300 md:text-lg md:leading-8">
+        Under the same HTTPS/HTTP2 load, with {BENCHMARK_ENV.connections} connections each carrying up to {
+          BENCHMARK_ENV.streams
+        } concurrent streams, Pyronaut keeps sub-millisecond response times at rates the fastest Python alternatives can't sustain.
+      </p>
+    </div>
+
+    <!-- Headline numbers -->
+    <dl class="mt-14 grid gap-8 sm:grid-cols-3">
+      <div class={tile}>
+        <dt class="text-sm text-ink-400">Sustained throughput</dt>
+        <dd class="mt-2">
+          <span class={tileValue}>{fmtK(pyronaut.sustained)}</span>
+          <span class="ml-1 text-sm text-ink-400">req/s</span>
+        </dd>
+        <dd class="mt-2 text-sm leading-6 text-ink-300">
+          <span class="font-semibold text-flame-300">{(pyronaut.sustained / bestAlt).toFixed(1)}×</span>{" "}
+          {label(emmett)} ·{" "}
+          <span class="font-semibold text-flame-300">{(pyronaut.sustained / flask.sustained).toFixed(1)}×</span>{" "}
+          {label(flask)}
+        </dd>
+      </div>
+      <div class={tile}>
+        <dt class="text-sm text-ink-400">p99 latency at {fmtK(matched.rps)} req/s</dt>
+        <dd class="mt-2">
+          <span class={tileValue}>{pyronautAtMatched.p99.toFixed(2)}</span>
+          <span class="ml-1 text-sm text-ink-400">ms</span>
+        </dd>
+        <dd class="mt-2 text-sm leading-6 text-ink-300">
+          vs {fmtMs(matched.p99)} for {label(emmett)} at the same load
+        </dd>
+      </div>
+      <div class={tile}>
+        <dt class="text-sm text-ink-400">p99 latency at {fmtK(pyronautTop.rps)} req/s</dt>
+        <dd class="mt-2">
+          <span class={tileValue}>{pyronautTop.p99.toFixed(1)}</span>
+          <span class="ml-1 text-sm text-ink-400">ms</span>
+        </dd>
+        <dd class="mt-2 text-sm leading-6 text-ink-300">
+          a load neither Python alternative can sustain within the SLA
+        </dd>
+      </div>
+    </dl>
+
+    <div class="mt-12 grid gap-6 lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)]">
+      <!-- Sustained throughput -->
+      <figure class={panel}>
+        <figcaption>
+          <h3 class={panelTitle}>Sustained throughput</h3>
+          <p class={panelSub}>Highest request rate that met every latency SLA across 45-second steps.</p>
+        </figcaption>
+        <div class="mt-8"><ThroughputBars /></div>
+        <p class="mt-8 text-xs leading-5 text-ink-500">
+          ≥ {label(emmett)} passed every validation step it was given; its load ramp first failed at {
+            emmett.failsAt.toLocaleString("en-US")
+          } req/s.
+        </p>
+      </figure>
+
+      <!-- Latency under load -->
+      <figure class={panel} data-latency-chart>
+        <figcaption class="flex flex-wrap items-start justify-between gap-4">
+          <div>
+            <h3 class={panelTitle}>Latency as load increases</h3>
+            <p class={panelSub}>Response time on a log scale; lines end at the last step that met the SLA.</p>
+          </div>
+          <div class="flex rounded-md border border-white/10 p-0.5 font-mono text-xs" role="group" aria-label="Percentile">
+            {
+              PERCENTILES.map((p) => (
+                <button
+                  type="button"
+                  data-percentile={p}
+                  aria-pressed={p === "p99" ? "true" : "false"}
+                  class="rounded px-2.5 py-1 uppercase text-ink-400 transition hover:text-white aria-pressed:bg-white/10 aria-pressed:text-white"
+                >
+                  {p}
+                </button>
+              ))
+            }
+          </div>
+        </figcaption>
+
+        <ul class="mt-4 flex flex-wrap gap-x-5 gap-y-2 text-xs text-ink-300">
+          {
+            BENCHMARKS.map((f) => (
+              <li class="flex items-center gap-2">
+                <svg width="22" height="8" aria-hidden="true">
+                  <line
+                    x1="1"
+                    y1="4"
+                    x2="21"
+                    y2="4"
+                    stroke={STYLE[f.id].stroke}
+                    stroke-width="2"
+                    stroke-dasharray={STYLE[f.id].dash}
+                    stroke-linecap="round"
+                  />
+                </svg>
+                {label(f)}
+              </li>
+            ))
+          }
+          <li class="flex items-center gap-2 text-ink-400">
+            <span class="font-semibold text-ink-300">×</span> first step over SLA
+          </li>
+        </ul>
+
+        <div class="relative mt-4">
+          <svg viewBox={`0 0 ${W} ${H}`} class="block w-full overflow-visible" role="img" aria-labelledby="latency-desc">
+            <desc id="latency-desc">
+              Latency against offered load. Pyronaut stays under {fmtMs(pyronautTop.p99)} at p99 up to {
+                pyronautTop.rps.toLocaleString("en-US")
+              } requests per second; {label(emmett)} reaches {fmtMs(matched.p99)} at {matched.rps.toLocaleString("en-US")} and
+              fails at {emmett.failsAt.toLocaleString("en-US")}; {label(flask)} fails at {flask.failsAt.toLocaleString("en-US")}.
+            </desc>
+
+            <g class="text-ink-500" font-size="13" font-family="var(--font-mono)">
+              {
+                yTicks.map((t) => (
+                  <g>
+                    <line x1={M.l} x2={W - M.r} y1={y(t)} y2={y(t)} stroke="rgba(255,255,255,0.07)" />
+                    <text x={M.l - 10} y={y(t) + 4} text-anchor="end" fill="currentColor">
+                      {t >= 1000 ? `${t / 1000} s` : `${t} ms`}
+                    </text>
+                  </g>
+                ))
+              }
+              <line x1={M.l} x2={W - M.r} y1={H - M.b} y2={H - M.b} stroke="rgba(255,255,255,0.18)" />
+              {
+                xTicks.map((t) => (
+                  <text x={x(t)} y={H - M.b + 18} text-anchor="middle" fill="currentColor">
+                    {t === 0 ? "0" : `${t / 1000}k`}
+                  </text>
+                ))
+              }
+              <text x={(M.l + W - M.r) / 2} y={H - 4} text-anchor="middle" fill="currentColor">requests / second</text>
+            </g>
+
+            {
+              series.map((s) => (
+                <g data-series={s.p} class={s.p === "p99" ? "" : "hidden"}>
+                  <line
+                    x1={M.l}
+                    x2={W - M.r}
+                    y1={y(s.sla)}
+                    y2={y(s.sla)}
+                    stroke="#ef4444"
+                    stroke-opacity="0.6"
+                    stroke-dasharray="3 4"
+                  />
+                  <text
+                    x={M.l + 8}
+                    y={y(s.sla) + 17}
+                    text-anchor="start"
+                    font-size="13"
+                    font-family="var(--font-mono)"
+                    fill="#a9b2c5"
+                  >
+                    {s.p} SLA {fmtMs(s.sla)}
+                  </text>
+                  {s.lines
+                    .slice()
+                    .reverse()
+                    .map((l) => (
+                      <g>
+                        <path
+                          d={l.path}
+                          fill="none"
+                          stroke={STYLE[l.id].stroke}
+                          stroke-width="2"
+                          stroke-linejoin="round"
+                          stroke-linecap="round"
+                          stroke-dasharray={STYLE[l.id].dash}
+                        />
+                        {l.points.map((pt) => (
+                          <circle cx={pt.cx} cy={pt.cy} r="3" fill={STYLE[l.id].stroke} stroke="#0b0f1b" stroke-width="1.5" />
+                        ))}
+                      </g>
+                    ))}
+                </g>
+              ))
+            }
+
+            {
+              BENCHMARKS.map((f) => (
+                <g stroke={STYLE[f.id].stroke} stroke-width="2" stroke-linecap="round">
+                  <line x1={x(f.failsAt) - 5} y1={failY - 5} x2={x(f.failsAt) + 5} y2={failY + 5} />
+                  <line x1={x(f.failsAt) - 5} y1={failY + 5} x2={x(f.failsAt) + 5} y2={failY - 5} />
+                </g>
+              ))
+            }
+
+            <line
+              data-crosshair
+              x1="0"
+              x2="0"
+              y1={M.t}
+              y2={H - M.b}
+              stroke="rgba(255,255,255,0.35)"
+              class="hidden"
+              pointer-events="none"
+            />
+            <rect
+              data-hit
+              x={M.l}
+              y={M.t}
+              width={W - M.l - M.r}
+              height={H - M.t - M.b}
+              fill="transparent"
+            />
+          </svg>
+          <div
+            data-tooltip
+            class="pointer-events-none absolute top-2 z-10 hidden min-w-52 rounded-md border border-white/10 bg-ink-900/95 px-3 py-2 text-xs shadow-xl shadow-black/40 backdrop-blur"
+          >
+          </div>
+        </div>
+        <script type="application/json" data-hover-data set:html={JSON.stringify(hoverData)} />
+      </figure>
+    </div>
+
+    <p class="mt-6 max-w-4xl text-xs leading-5 text-ink-500">
+      Benchmark run {BENCHMARK_ENV.date}: each framework served the same workload over {BENCHMARK_ENV.protocol} on an {
+        BENCHMARK_ENV.sut
+      }, driven by {BENCHMARK_ENV.loadGenerator}. SLAs: p50 ≤ {BENCHMARK_ENV.sla.p50} ms, p95 ≤ {BENCHMARK_ENV.sla.p95} ms,
+      p99 ≤ {BENCHMARK_ENV.sla.p99 / 1000} s. Latency lines come from the load ramp (+25% per 15-second step); throughput
+      from 45-second validation steps after a 180-second warm-up. Profilers were attached during runs (async-profiler for
+      Pyronaut, py-spy for the Python servers) and their overhead may differ.
+    </p>
+  </div>
+</section>
+
+<script>
+  interface Step {
+    rps: number;
+    p50: number;
+    p95: number;
+    p99: number;
+  }
+  interface HoverData {
+    steps: { rps: number; x: number }[];
+    frameworks: { id: string; name: string; color: string; failsAt: number; ramp: Record<string, Step> }[];
+    bounds: { top: number; bottom: number; width: number; height: number };
+  }
+
+  const fmt = (ms: number) =>
+    ms >= 1000 ? `${+(ms / 1000).toFixed(1)} s` : ms >= 10 ? `${Math.round(ms)} ms` : `${ms.toFixed(2)} ms`;
+
+  for (const chart of document.querySelectorAll<HTMLElement>("[data-latency-chart]")) {
+    const data: HoverData = JSON.parse(chart.querySelector("[data-hover-data]")?.textContent ?? "{}");
+    const hit = chart.querySelector<SVGRectElement>("[data-hit]")!;
+    const svg = hit.ownerSVGElement!;
+    const crosshair = chart.querySelector<SVGLineElement>("[data-crosshair]")!;
+    const tooltip = chart.querySelector<HTMLElement>("[data-tooltip]")!;
+    let percentile: keyof Omit<Step, "rps"> = "p99";
+
+    for (const button of chart.querySelectorAll<HTMLButtonElement>("[data-percentile]")) {
+      button.addEventListener("click", () => {
+        percentile = button.dataset.percentile as typeof percentile;
+        for (const b of chart.querySelectorAll("[data-percentile]")) {
+          b.setAttribute("aria-pressed", String(b === button));
+        }
+        for (const g of chart.querySelectorAll<SVGGElement>("[data-series]")) {
+          g.classList.toggle("hidden", g.dataset.series !== percentile);
+        }
+      });
+    }
+
+    const hide = () => {
+      crosshair.classList.add("hidden");
+      tooltip.classList.add("hidden");
+    };
+
+    hit.addEventListener("pointerleave", hide);
+    hit.addEventListener("pointermove", (event) => {
+      const box = svg.getBoundingClientRect();
+      const scale = box.width / data.bounds.width;
+      const px = (event.clientX - box.left) / scale;
+      const step = data.steps.reduce((a, b) => (Math.abs(b.x - px) < Math.abs(a.x - px) ? b : a));
+
+      crosshair.setAttribute("x1", String(step.x));
+      crosshair.setAttribute("x2", String(step.x));
+      crosshair.classList.remove("hidden");
+
+      const rows = data.frameworks
+        .map((f) => {
+          const s = f.ramp[step.rps];
+          const value = s
+            ? `<span class="font-mono tabular-nums text-white">${fmt(s[percentile])}</span>`
+            : step.rps >= f.failsAt
+              ? `<span class="text-ink-400">over SLA</span>`
+              : `<span class="text-ink-500">—</span>`;
+          return `<div class="mt-1 flex items-center justify-between gap-4"><span class="flex items-center gap-2 text-ink-300"><span class="inline-block size-2 rounded-full" style="background:${f.color}"></span>${f.name}</span>${value}</div>`;
+        })
+        .join("");
+      tooltip.innerHTML = `<div class="font-mono text-ink-400">${step.rps.toLocaleString("en-US")} req/s · ${percentile}</div>${rows}`;
+      tooltip.classList.remove("hidden");
+
+      const left = step.x * scale;
+      const width = tooltip.offsetWidth;
+      // Sit right of the crosshair, flipping left when it would overflow.
+      tooltip.style.left = `${left + 12 + width > box.width ? Math.max(left - 12 - width, 0) : left + 12}px`;
+    });
+  }
+</script>

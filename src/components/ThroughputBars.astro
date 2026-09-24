@@ -1,0 +1,37 @@
+---
+import { BENCHMARKS, SERIES_COLORS, frameworkLabel } from "@/data/benchmarks";
+
+/**
+ * Sustained-throughput bars, one per framework. Shared by the homepage hero
+ * card (`compact`) and the performance page. Always on a dark surface.
+ */
+interface Props {
+  compact?: boolean;
+}
+
+const { compact = false } = Astro.props;
+const max = Math.max(...BENCHMARKS.map((f) => f.sustained));
+---
+
+<ul class={compact ? "space-y-3" : "space-y-6"}>
+  {
+    BENCHMARKS.map((f) => (
+      <li>
+        <div class:list={["flex items-baseline justify-between gap-4", compact ? "text-xs" : "text-sm"]}>
+          <span class:list={[f.id === "pyronaut" ? "font-semibold text-white" : "text-ink-300"]}>{frameworkLabel(f)}</span>
+          <span class="font-mono tabular-nums text-ink-200">
+            {f.lowerBound ? "≥ " : ""}
+            {f.sustained.toLocaleString("en-US")}
+            <span class="text-ink-500"> req/s</span>
+          </span>
+        </div>
+        <div class:list={["overflow-hidden rounded-r bg-white/[0.04]", compact ? "mt-1.5 h-2" : "mt-2 h-3"]}>
+          <div
+            class="h-full rounded-r"
+            style={`width:${((f.sustained / max) * 100).toFixed(1)}%;background:${SERIES_COLORS[f.id].stroke}`}
+          />
+        </div>
+      </li>
+    ))
+  }
+</ul>

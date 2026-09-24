@@ -5,6 +5,7 @@ import CodeTabs from "@/components/CodeTabs.astro";
 import Glyph from "@/components/Glyph.astro";
 import Mascot from "@/components/Mascot.astro";
 import MicronautBand from "@/components/MicronautBand.astro";
+import ThroughputBars from "@/components/ThroughputBars.astro";
 import SiteFooter from "@/components/SiteFooter.astro";
 import SiteHeader from "@/components/SiteHeader.astro";
 import {
@@ -109,7 +110,7 @@ const btnGhost =
         <div class="relative">
           <Mascot class="mx-auto w-full max-w-lg lg:max-w-none lg:translate-x-6" />
           <figure
-            class="code-block relative -mt-6 ml-auto w-[88%] max-w-md overflow-hidden rounded-lg border border-white/10 bg-ink-900/90 shadow-2xl shadow-black/40 backdrop-blur sm:-mt-10"
+            class="code-block relative mx-auto mt-6 w-full max-w-md overflow-hidden rounded-lg border border-white/10 bg-ink-900/90 shadow-2xl shadow-black/40 backdrop-blur"
           >
             <figcaption class="border-b border-white/10 px-4 py-2 font-mono text-xs text-ink-400">
               hello.py
@@ -120,6 +121,23 @@ const btnGhost =
               themes={{ light: "one-dark-pro", dark: "one-dark-pro" }}
               defaultColor="light"
             />
+          </figure>
+          <figure
+            class="relative mx-auto mt-4 w-full max-w-md overflow-hidden rounded-lg border border-white/10 bg-ink-900/90 shadow-2xl shadow-black/40 backdrop-blur"
+          >
+            <figcaption class="border-b border-white/10 px-4 py-2 font-mono text-xs text-ink-400">
+              sustained throughput · HTTPS/HTTP2
+            </figcaption>
+            <div class="px-5 py-4">
+              <ThroughputBars compact />
+              <a
+                href="/performance/"
+                class="mt-4 inline-flex items-center gap-1.5 text-xs font-semibold text-flame-400 transition hover:text-flame-300"
+              >
+                See the performance benchmarks
+                <Glyph name="arrow-right" class="size-3.5" />
+              </a>
+            </div>
           </figure>
         </div>
       </div>

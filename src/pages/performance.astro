@@ -1,0 +1,12 @@
+---
+import PageLayout from "@/layouts/PageLayout.astro";
+import PerformanceBenchmarks from "@/components/PerformanceBenchmarks.astro";
+import { SITE_NAME } from "@/lib/site-content";
+---
+
+<PageLayout
+  title={`Performance — ${SITE_NAME}`}
+  description="Pyronaut throughput and latency benchmarks against the fastest Python web frameworks."
+>
+  <PerformanceBenchmarks />
+</PageLayout>
