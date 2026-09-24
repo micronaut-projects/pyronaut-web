@@ -5,7 +5,7 @@
 export const SITE_NAME = "Pyronaut";
 
 export const SITE_DESCRIPTION =
-  "Pyronaut is a high-performance Python web framework built on Micronaut, with data access, cloud integrations, observability, build-time validation, testing, packaging, and Oracle enterprise support.";
+  "Pyronaut is a high-performance Python web framework for building production services with rich data access, observability, cloud integrations, build-time validation, integrated testing, and enterprise support.";
 
 export interface Feature {
   title: string;
@@ -30,7 +30,7 @@ export const FEATURES: Feature[] = [
   },
   {
     title: "Production observability",
-    copy: "Use metrics, traces, health checks, and logging through Micrometer and OpenTelemetry.",
+    copy: "Understand how your service behaves in production. Pyronaut brings together traces, correlated logs, health checks, and metrics with integrated Micrometer and OpenTelemetry support.",
     icon: "gauge",
     href: "/docs/observability/",
   },
@@ -48,7 +48,7 @@ export const FEATURES: Feature[] = [
   },
   {
     title: "Enterprise support",
-    copy: "Oracle support for teams running Pyronaut in production.",
+    copy: "Enterprise support for teams running business-critical Pyronaut services in production.",
     icon: "rocket",
     href: "/docs/support/",
   },
@@ -217,19 +217,9 @@ export const CODE_PROOFS = [
   "One application model spans development, tests, and packaging",
 ];
 
-export const SKEPTIC = {
-  question:
-    "Why not assemble a stack from the Python frameworks and tools I already know?",
-  intro:
-    "You can. Those tools may all be excellent. The choice is whether your team wants to assemble and maintain those capabilities separately, or use a high-performance, production-focused framework with a consistent application model.",
-  answers: [],
-};
-
 export const MICRONAUT_AUDIENCE = {
   kicker: "Already building on Micronaut?",
   copy: "Add Python without adding a second application platform. Use Python on the Micronaut platform you already know.",
-  linkLabel: "Pyronaut for Micronaut teams",
-  href: "/docs/micronaut-teams/",
 };
 
 export interface DeepDive {
