@@ -106,17 +106,47 @@
   margin-top: 1.5rem;
   font-size: 1rem;
 }
-.docs-prose .anchor {
+/*
+ * Heading permalinks: a "#" in the left gutter, shown on hover or focus.
+ * It needs a real box so it can be clicked (copies the link) or right-clicked.
+ */
+.docs-prose :is(h2, h3, h4, h5) {
   position: relative;
 }
-.docs-prose h2:hover .anchor::before,
-.docs-prose h3:hover .anchor::before,
-.docs-prose h4:hover .anchor::before {
-  content: "#";
+.docs-prose .anchor {
   position: absolute;
-  right: 0.35em;
+  top: 0;
+  left: -1.1em;
+  width: 1.1em;
+  text-align: center;
   color: var(--color-ink-300);
   font-weight: 400;
+  text-decoration: none;
+  opacity: 0;
+  transition: opacity 0.15s, color 0.15s;
+}
+.docs-prose .anchor::before {
+  content: "#";
+}
+.docs-prose .anchor[data-copied]::before {
+  content: "✓";
+  color: var(--color-flame-500);
+}
+.docs-prose :is(h2, h3, h4, h5):hover .anchor,
+.docs-prose .anchor:focus-visible,
+.docs-prose .anchor[data-copied] {
+  opacity: 1;
+}
+.docs-prose .anchor:hover {
+  color: var(--color-flame-500);
+}
+/* No hover on touch screens: keep the link visible after the title instead. */
+@media (hover: none) {
+  .docs-prose .anchor {
+    position: static;
+    margin-right: 0.3em;
+    opacity: 0.5;
+  }
 }
 
 .docs-prose a:not(.anchor, .doc-edit) {
