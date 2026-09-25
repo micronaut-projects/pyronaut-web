@@ -1,0 +1,408 @@
+/*
+ * Pyronaut guide: HTML rendered by Asciidoctor at build time
+ * (scripts/render-docs.mjs), so it is styled by element and class.
+ */
+@reference "./global.css";
+
+.docs-prose {
+  font-size: 1rem;
+  line-height: 1.75;
+  color: var(--color-ink-700);
+}
+.dark .docs-prose {
+  color: var(--color-ink-200);
+}
+.docs-prose p,
+.docs-prose .ulist,
+.docs-prose .olist,
+.docs-prose .dlist,
+.docs-prose .admonitionblock,
+.docs-prose table.tableblock,
+.docs-prose .snippet,
+.docs-prose .imageblock,
+.docs-prose .colist {
+  margin-top: 1.1rem;
+}
+
+/* Numbered TOC sections and the "improve this doc" pencil. */
+.docs-prose .doc-section-heading {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  scroll-margin-top: 5rem;
+}
+.docs-prose .doc-section + .doc-section {
+  margin-top: 3.5rem;
+}
+.docs-prose .doc-section[data-level="0"] {
+  border-top: 1px solid var(--color-ink-100);
+  padding-top: 2.5rem;
+}
+.docs-prose .doc-section[data-level="0"]:first-child {
+  border-top: 0;
+  padding-top: 0;
+}
+.dark .docs-prose .doc-section[data-level="0"] {
+  border-color: rgb(255 255 255 / 0.08);
+}
+.docs-prose .doc-number {
+  margin-right: 0.35em;
+  color: var(--color-flame-600);
+}
+.dark .docs-prose .doc-number {
+  color: var(--color-flame-400);
+}
+.docs-prose .doc-edit {
+  flex-shrink: 0;
+  width: 1rem;
+  height: 1rem;
+  background-color: var(--color-ink-400);
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 20h9'/%3E%3Cpath d='M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z'/%3E%3C/svg%3E")
+    center / contain no-repeat;
+  opacity: 0.6;
+  transition: opacity 0.15s, background-color 0.15s;
+}
+.docs-prose .doc-edit:hover {
+  opacity: 1;
+  background-color: var(--color-flame-500);
+}
+
+.docs-prose h2,
+.docs-prose h3,
+.docs-prose h4,
+.docs-prose h5 {
+  scroll-margin-top: 5rem;
+  color: var(--color-ink-950);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.25;
+}
+.dark .docs-prose h2,
+.dark .docs-prose h3,
+.dark .docs-prose h4,
+.dark .docs-prose h5 {
+  color: white;
+}
+.docs-prose .doc-section-heading h2 {
+  font-family: var(--font-display);
+  font-size: 2rem;
+}
+.docs-prose .doc-section-heading h3 {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+}
+/* Headings inside a section's own AsciiDoc body. */
+.docs-prose .sect1 > h2 {
+  margin-top: 2.25rem;
+  font-size: 1.25rem;
+}
+.docs-prose .sect2 > h3 {
+  margin-top: 1.75rem;
+  font-size: 1.1rem;
+}
+.docs-prose .sect3 > h4,
+.docs-prose .sect4 > h5 {
+  margin-top: 1.5rem;
+  font-size: 1rem;
+}
+.docs-prose .anchor {
+  position: relative;
+}
+.docs-prose h2:hover .anchor::before,
+.docs-prose h3:hover .anchor::before,
+.docs-prose h4:hover .anchor::before {
+  content: "#";
+  position: absolute;
+  right: 0.35em;
+  color: var(--color-ink-300);
+  font-weight: 400;
+}
+
+.docs-prose a:not(.anchor, .doc-edit) {
+  color: var(--color-flame-600);
+  font-weight: 500;
+  text-decoration: underline;
+  text-decoration-color: color-mix(in srgb, currentColor 35%, transparent);
+  text-underline-offset: 3px;
+}
+.docs-prose a:not(.anchor, .doc-edit):hover {
+  text-decoration-color: currentColor;
+}
+.dark .docs-prose a:not(.anchor, .doc-edit) {
+  color: var(--color-flame-400);
+}
+.docs-prose strong {
+  color: var(--color-ink-950);
+  font-weight: 600;
+}
+.dark .docs-prose strong {
+  color: white;
+}
+.docs-prose ul,
+.docs-prose ol {
+  padding-left: 1.5rem;
+}
+.docs-prose ul {
+  list-style: disc;
+}
+.docs-prose ol {
+  list-style: decimal;
+}
+.docs-prose li + li,
+.docs-prose li > p + *,
+.docs-prose li .ulist {
+  margin-top: 0.4rem;
+}
+.docs-prose li p {
+  margin-top: 0;
+}
+.docs-prose li::marker {
+  color: var(--color-flame-500);
+}
+.docs-prose dt {
+  margin-top: 0.75rem;
+  font-weight: 600;
+  color: var(--color-ink-950);
+}
+.dark .docs-prose dt {
+  color: white;
+}
+.docs-prose dd {
+  margin-left: 1.25rem;
+}
+.docs-prose :not(pre) > code {
+  border-radius: 0.375rem;
+  background-color: var(--color-ink-100);
+  padding: 0.1rem 0.35rem;
+  font-family: var(--font-mono);
+  font-size: 0.85em;
+  color: var(--color-ink-950);
+  overflow-wrap: anywhere;
+}
+.dark .docs-prose :not(pre) > code {
+  background-color: rgb(255 255 255 / 0.08);
+  color: var(--color-ink-100);
+}
+.docs-prose img {
+  max-width: 100%;
+  border-radius: 0.75rem;
+}
+
+/* Admonitions: NOTE / TIP / IMPORTANT / WARNING / CAUTION. */
+.docs-prose .admonitionblock > table {
+  width: 100%;
+  border-left: 3px solid var(--color-python-blue);
+  border-radius: 0.5rem;
+  background-color: var(--color-ink-50);
+}
+.dark .docs-prose .admonitionblock > table {
+  background-color: rgb(255 255 255 / 0.04);
+}
+.docs-prose .admonitionblock td {
+  padding: 0.75rem 1rem;
+  vertical-align: top;
+}
+.docs-prose .admonitionblock td.icon {
+  width: 1%;
+  padding-right: 0;
+  white-space: nowrap;
+}
+.docs-prose .admonitionblock td.icon i::after {
+  content: attr(title);
+  font-style: normal;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-python-blue);
+}
+.docs-prose .admonitionblock td.content > :first-child,
+.docs-prose .admonitionblock td.content > .paragraph:first-child p {
+  margin-top: 0;
+}
+.docs-prose .admonitionblock.tip > table {
+  border-left-color: var(--color-flame-500);
+}
+.docs-prose .admonitionblock.tip td.icon i::after {
+  color: var(--color-flame-600);
+}
+.docs-prose .admonitionblock.warning > table,
+.docs-prose .admonitionblock.caution > table,
+.docs-prose .admonitionblock.important > table {
+  border-left-color: var(--color-ember-500);
+}
+.docs-prose .admonitionblock.warning td.icon i::after,
+.docs-prose .admonitionblock.caution td.icon i::after,
+.docs-prose .admonitionblock.important td.icon i::after {
+  color: var(--color-ember-600);
+}
+
+/* Tables. */
+.docs-prose table.tableblock {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+.docs-prose table.tableblock caption {
+  caption-side: top;
+  text-align: left;
+  font-weight: 600;
+  padding-bottom: 0.5rem;
+}
+.docs-prose table.tableblock th,
+.docs-prose table.tableblock td {
+  border: 1px solid var(--color-ink-100);
+  padding: 0.5rem 0.75rem;
+  text-align: left;
+  vertical-align: top;
+}
+.docs-prose table.tableblock th {
+  background-color: var(--color-ink-50);
+  color: var(--color-ink-950);
+  font-weight: 600;
+}
+.dark .docs-prose table.tableblock th,
+.dark .docs-prose table.tableblock td {
+  border-color: rgb(255 255 255 / 0.1);
+}
+.dark .docs-prose table.tableblock th {
+  background-color: rgb(255 255 255 / 0.04);
+  color: white;
+}
+.docs-prose table.tableblock p {
+  margin: 0;
+}
+.docs-prose table.tableblock p + p {
+  margin-top: 0.5rem;
+}
+/* Wide tables scroll sideways on small screens instead of widening the page. */
+@media (max-width: 47.99rem) {
+  .docs-prose table.tableblock {
+    display: block;
+    overflow-x: auto;
+  }
+}
+
+/* Code snippet cards. */
+.docs-prose .snippet {
+  overflow: hidden;
+  border: 1px solid var(--color-ink-200);
+  border-radius: 0.75rem;
+  background-color: #fafafa;
+}
+.dark .docs-prose .snippet {
+  border-color: rgb(255 255 255 / 0.1);
+  background-color: #1e222a;
+}
+.docs-prose .snippet-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  border-bottom: 1px solid var(--color-ink-100);
+  padding: 0.35rem 0.5rem 0.35rem 1rem;
+  font-size: 0.75rem;
+  color: var(--color-ink-500);
+}
+.dark .docs-prose .snippet-header {
+  border-color: rgb(255 255 255 / 0.08);
+  color: var(--color-ink-400);
+}
+.docs-prose .snippet-title {
+  font-weight: 600;
+  color: var(--color-ink-800);
+}
+.dark .docs-prose .snippet-title {
+  color: var(--color-ink-100);
+}
+.docs-prose .snippet-lang {
+  font-family: var(--font-mono);
+}
+.docs-prose .snippet-copy {
+  margin-left: auto;
+  width: 1.75rem;
+  height: 1.75rem;
+  border-radius: 0.375rem;
+  cursor: pointer;
+  background: currentColor;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect width='14' height='14' x='8' y='8' rx='2'/%3E%3Cpath d='M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2'/%3E%3C/svg%3E")
+    center / 0.95rem no-repeat;
+}
+.docs-prose .snippet-copy:hover {
+  color: var(--color-flame-500);
+}
+.docs-prose .snippet-copy[data-copied] {
+  color: var(--color-flame-500);
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 6 9 17l-5-5'/%3E%3C/svg%3E");
+}
+.docs-prose .snippet pre {
+  margin: 0;
+  padding: 0.9rem 1rem;
+  overflow-x: auto;
+  font-size: 0.8125rem;
+  line-height: 1.65;
+  background-color: transparent !important;
+}
+.docs-prose .snippet pre code {
+  font-family: var(--font-mono);
+}
+.docs-prose .shiki,
+.docs-prose .shiki span {
+  color: var(--shiki-light);
+  font-style: var(--shiki-light-font-style);
+  font-weight: var(--shiki-light-font-weight);
+}
+.dark .docs-prose .shiki,
+.dark .docs-prose .shiki span {
+  color: var(--shiki-dark);
+  font-style: var(--shiki-dark-font-style);
+  font-weight: var(--shiki-dark-font-weight);
+}
+
+/* Callout markers, in code and in the list that explains them. */
+.docs-prose .conum[data-value] {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.2rem;
+  height: 1.2rem;
+  margin-left: 0.5rem;
+  border-radius: 9999px;
+  background-color: var(--color-flame-500);
+  color: white !important;
+  font-family: var(--font-sans);
+  font-size: 0.7rem;
+  font-style: normal !important;
+  font-weight: 700 !important;
+  line-height: 1;
+  vertical-align: 0.1em;
+  user-select: none;
+}
+.docs-prose .conum[data-value]::after {
+  content: attr(data-value);
+}
+.docs-prose .conum + b {
+  display: none;
+}
+.docs-prose .colist table {
+  border-collapse: collapse;
+}
+.docs-prose .colist td {
+  padding: 0.2rem 0.5rem 0.2rem 0;
+  vertical-align: top;
+}
+.docs-prose .colist td:first-child .conum {
+  margin-left: 0;
+}
+.docs-prose .colist p {
+  margin: 0;
+}
+
+/* Sidebar TOC. */
+.docs-toc a[aria-current="true"] {
+  color: var(--color-flame-600);
+  font-weight: 600;
+}
+.dark .docs-toc a[aria-current="true"] {
+  color: var(--color-flame-400);
+}

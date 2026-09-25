@@ -1,10 +1,10 @@
 ---
 import Glyph from "@/components/Glyph.astro";
 import ThemeToggle from "@/components/ThemeToggle.astro";
+import { DOCS_LINKS } from "@/lib/site-content";
 
 const navLinks = [
-  { label: "Docs", href: "/docs/" },
-  { label: "Guides", href: "/guides/" },
+  { label: "Docs", href: DOCS_LINKS.pyronaut },
   { label: "Performance", href: "/performance/" },
   { label: "Blog", href: "/blog/" },
   {
@@ -14,7 +14,7 @@ const navLinks = [
 ];
 
 const githubHref = "https://github.com/micronaut-projects/pyronaut";
-const getStartedHref = "/docs/guide/index.html#gettingStarted";
+const getStartedHref = "/docs/#gettingStarted";
 
 const container = "mx-auto max-w-6xl px-5";
 const current = Astro.url.pathname;
