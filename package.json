@@ -4,16 +4,19 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "astro dev --host 127.0.0.1",
-    "build": "npm run typecheck && astro build",
+    "dev": "npm run docs && astro dev --host 127.0.0.1",
+    "build": "npm run docs && npm run typecheck && astro build",
     "preview": "astro preview --host 127.0.0.1",
-    "typecheck": "astro check"
+    "typecheck": "astro check",
+    "docs": "node scripts/render-docs.mjs"
   },
   "dependencies": {
+    "@asciidoctor/core": "^4.0.11",
+    "@tailwindcss/vite": "^4.3.3",
     "astro": "^7.2.4",
+    "js-yaml": "^5.4.2",
     "shiki": "^4.0.2",
-    "tailwindcss": "^4.3.3",
-    "@tailwindcss/vite": "^4.3.3"
+    "tailwindcss": "^4.3.3"
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.6",

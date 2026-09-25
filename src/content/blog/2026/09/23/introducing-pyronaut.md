@@ -137,4 +137,4 @@ pyronaut setup
 
 If anything goes wrong, `pyronaut doctor` checks your environment and prints a fix for every failing check.
 
-From there, read the [documentation](/docs/), follow the [guides](/guides/), and let us know what you build on [GitHub](https://github.com/micronaut-projects/pyronaut). Pyronaut is part of Micronaut, a Commonhaus Foundation project, and we look forward to building it with you.
+From there, read the [documentation](/docs/), follow the [guides](https://guides.micronaut.io/latest/index.html?language=python&lang=python&build=pyronaut), and let us know what you build on [GitHub](https://github.com/micronaut-projects/pyronaut). Pyronaut is part of Micronaut, a Commonhaus Foundation project, and we look forward to building it with you.

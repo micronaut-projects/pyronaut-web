@@ -7,6 +7,17 @@ export const SITE_NAME = "Pyronaut";
 export const SITE_DESCRIPTION =
   "Pyronaut is a high-performance Python web framework for building production services with rich data access, observability, cloud integrations, build-time validation, integrated testing, and enterprise support.";
 
+/**
+ * Documentation destinations. The Micronaut sites keep the reader's code
+ * language and build tool in `lang` / `build`, so Pyronaut readers land on the
+ * Python + Pyronaut variants.
+ */
+export const DOCS_LINKS = {
+  pyronaut: "/docs/",
+  micronaut: "https://docs.micronaut.io/?lang=python&build=pyronaut",
+  guides: "https://guides.micronaut.io/latest/index.html?language=python&lang=python&build=pyronaut",
+};
+
 export interface Feature {
   title: string;
   copy: string;
@@ -364,9 +375,10 @@ export const FOOTER_COLUMNS = [
   {
     title: "Platform",
     links: [
-      { label: "Documentation", href: "/docs/" },
-      { label: "Guides", href: "/guides/" },
-      { label: "CLI reference", href: "/docs/cli/" },
+      { label: "Pyronaut Documentation", href: DOCS_LINKS.pyronaut },
+      { label: "Micronaut Docs", href: DOCS_LINKS.micronaut },
+      { label: "Pyronaut Guides", href: DOCS_LINKS.guides },
+      { label: "CLI reference", href: "/docs/#pyronautCliV2" },
       { label: "Python package compatibility", href: "/docs/compatibility/" },
     ],
   },

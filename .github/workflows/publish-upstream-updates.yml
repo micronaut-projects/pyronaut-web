@@ -1,0 +1,54 @@
+name: Publish Upstream Updates
+
+# GitHub Actions cannot subscribe to events in another repository, so this
+# workflow polls micronaut-projects/pyronaut and redeploys the site when the
+# guide sources (src/main/docs) have a commit the published docs don't have.
+
+on:
+  schedule:
+    - cron: "37 * * * *"
+  workflow_dispatch:
+
+permissions:
+  actions: write
+  contents: read
+  pages: read
+
+concurrency:
+  group: publish-upstream-updates
+  cancel-in-progress: false
+
+env:
+  GH_TOKEN: ${{ secrets.GH_TOKEN || github.token }}
+  DOCS_REPOSITORY: micronaut-projects/pyronaut
+  DOCS_BRANCH: 0.0.x
+
+jobs:
+  docs:
+    name: Publish unpublished Pyronaut docs
+    runs-on: ubuntu-latest
+    steps:
+      - name: Compare published and upstream docs
+        id: pending
+        run: |
+          set -euo pipefail
+          upstream=$(gh api "repos/$DOCS_REPOSITORY/commits?sha=$DOCS_BRANCH&path=src/main/docs&per_page=1" --jq '.[0].sha')
+          site=$(gh api "repos/$GITHUB_REPOSITORY/pages" --jq '.html_url')
+          published=$(curl -fsSL "${site%/}/docs/source.json" | jq -r '.commit // empty' || true)
+          echo "Upstream docs commit: $upstream"
+          echo "Published docs commit: ${published:-none}"
+
+          publish=true
+          if [ -n "$published" ]; then
+            # Up to date when the published commit already contains the latest docs change.
+            status=$(gh api "repos/$DOCS_REPOSITORY/compare/$upstream...$published" --jq '.status' || echo unknown)
+            if [ "$status" = "identical" ] || [ "$status" = "ahead" ]; then
+              publish=false
+            fi
+          fi
+          echo "publish=$publish" >> "$GITHUB_OUTPUT"
+          echo "sha=$upstream" >> "$GITHUB_OUTPUT"
+
+      - name: Start docs publish
+        if: steps.pending.outputs.publish == 'true'
+        run: gh workflow run deploy-pages.yml --repo "$GITHUB_REPOSITORY" --ref main -f docs_ref="${{ steps.pending.outputs.sha }}"
