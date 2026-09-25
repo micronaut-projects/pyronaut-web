@@ -4,13 +4,16 @@ import Glyph from "@/components/Glyph.astro";
 /**
  * Light/dark toggle. The BaseLayout inline script applies the stored theme
  * before paint; this button flips the `.dark` class and persists the choice.
+ * Pass `label` to render the target theme as text next to the icon (menus).
  */
 interface Props {
   class?: string;
+  label?: boolean;
 }
 
 const {
   class: className = "rounded-lg p-2 text-current transition hover:bg-black/5 dark:hover:bg-white/10",
+  label = false,
 } = Astro.props;
 ---
 
@@ -23,6 +26,14 @@ const {
 >
   <Glyph name="moon" class="size-5 dark:hidden" />
   <Glyph name="sun" class="hidden size-5 dark:block" />
+  {
+    label && (
+      <>
+        <span class="dark:hidden">Use dark theme</span>
+        <span class="hidden dark:inline">Use light theme</span>
+      </>
+    )
+  }
 </button>
 
 <script>
