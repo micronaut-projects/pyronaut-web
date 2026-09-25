@@ -20,7 +20,7 @@ export const FEATURES: Feature[] = [
     title: "High performance",
     copy: "Pyronaut shifts application work to build time, preparing dependency injection, serialization, routing, and more before startup. A JIT compiler optimizes hot Python code, while a non-blocking HTTP runtime handles concurrent requests.",
     icon: "bolt",
-    href: "/docs/performance/",
+    href: "/performance/",
   },
   {
     title: "Rich data access",
