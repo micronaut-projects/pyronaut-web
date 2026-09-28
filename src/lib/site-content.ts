@@ -61,7 +61,7 @@ export const FEATURES: Feature[] = [
     title: "Enterprise support",
     copy: "Enterprise support for teams running business-critical Pyronaut services in production.",
     icon: "rocket",
-    href: "/docs/support/",
+    href: "https://micronaut.io/support/",
   },
 ];
 
