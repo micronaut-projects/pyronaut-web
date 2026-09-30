@@ -75,7 +75,8 @@ Routes:
 ## Guides (`/guides/`)
 
 The Python guides from
-[micronaut-projects/micronaut-guides](https://github.com/micronaut-projects/micronaut-guides):
+[micronaut-projects/micronaut-guides](https://github.com/micronaut-projects/micronaut-guides/tree/python-guide-support)
+(branch `python-guide-support`):
 every published guide whose `metadata.json` lists `PYTHON` in `languages`,
 rendered in its Python / Pyronaut variant only. `scripts/render-guides.mjs`
 (`npm run guides`, part of `dev` and `build`) runs the guides' own Gradle build
@@ -86,7 +87,7 @@ AsciiDoc the same way as the docs. It writes `src/generated/guides.json` and
 
 - **Requirements** — a JDK, for the Gradle build. Outside CI a failed render
   only warns, and the site builds with the guides rendered last time (or none).
-- **Source** — `GUIDES_REF` (default `master`) and `GUIDES_REPOSITORY` pick
+- **Source** — `GUIDES_REF` (default `python-guide-support`) and `GUIDES_REPOSITORY` pick
   what is cloned; `MICRONAUT_GUIDES_DIR` renders a local checkout instead. A
   revision that is already rendered is skipped; `npm run guides -- --force`
   renders it again.
@@ -94,7 +95,7 @@ AsciiDoc the same way as the docs. It writes `src/generated/guides.json` and
   every deploy. `.github/workflows/deploy-guides.yml` republishes them on a
   `guides-updated` repository dispatch (`client_payload.sha` pins the guides
   commit) or a manual run, and `publish-upstream-updates.yml` starts it when
-  `master` has a commit that `/guides/source.json` does not report.
+  that branch has a commit that `/guides/source.json` does not report.
 
 ## Code snippets
 

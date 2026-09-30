@@ -22,7 +22,7 @@ import { SnippetHtmlConverter, takeListings } from "./lib/asciidoc.mjs";
 import { configurationHints } from "./lib/configuration.mjs";
 
 const REPO = process.env.GUIDES_REPOSITORY || "micronaut-projects/micronaut-guides";
-const REF = process.env.GUIDES_REF || "master";
+const REF = process.env.GUIDES_REF || "python-guide-support";
 const OUTPUT = path.resolve("src/generated/guides.json");
 const PUBLIC_DIR = path.resolve("public/guides");
 const ROUTE = "/guides";
@@ -86,6 +86,7 @@ async function pythonGuides(guidesDir) {
     guides.push({
       slug: metadata.slug ?? entry.name,
       directory: path.join(root, entry.name),
+      intro: metadata.intro ?? "",
       categories: metadata.categories ?? [],
       tags: metadata.tags ?? [],
       publicationDate: metadata.publicationDate ?? "1970-01-01",
@@ -99,12 +100,44 @@ async function pythonGuides(guidesDir) {
 // `micronaut-http-client` → `micronautHttpClient`, as GuidesPlugin names tasks.
 const taskSlug = (slug) => slug.replace(/-(.)/g, (_, letter) => letter.toUpperCase());
 
+// Generates each guide's Pyronaut sample project, its ZIP and its expanded
+// AsciiDoc, and returns the guides the build has tasks for. Task names differ
+// between guides branches: some register per-language tasks, others generate
+// every option of a guide at once and name the ZIP task after the option.
 function generate(guidesDir, guides) {
-  const tasks = guides.flatMap((guide) => [
-    `${taskSlug(guide.slug)}GenerateDocsPython`,
-    `${taskSlug(guide.slug)}PythonZipCode`,
-  ]);
-  execFileSync("./gradlew", ["--console=plain", "-q", ...tasks], { cwd: guidesDir, stdio: "inherit" });
+  const gradle = (args, options) => execFileSync("./gradlew", ["--console=plain", "-q", ...args], { cwd: guidesDir, ...options });
+  const known = new Set(
+    gradle(["tasks", "--all"], { encoding: "utf8", maxBuffer: 64 * 1024 * 1024, stdio: ["ignore", "pipe", "inherit"] })
+      .split("\n")
+      .map((line) => line.split(" ")[0]),
+  );
+  const tasks = [];
+  const generated = guides.filter((guide) => {
+    const name = taskSlug(guide.slug);
+    const docs = [`${name}GenerateDocsPython`, `${name}GenerateDocs`].find((task) => known.has(task));
+    const zip = [`${name}PythonZipCode`, `${name}PyronautPythonZipCode`].find((task) => known.has(task));
+    // The build registers no tasks for a guide it cannot generate, such as
+    // one capped below the running JDK.
+    if (!docs || !zip) {
+      console.warn(`Skipping ${guide.slug}: the guides build has no Python tasks for it`);
+      return false;
+    }
+    tasks.push(docs, zip);
+    return true;
+  });
+  // One guide the build cannot generate must not take the others down with it.
+  try {
+    gradle(["--continue", ...tasks], { stdio: "inherit" });
+  } catch {
+    // Reported per guide below.
+  }
+  return generated.filter((guide) => {
+    const complete =
+      existsSync(path.join(guidesDir, "src/docs/asciidoc", `${guide.slug}-${OPTION}.adoc`)) &&
+      existsSync(path.join(guidesDir, "build/dist", `${guide.slug}-${OPTION}.zip`));
+    if (!complete) console.warn(`Skipping ${guide.slug}: the guides build failed to generate it`);
+    return complete;
+  });
 }
 
 // ── Rendering ──────────────────────────────────────────────────────────────
@@ -152,7 +185,11 @@ function rewriteUrls(html, slugs, images) {
 }
 
 async function render(guidesDir, guide, slugs, images) {
-  const source = await fs.readFile(path.join(guidesDir, "src/docs/asciidoc", `${guide.slug}-${OPTION}.adoc`), "utf8");
+  // Some guides branches write the authors and the Micronaut version under the
+  // title; neither is published here.
+  const source = (
+    await fs.readFile(path.join(guidesDir, "src/docs/asciidoc", `${guide.slug}-${OPTION}.adoc`), "utf8")
+  ).replace(/^(Authors:|Micronaut Version:).*\n?/gm, "");
   takeListings();
   let html = String(
     await convert(source, {
@@ -174,7 +211,8 @@ async function render(guidesDir, guide, slugs, images) {
 
   // The page header shows the title and intro, so the preamble repeating the
   // intro is dropped from the body.
-  let intro = "";
+  // Falls back to the metadata's intro when the preamble is not just the intro.
+  let intro = guide.intro;
   html = html.replace(/<div id="preamble">\s*<div class="sectionbody">([\s\S]*?)<\/div>\s*<\/div>\s*(?=<div class="sect1">)/, (whole, body) => {
     const paragraphs = [...body.matchAll(/<p>([\s\S]*?)<\/p>/g)];
     if (paragraphs.length !== 1) return whole;
@@ -188,7 +226,7 @@ async function render(guidesDir, guide, slugs, images) {
   // the guides.
   const { directory, publicationDate, ...metadata } = guide;
   const properties = await configurationHints(takeListings());
-  return { ...metadata, title, intro, zip: `${guide.slug}-${OPTION}.zip`, headings: headings(html), properties, html };
+  return { ...metadata, title, intro: intro.trim(), zip: `${guide.slug}-${OPTION}.zip`, headings: headings(html), properties, html };
 }
 
 // Images live in the shared src/docs/images, or beside the guide.
@@ -220,14 +258,21 @@ async function renderAll() {
     }
   })();
 
-  const guides = await pythonGuides(guidesDir);
-  if (!guides.length) throw new Error(`No Python guides found in ${guidesDir}`);
-  generate(guidesDir, guides);
+  const found = await pythonGuides(guidesDir);
+  if (!found.length) throw new Error(`No Python guides found in ${guidesDir}`);
+  const guides = generate(guidesDir, found);
+  if (!guides.length) throw new Error("The guides build generated no Python guide");
 
   const slugs = new Set(guides.map((guide) => guide.slug));
   const images = new Set();
   const rendered = [];
-  for (const guide of guides) rendered.push(await render(guidesDir, guide, slugs, images));
+  for (const guide of guides) {
+    try {
+      rendered.push(await render(guidesDir, guide, slugs, images));
+    } catch (error) {
+      console.warn(`Skipping ${guide.slug}: ${error.message}`);
+    }
+  }
 
   await fs.rm(PUBLIC_DIR, { recursive: true, force: true });
   await fs.mkdir(PUBLIC_DIR, { recursive: true });

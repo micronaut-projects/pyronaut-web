@@ -25,7 +25,7 @@ env:
   DOCS_REPOSITORY: micronaut-projects/pyronaut
   DOCS_BRANCH: 0.0.x
   GUIDES_REPOSITORY: micronaut-projects/micronaut-guides
-  GUIDES_BRANCH: master
+  GUIDES_BRANCH: python-guide-support
 
 jobs:
   docs:
