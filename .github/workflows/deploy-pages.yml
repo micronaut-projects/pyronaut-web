@@ -21,7 +21,7 @@ on:
       guides_ref:
         description: Guides branch, tag, or SHA to render the Python guides from
         required: false
-        default: python-guide-support
+        default: master
 
 permissions:
   contents: read
@@ -41,7 +41,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: ${{ inputs.guides_repository || 'micronaut-projects/micronaut-guides' }}
-          ref: ${{ inputs.guides_ref || 'python-guide-support' }}
+          ref: ${{ inputs.guides_ref || 'master' }}
           path: external/micronaut-guides
       - uses: actions/setup-node@v4
         with:
@@ -70,7 +70,7 @@ jobs:
           PYRONAUT_DOCS_REF: ${{ github.event.client_payload.sha || inputs.docs_ref || '0.0.x' }}
           MICRONAUT_GUIDES_DIR: ${{ github.workspace }}/external/micronaut-guides
           GUIDES_REPOSITORY: ${{ inputs.guides_repository || 'micronaut-projects/micronaut-guides' }}
-          GUIDES_REF: ${{ inputs.guides_ref || 'python-guide-support' }}
+          GUIDES_REF: ${{ inputs.guides_ref || 'master' }}
       - uses: actions/upload-pages-artifact@v3
         with:
           path: dist

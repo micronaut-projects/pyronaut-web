@@ -19,7 +19,7 @@ on:
       guides_ref:
         description: Guides branch, tag, or SHA to build from
         required: false
-        default: python-guide-support
+        default: master
 
 permissions:
   actions: write
@@ -29,7 +29,7 @@ concurrency:
   group: guides-pages
   cancel-in-progress: false
 
-run-name: Publish guides from ${{ github.event.client_payload.sha || inputs.guides_ref || 'python-guide-support' }}
+run-name: Publish guides from ${{ github.event.client_payload.sha || inputs.guides_ref || 'master' }}
 
 jobs:
   publish:
@@ -40,7 +40,7 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GH_TOKEN || github.token }}
           GUIDES_REPOSITORY: ${{ inputs.guides_repository || 'micronaut-projects/micronaut-guides' }}
-          GUIDES_REF: ${{ github.event.client_payload.sha || inputs.guides_ref || 'python-guide-support' }}
+          GUIDES_REF: ${{ github.event.client_payload.sha || inputs.guides_ref || 'master' }}
         run: |
           gh workflow run deploy-pages.yml --repo "$GITHUB_REPOSITORY" --ref main \
             -f guides_repository="$GUIDES_REPOSITORY" -f guides_ref="$GUIDES_REF"

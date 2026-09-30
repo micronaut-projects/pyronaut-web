@@ -22,7 +22,7 @@ import { SnippetHtmlConverter, takeListings } from "./lib/asciidoc.mjs";
 import { configurationHints } from "./lib/configuration.mjs";
 
 const REPO = process.env.GUIDES_REPOSITORY || "micronaut-projects/micronaut-guides";
-const REF = process.env.GUIDES_REF || "python-guide-support";
+const REF = process.env.GUIDES_REF || "master";
 const OUTPUT = path.resolve("src/generated/guides.json");
 const PUBLIC_DIR = path.resolve("public/guides");
 const ROUTE = "/guides";
