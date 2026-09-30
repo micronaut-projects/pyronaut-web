@@ -71,7 +71,7 @@ jobs:
           MICRONAUT_GUIDES_DIR: ${{ github.workspace }}/external/micronaut-guides
           GUIDES_REPOSITORY: ${{ inputs.guides_repository || 'micronaut-projects/micronaut-guides' }}
           GUIDES_REF: ${{ inputs.guides_ref || 'master' }}
-      - uses: actions/upload-pages-artifact@v3
+      - uses: actions/upload-pages-artifact@v5
         with:
           path: dist
 
