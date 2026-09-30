@@ -1,0 +1,46 @@
+name: Deploy Guides
+
+# Republishes the Python guides. Unlike micronaut-web, which pushes its guides
+# to a Pages repository of their own, the guides here are pages of this site
+# (/guides/), so publishing them is a site deploy pinned to a guides revision.
+
+on:
+  # Sent by micronaut-projects/micronaut-guides when the guides change;
+  # `client_payload.sha` pins the guides commit to render.
+  repository_dispatch:
+    types:
+      - guides-updated
+  workflow_dispatch:
+    inputs:
+      guides_repository:
+        description: Guides repository to build from
+        required: false
+        default: micronaut-projects/micronaut-guides
+      guides_ref:
+        description: Guides branch, tag, or SHA to build from
+        required: false
+        default: master
+
+permissions:
+  actions: write
+  contents: read
+
+concurrency:
+  group: guides-pages
+  cancel-in-progress: false
+
+run-name: Publish guides from ${{ github.event.client_payload.sha || inputs.guides_ref || 'master' }}
+
+jobs:
+  publish:
+    name: Publish guides to the site
+    runs-on: ubuntu-latest
+    steps:
+      - name: Start site deploy
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN || github.token }}
+          GUIDES_REPOSITORY: ${{ inputs.guides_repository || 'micronaut-projects/micronaut-guides' }}
+          GUIDES_REF: ${{ github.event.client_payload.sha || inputs.guides_ref || 'master' }}
+        run: |
+          gh workflow run deploy-pages.yml --repo "$GITHUB_REPOSITORY" --ref main \
+            -f guides_repository="$GUIDES_REPOSITORY" -f guides_ref="$GUIDES_REF"

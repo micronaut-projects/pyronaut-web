@@ -4,11 +4,12 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "npm run docs && astro dev --host 127.0.0.1",
-    "build": "npm run docs && npm run typecheck && astro build",
+    "dev": "npm run docs && npm run guides && astro dev --host 127.0.0.1",
+    "build": "npm run docs && npm run guides && npm run typecheck && astro build",
     "preview": "astro preview --host 127.0.0.1",
     "typecheck": "astro check",
-    "docs": "node scripts/render-docs.mjs"
+    "docs": "node scripts/render-docs.mjs",
+    "guides": "node scripts/render-guides.mjs"
   },
   "dependencies": {
     "@asciidoctor/core": "^4.0.11",

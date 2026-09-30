@@ -7,13 +7,14 @@
 // highlighter ships to the browser.
 //
 // Set PYRONAUT_DOCS_REF to render a specific commit, or PYRONAUT_DOCS_DIR to a local pyronaut checkout to skip the git fetch.
-import { Html5Converter, convert } from "@asciidoctor/core";
+import { convert } from "@asciidoctor/core";
 import { execFileSync } from "node:child_process";
 import { existsSync, mkdtempSync, readFileSync, promises as fs } from "node:fs";
 import os from "node:os";
 import path from "node:path";
 import * as yaml from "js-yaml";
-import { codeToHtml } from "shiki";
+import { SnippetHtmlConverter, takeListings } from "./lib/asciidoc.mjs";
+import { configurationHints } from "./lib/configuration.mjs";
 
 const REPO = "micronaut-projects/pyronaut";
 const BRANCH = process.env.PYRONAUT_DOCS_BRANCH ?? "0.0.x";
@@ -86,76 +87,6 @@ function sourceFile(parentIds, id) {
   throw new Error(`Missing guide source for TOC section '${id}'`);
 }
 
-// ── Listings ───────────────────────────────────────────────────────────────
-
-const LANGUAGE_LABELS = {
-  python: "Python",
-  toml: "TOML",
-  bash: "Shell",
-  shell: "Shell",
-  sh: "Shell",
-  java: "Java",
-  json: "JSON",
-  yaml: "YAML",
-  xml: "XML",
-  groovy: "Groovy",
-  kotlin: "Kotlin",
-  properties: "Properties",
-  dockerfile: "Dockerfile",
-  text: "Text",
-};
-
-// Trailing callout markers such as `# <1>`, `// <2>` or `<3>`.
-const CALLOUT = /\s*(?:(?:#|\/\/|--|;;)\s*)?((?:<\d+>\s*)+)$/;
-
-async function highlight(source, language) {
-  const lines = source.replace(/\s+$/, "").split("\n");
-  const callouts = lines.map((line) => {
-    const match = CALLOUT.exec(line);
-    return match ? [...match[1].matchAll(/<(\d+)>/g)].map((m) => m[1]) : [];
-  });
-  const code = lines.map((line, i) => (callouts[i].length ? line.replace(CALLOUT, "") : line)).join("\n");
-
-  let highlighted;
-  try {
-    highlighted = await codeToHtml(code, {
-      lang: language,
-      themes: { light: "one-light", dark: "one-dark-pro" },
-      defaultColor: false,
-    });
-  } catch {
-    highlighted = await codeToHtml(code, {
-      lang: "text",
-      themes: { light: "one-light", dark: "one-dark-pro" },
-      defaultColor: false,
-    });
-  }
-
-  let line = -1;
-  return highlighted.replace(/<span class="line">([\s\S]*?)(?=<span class="line">|<\/code>)/g, (whole) => {
-    line += 1;
-    const marks = callouts[line] ?? [];
-    if (!marks.length) return whole;
-    const conums = marks.map((n) => `<i class="conum" data-value="${n}"></i>`).join("");
-    return whole.replace(/<\/span>(\s*)$/, `${conums}</span>$1`);
-  });
-}
-
-class PyronautHtmlConverter extends Html5Converter {
-  async convert_listing(node) {
-    const language = String(node.getAttribute("language") || "text").toLowerCase();
-    let source = node.getSource();
-    if (node.getSubstitutions?.().includes("attributes")) source = node.subAttributes(source);
-    const title = node.hasTitle() ? `<div class="snippet-title">${node.getTitle()}</div>` : "";
-    const label = LANGUAGE_LABELS[language] ?? language.toUpperCase();
-    return `<div class="snippet"${node.getId() ? ` id="${node.getId()}"` : ""}>
-<div class="snippet-header">${title}<span class="snippet-lang">${label}</span>
-<button type="button" class="snippet-copy" data-copy aria-label="Copy code" title="Copy code"></button></div>
-${await highlight(source, language)}
-</div>`;
-  }
-}
-
 // ── Rendering ──────────────────────────────────────────────────────────────
 
 const attributes = {
@@ -212,7 +143,7 @@ async function renderNode(node, reserved) {
       base_dir: repoDir,
       header_footer: false,
       attributes,
-      converter: PyronautHtmlConverter,
+      converter: SnippetHtmlConverter,
     }),
   );
   const body = uniquifyIds(html, reserved);
@@ -262,6 +193,13 @@ for (const node of toc) html += await renderNode(node, reserved);
 await fs.mkdir(path.dirname(OUTPUT), { recursive: true });
 await fs.writeFile(
   OUTPUT,
-  JSON.stringify({ version: properties.projectVersion ?? "", branch: BRANCH, commit, toc: stripFiles(toc), html }),
+  JSON.stringify({
+    version: properties.projectVersion ?? "",
+    branch: BRANCH,
+    commit,
+    toc: stripFiles(toc),
+    properties: await configurationHints(takeListings()),
+    html,
+  }),
 );
 console.log(`Rendered Pyronaut docs (${BRANCH} @ ${commit.slice(0, 7)}, ${reserved.size} sections) → ${path.relative(process.cwd(), OUTPUT)}`);

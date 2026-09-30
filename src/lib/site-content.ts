@@ -5,7 +5,7 @@
 export const SITE_NAME = "Pyronaut";
 
 export const SITE_DESCRIPTION =
-  "Pyronaut is a high-performance Python web framework for building production services with rich data access, observability, cloud integrations, build-time validation, integrated testing, and enterprise support.";
+  "Pyronaut is a high-performance Python framework for building production services with rich data access, observability, cloud integrations, build-time validation, testing, and enterprise support.";
 
 /**
  * Documentation destinations. The Micronaut sites keep the reader's code
@@ -15,7 +15,7 @@ export const SITE_DESCRIPTION =
 export const DOCS_LINKS = {
   pyronaut: "/docs/",
   micronaut: "https://docs.micronaut.io/?lang=python&build=pyronaut",
-  guides: "https://guides.micronaut.io/latest/index.html?language=python&lang=python&build=pyronaut",
+  guides: "/guides/",
 };
 
 export interface Feature {

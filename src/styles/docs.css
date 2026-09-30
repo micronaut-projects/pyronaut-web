@@ -389,6 +389,104 @@
   font-weight: var(--shiki-dark-font-weight);
 }
 
+/* Leading imports, folded like an IDE (scripts/lib/asciidoc.mjs). */
+.docs-prose .snippet-imports > summary {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.55rem 1rem 0;
+  cursor: pointer;
+  list-style: none;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--color-ink-400);
+  user-select: none;
+}
+.docs-prose .snippet-imports > summary::-webkit-details-marker {
+  display: none;
+}
+.docs-prose .snippet-imports > summary::before {
+  content: "";
+  width: 0.7rem;
+  height: 0.7rem;
+  background: currentColor;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m9 18 6-6-6-6'/%3E%3C/svg%3E")
+    center / contain no-repeat;
+  transition: transform 0.15s;
+}
+.docs-prose .snippet-imports[open] > summary::before {
+  transform: rotate(90deg);
+}
+.docs-prose .snippet-imports > summary:hover {
+  color: var(--color-flame-500);
+}
+.docs-prose .snippet-imports > pre {
+  padding-bottom: 0;
+}
+.docs-prose .snippet-imports + pre {
+  padding-top: 0.55rem;
+}
+
+/* Painted by src/scripts/code-hover.ts over the name under the pointer. */
+::highlight(code-api-type) {
+  text-decoration: underline dotted;
+  text-underline-offset: 3px;
+  background-color: color-mix(in oklab, var(--color-flame-500) 20%, transparent);
+}
+.code-hover {
+  position: fixed;
+  z-index: 50;
+  max-width: min(24rem, calc(100vw - 1rem));
+  border: 1px solid var(--color-ink-200);
+  border-radius: 0.6rem;
+  padding: 0.75rem;
+  background-color: white;
+  box-shadow: 0 12px 32px -12px rgb(16 21 36 / 0.35);
+  font-size: 0.875rem;
+  line-height: 1.4;
+  color: var(--color-ink-600);
+}
+.dark .code-hover {
+  border-color: rgb(255 255 255 / 0.12);
+  background-color: var(--color-ink-900);
+  color: var(--color-ink-300);
+}
+.code-hover > * + * {
+  margin-top: 0.5rem;
+}
+.code-hover-name,
+.code-hover-type {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  word-break: break-all;
+}
+.code-hover-name {
+  font-weight: 600;
+  color: var(--color-ink-950);
+}
+.dark .code-hover-name {
+  color: white;
+}
+.code-hover-muted {
+  font-weight: 400;
+  color: var(--color-ink-500);
+}
+.dark .code-hover-muted {
+  color: var(--color-ink-400);
+}
+.code-hover-link {
+  display: inline-block;
+  font-weight: 600;
+  color: var(--color-flame-600);
+}
+.dark .code-hover-link {
+  color: var(--color-flame-400);
+}
+.code-hover-link:hover {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
 /* Callout markers, in code and in the list that explains them. */
 .docs-prose .conum[data-value] {
   display: inline-flex;

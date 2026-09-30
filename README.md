@@ -37,6 +37,8 @@ variant, falls back to the OS preference).
 - `src/components/SiteHeader.astro`, `src/components/SiteFooter.astro` —
   header and footer shared by every page
 - `src/content/blog/` — blog posts (see [Blog](#blog))
+- `src/pages/guides/` + `src/lib/guides.ts` — the Python guides (see
+  [Guides](#guides-guides))
 - `resources/` — pristine mirror of the upstream artwork from
   [micronaut-projects/pyronaut](https://github.com/micronaut-projects/pyronaut)
   (`media/`); not served directly
@@ -70,6 +72,47 @@ Routes:
 - `/<slug>/` — the post itself, e.g. `/2026/09/23/introducing-pyronaut/`
 - `/category/<category>/` and `/tag/<tag>/` — archives
 
+## Guides (`/guides/`)
+
+The Python guides from
+[micronaut-projects/micronaut-guides](https://github.com/micronaut-projects/micronaut-guides):
+every published guide whose `metadata.json` lists `PYTHON` in `languages`,
+rendered in its Python / Pyronaut variant only. `scripts/render-guides.mjs`
+(`npm run guides`, part of `dev` and `build`) runs the guides' own Gradle build
+for those guides — it generates each sample project with Micronaut Starter,
+zips it and expands the guide macros into plain AsciiDoc — then renders that
+AsciiDoc the same way as the docs. It writes `src/generated/guides.json` and
+`public/guides/` (ZIPs and images); both are ignored by Git.
+
+- **Requirements** — a JDK, for the Gradle build. Outside CI a failed render
+  only warns, and the site builds with the guides rendered last time (or none).
+- **Source** — `GUIDES_REF` (default `master`) and `GUIDES_REPOSITORY` pick
+  what is cloned; `MICRONAUT_GUIDES_DIR` renders a local checkout instead. A
+  revision that is already rendered is skipped; `npm run guides -- --force`
+  renders it again.
+- **Publishing** — the guides are pages of this site, so they go out with
+  every deploy. `.github/workflows/deploy-guides.yml` republishes them on a
+  `guides-updated` repository dispatch (`client_payload.sha` pins the guides
+  commit) or a manual run, and `publish-upstream-updates.yml` starts it when
+  `master` has a commit that `/guides/source.json` does not report.
+
+## Code snippets
+
+Docs and guide snippets share `scripts/lib/asciidoc.mjs` and
+`src/scripts/code-hover.ts`, ported from micronaut-web:
+
+- **Folded imports** — a snippet's leading imports collapse into an
+  "N imports" toggle; the copy button still copies the whole sample.
+- **Javadoc on hover** — a type name is resolved from the snippet's own
+  imports (`from micronaut.http.annotation import Get` is
+  `io.micronaut.http.annotation.Get`), highlighted, and shown with the first
+  sentence of its javadoc and a link. Nothing is added to the HTML.
+- **Configuration keys on hover** — type, default and description from the
+  Micronaut configuration references, linking to docs.micronaut.io. The
+  render scripts fetch the references (`scripts/lib/configuration.mjs`) and
+  ship each page only the keys its snippets set; a module that cannot be
+  fetched is left out.
+
 ## Logo assets
 
 The header logo, full logo and mascot are served as SVG. The outputs are
@@ -85,7 +128,8 @@ asset pipeline, not part of `npm run build`. It tightens each viewBox to the
 real ink bounds, crops a mascot-only variant, puts the Python mark on the
 narrow header's nozzle to match the mascot's flamethrower, and re-encodes the
 embedded rasters as palette PNGs (~1.2 MB total instead of ~4.9 MB). It also
-emits `mascot.png` and `favicon.png`, since social cards cannot use SVG.
+emits `social-card.png` (an opaque 1200×630 card, the `og:image`) and
+`favicon.png`, since social cards cannot use SVG.
 
 ## Pyronaut Launch (`/launch/`)
 

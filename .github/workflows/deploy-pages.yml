@@ -14,6 +14,14 @@ on:
         description: Pyronaut branch, tag, or SHA to render the docs from
         required: false
         default: 0.0.x
+      guides_repository:
+        description: Guides repository to render the Python guides from
+        required: false
+        default: micronaut-projects/micronaut-guides
+      guides_ref:
+        description: Guides branch, tag, or SHA to render the Python guides from
+        required: false
+        default: master
 
 permissions:
   contents: read
@@ -29,10 +37,30 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - name: Check out guides project
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ inputs.guides_repository || 'micronaut-projects/micronaut-guides' }}
+          ref: ${{ inputs.guides_ref || 'master' }}
+          path: external/micronaut-guides
       - uses: actions/setup-node@v4
         with:
           node-version: 22
           cache: npm
+      # The guides build generates each Python guide's sample project with
+      # Micronaut Starter; scripts/render-guides.mjs runs it.
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 25
+      - name: Cache Gradle dependencies
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.gradle/caches/modules-2
+            ~/.gradle/wrapper/dists
+          key: gradle-guides-${{ hashFiles('external/micronaut-guides/**/*.gradle') }}
+          restore-keys: gradle-guides-
       - uses: actions/configure-pages@v5
         with:
           enablement: true
@@ -40,6 +68,9 @@ jobs:
       - run: npm run build
         env:
           PYRONAUT_DOCS_REF: ${{ github.event.client_payload.sha || inputs.docs_ref || '0.0.x' }}
+          MICRONAUT_GUIDES_DIR: ${{ github.workspace }}/external/micronaut-guides
+          GUIDES_REPOSITORY: ${{ inputs.guides_repository || 'micronaut-projects/micronaut-guides' }}
+          GUIDES_REF: ${{ inputs.guides_ref || 'master' }}
       - uses: actions/upload-pages-artifact@v3
         with:
           path: dist

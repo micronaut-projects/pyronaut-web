@@ -1,0 +1,103 @@
+---
+import "@/styles/docs.css";
+import PageLayout from "@/layouts/PageLayout.astro";
+import { formatPostDate } from "@/lib/blog";
+import { guideSourceHref, guides, type Guide } from "@/lib/guides";
+import { SITE_NAME } from "@/lib/site-content";
+
+export function getStaticPaths() {
+  return guides.map((guide) => ({ params: { slug: guide.slug }, props: { guide } }));
+}
+
+interface Props {
+  guide: Guide;
+}
+
+const { guide } = Astro.props;
+const zipHref = `/guides/${guide.zip}`;
+
+const railLink =
+  "block rounded-md py-1 pr-2 text-ink-600 transition hover:text-ink-950 dark:text-ink-300 dark:hover:text-white";
+---
+
+<PageLayout title={`${guide.title} — ${SITE_NAME} Guides`} description={guide.intro}>
+  <div class="mx-auto max-w-6xl px-5 xl:grid xl:grid-cols-[minmax(0,1fr)_14rem] xl:gap-12">
+    <article class="min-w-0 py-10 lg:py-12">
+      <header class="mb-12">
+        <a
+          href="/guides/"
+          class="text-sm font-semibold uppercase tracking-widest text-flame-600 transition hover:text-flame-500 dark:text-flame-400"
+        >
+          ← Guides
+        </a>
+        <h1 class="font-display mt-2 text-4xl font-bold tracking-tight text-ink-950 md:text-5xl dark:text-white">
+          {guide.title}
+        </h1>
+        <p class="mt-5 max-w-3xl text-lg leading-8 text-ink-600 dark:text-ink-300">{guide.intro}</p>
+        <div class="mt-6 flex flex-wrap items-center gap-x-5 gap-y-3 text-sm text-ink-500 dark:text-ink-400">
+          <a
+            href={zipHref}
+            download
+            class="inline-flex h-9 items-center rounded-md bg-flame-500 px-3.5 font-semibold text-ink-950 transition hover:bg-flame-400"
+          >
+            Download sample project
+          </a>
+          <time datetime={guide.publicationDate}>{formatPostDate(new Date(guide.publicationDate))}</time>
+          {guide.categories.map((category) => <span>{category}</span>)}
+          <a href={guideSourceHref(guide)} class="underline-offset-4 hover:underline">Guide source on GitHub ↗</a>
+        </div>
+      </header>
+      <div class="docs-prose" set:html={guide.html} />
+      <script is:inline type="application/json" data-code-properties set:html={JSON.stringify(guide.properties)} />
+    </article>
+
+    <!-- On this page: the guide's sections, desktop only. -->
+    <aside class="hidden xl:sticky xl:top-16 xl:block xl:h-[calc(100dvh-4rem)] xl:overflow-y-auto xl:py-12">
+      <nav aria-label="On this page" data-guide-rail>
+        <p class="text-xs font-semibold uppercase tracking-widest text-ink-500 dark:text-ink-400">On this page</p>
+        <ul class="docs-toc mt-4 space-y-0.5 border-l border-ink-100 text-[0.8125rem] dark:border-white/10">
+          {
+            guide.headings.map((heading) => (
+              <li>
+                <a
+                  href={`#${heading.id}`}
+                  class:list={[railLink, "-ml-px border-l border-transparent aria-[current=true]:border-flame-500", heading.depth === 1 ? "pl-3" : "pl-6"]}
+                >
+                  {heading.title}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </nav>
+    </aside>
+  </div>
+</PageLayout>
+
+<script>
+  import "@/scripts/prose";
+
+  // Scroll spy: highlight the rail entry of the section being read.
+  const links = new Map(
+    [...document.querySelectorAll<HTMLAnchorElement>("[data-guide-rail] a")].map((a) => [a.hash.slice(1), a]),
+  );
+  const headings = [...links.keys()]
+    .map((id) => document.getElementById(id))
+    .filter((el): el is HTMLElement => el !== null);
+  let active: HTMLAnchorElement | undefined;
+
+  const update = () => {
+    let current: HTMLElement | undefined;
+    for (const heading of headings) {
+      if (heading.getBoundingClientRect().top < 120) current = heading;
+      else break;
+    }
+    const link = current && links.get(current.id);
+    if (link === active) return;
+    active?.removeAttribute("aria-current");
+    link?.setAttribute("aria-current", "true");
+    active = link;
+  };
+  document.addEventListener("scroll", update, { passive: true });
+  update();
+</script>
