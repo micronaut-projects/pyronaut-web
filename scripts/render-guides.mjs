@@ -86,7 +86,6 @@ async function pythonGuides(guidesDir) {
     guides.push({
       slug: metadata.slug ?? entry.name,
       directory: path.join(root, entry.name),
-      authors: metadata.authors ?? [],
       categories: metadata.categories ?? [],
       tags: metadata.tags ?? [],
       publicationDate: metadata.publicationDate ?? "1970-01-01",
@@ -185,7 +184,9 @@ async function render(guidesDir, guide, slugs, images) {
   html = rewriteUrls(html, slugs, images);
 
   const title = /^= (.+)$/m.exec(source)?.[1].trim() ?? guide.slug;
-  const { directory, ...metadata } = guide;
+  // Authors and the publication date are not published; the date only orders
+  // the guides.
+  const { directory, publicationDate, ...metadata } = guide;
   const properties = await configurationHints(takeListings());
   return { ...metadata, title, intro, zip: `${guide.slug}-${OPTION}.zip`, headings: headings(html), properties, html };
 }

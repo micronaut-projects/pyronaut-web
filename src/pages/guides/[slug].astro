@@ -1,7 +1,6 @@
 ---
 import "@/styles/docs.css";
 import PageLayout from "@/layouts/PageLayout.astro";
-import { formatPostDate } from "@/lib/blog";
 import { guideSourceHref, guides, type Guide } from "@/lib/guides";
 import { SITE_NAME } from "@/lib/site-content";
 
@@ -42,7 +41,6 @@ const railLink =
           >
             Download sample project
           </a>
-          <time datetime={guide.publicationDate}>{formatPostDate(new Date(guide.publicationDate))}</time>
           {guide.categories.map((category) => <span>{category}</span>)}
           <a href={guideSourceHref(guide)} class="underline-offset-4 hover:underline">Guide source on GitHub ↗</a>
         </div>

@@ -6,10 +6,8 @@ export interface Guide {
   slug: string;
   title: string;
   intro: string;
-  authors: string[];
   categories: string[];
   tags: string[];
-  publicationDate: string;
   /** Sample project archive, served from `/guides/`. */
   zip: string;
   headings: { id: string; title: string; depth: number }[];

@@ -1,7 +1,6 @@
 ---
 import Glyph from "@/components/Glyph.astro";
 import PageLayout from "@/layouts/PageLayout.astro";
-import { formatPostDate } from "@/lib/blog";
 import { guideHref, guides } from "@/lib/guides";
 import { SITE_NAME } from "@/lib/site-content";
 ---
@@ -32,10 +31,7 @@ import { SITE_NAME } from "@/lib/site-content";
                   href={guideHref(guide)}
                   class="group flex h-full flex-col rounded-2xl bg-white p-6 ring-1 ring-ink-200 transition hover:-translate-y-1 hover:shadow-[0_24px_48px_-24px_rgba(16,21,36,0.3)] hover:ring-ink-950 dark:bg-ink-900 dark:ring-white/10 dark:hover:ring-flame-500/60"
                 >
-                  <div class="flex flex-wrap items-center gap-x-3 gap-y-1 font-mono text-xs font-semibold uppercase tracking-wider">
-                    <time datetime={guide.publicationDate} class="text-ink-400">
-                      {formatPostDate(new Date(guide.publicationDate))}
-                    </time>
+                  <div class="font-mono text-xs font-semibold uppercase tracking-wider">
                     {guide.categories.slice(0, 1).map((category) => <span class="text-ember-500">{category}</span>)}
                   </div>
                   <h2 class="mt-4 text-lg font-bold tracking-tight text-ink-950 dark:text-white">{guide.title}</h2>
