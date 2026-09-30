@@ -3,7 +3,9 @@ import { defineConfig } from "astro/config";
 import tailwindcss from "@tailwindcss/vite";
 
 export default defineConfig({
-  site: "https://pyronaut.io",
+  // SITE_URL overrides the origin baked into absolute URLs (link-preview
+  // images), for builds served somewhere else, such as a preview tunnel.
+  site: process.env.SITE_URL ?? "https://pyronaut.io",
   markdown: {
     // Dual themes; global.css switches token colors when `.dark` is active.
     shikiConfig: {

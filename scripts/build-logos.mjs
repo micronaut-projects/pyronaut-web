@@ -117,9 +117,19 @@ await emit('mascot.svg', logoSvg, await inkBounds(logoSvg, 0, WORDMARK_GUTTER_Y)
 // 3. Raster fallbacks: og:image (social cards will not render SVG) + favicon.
 // ---------------------------------------------------------------------------
 const mascotSvg = readFileSync(join(out, 'mascot.svg'));
-await sharp(mascotSvg).resize({ width: 1200 }).png().toFile(join(out, 'mascot.png'));
+// The card is opaque and 1200x630: link previews crop anything else, and show
+// their own placeholder through a transparent image.
+const CARD = { width: 1200, height: 630, background: '#0b0f1b' };
+const cardMascot = await sharp(mascotSvg)
+  .resize({ width: 960, height: 510, fit: 'inside' })
+  .png()
+  .toBuffer();
+await sharp({ create: { width: CARD.width, height: CARD.height, channels: 3, background: CARD.background } })
+  .composite([{ input: cardMascot, gravity: 'centre' }])
+  .png({ palette: true, colors: 256, compressionLevel: 9 })
+  .toFile(join(out, 'social-card.png'));
 await sharp(mascotSvg)
   .resize({ width: 512, height: 512, fit: 'contain', background: { r: 0, g: 0, b: 0, alpha: 0 } })
   .png()
   .toFile(join(out, 'favicon.png'));
-console.log('mascot.png + favicon.png written');
+console.log('social-card.png + favicon.png written');
