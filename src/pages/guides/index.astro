@@ -1,0 +1,118 @@
+---
+import Glyph from "@/components/Glyph.astro";
+import PageLayout from "@/layouts/PageLayout.astro";
+import { guideHref, guides } from "@/lib/guides";
+import { SITE_NAME } from "@/lib/site-content";
+---
+
+<PageLayout
+  title={`${SITE_NAME} Guides`}
+  description="Step-by-step Pyronaut tutorials, each with a complete Python sample project to download."
+>
+  <section class="border-b border-ink-200/70 dark:border-white/10">
+    <div class="mx-auto max-w-6xl px-5 py-16 md:py-20">
+      <p class="font-mono text-xs font-bold uppercase tracking-[0.2em] text-ember-500">Guides</p>
+      <h1 class="mt-6 max-w-3xl text-4xl font-extrabold tracking-[-0.02em] text-ink-950 dark:text-white md:text-5xl">
+        {SITE_NAME} Guides
+      </h1>
+      <p class="mt-5 max-w-2xl text-lg leading-8 text-ink-500 dark:text-ink-300">
+        Step-by-step tutorials written in Python and built with Pyronaut. Every guide comes with a complete sample
+        project to download.
+      </p>
+
+      {
+        guides.length === 0 ? (
+          <p class="mt-12 text-base text-ink-500 dark:text-ink-300">No guides yet.</p>
+        ) : (
+          <>
+            <div class="mt-10 flex flex-wrap items-center gap-x-4 gap-y-2">
+              <label class="flex min-w-0 max-w-xl flex-1 basis-72 items-center gap-2.5 rounded-xl border border-ink-200 bg-ink-50 px-3.5 py-2 transition focus-within:border-flame-500 focus-within:ring-4 focus-within:ring-flame-500/15 dark:border-white/10 dark:bg-ink-900 dark:focus-within:border-flame-400">
+                <Glyph name="search" class="size-4.5 shrink-0 text-ink-400" />
+                <span class="sr-only">Search guides</span>
+                <input
+                  id="guide-search"
+                  type="search"
+                  placeholder="Search — security, data, tracing…"
+                  autocomplete="off"
+                  spellcheck="false"
+                  aria-controls="guide-results"
+                  class="min-w-0 flex-1 bg-transparent py-0.5 text-[0.95rem] text-ink-950 outline-none placeholder:text-ink-400 dark:text-white [&::-webkit-search-cancel-button]:appearance-none"
+                />
+              </label>
+              <p id="guide-count" class="text-sm text-ink-500 dark:text-ink-400" aria-live="polite">
+                {guides.length} guides
+              </p>
+            </div>
+            <p id="guide-empty" class="mt-12 text-base text-ink-500 dark:text-ink-300" hidden>
+              No guides match your search.
+            </p>
+          <ul id="guide-results" class="mt-8 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+            {guides.map((guide) => (
+              <li data-guide={[guide.title, guide.intro, ...guide.categories, ...guide.tags, guide.slug].join(" ").toLowerCase()}>
+                <a
+                  href={guideHref(guide)}
+                  class="group flex h-full flex-col rounded-2xl bg-white p-6 ring-1 ring-ink-200 transition hover:-translate-y-1 hover:shadow-[0_24px_48px_-24px_rgba(16,21,36,0.3)] hover:ring-ink-950 dark:bg-ink-900 dark:ring-white/10 dark:hover:ring-flame-500/60"
+                >
+                  <div class="font-mono text-xs font-semibold uppercase tracking-wider">
+                    {guide.categories.slice(0, 1).map((category) => <span class="text-ember-500">{category}</span>)}
+                  </div>
+                  <h2 class="mt-4 text-lg font-bold tracking-tight text-ink-950 dark:text-white">{guide.title}</h2>
+                  <p class="mt-2 flex-1 text-sm leading-6 text-ink-500 dark:text-ink-300">{guide.intro}</p>
+                  <span class="mt-5 inline-flex items-center gap-2 text-sm font-bold text-ink-950 dark:text-white">
+                    Read guide
+                    <Glyph name="arrow-right" class="size-4 text-flame-500 transition group-hover:translate-x-0.5" />
+                  </span>
+                </a>
+              </li>
+            ))}
+          </ul>
+          </>
+        )
+      }
+    </div>
+  </section>
+</PageLayout>
+
+<script>
+  // Filters the cards as you type: every word has to appear in the guide's
+  // title, intro, categories or tags. The query is kept in `?q=`.
+  const search = document.querySelector<HTMLInputElement>("#guide-search");
+  const count = document.querySelector<HTMLElement>("#guide-count");
+  const empty = document.querySelector<HTMLElement>("#guide-empty");
+  const cards = [...document.querySelectorAll<HTMLElement>("#guide-results > [data-guide]")];
+
+  if (search && count && empty) {
+    const filter = () => {
+      const terms = search.value.toLowerCase().split(/\s+/).filter(Boolean);
+      let shown = 0;
+      for (const card of cards) {
+        const match = terms.every((term) => card.dataset.guide!.includes(term));
+        card.hidden = !match;
+        if (match) shown += 1;
+      }
+      count.textContent = terms.length ? `${shown} of ${cards.length} guides` : `${cards.length} guides`;
+      empty.hidden = shown > 0;
+      const url = new URL(location.href);
+      if (search.value.trim()) url.searchParams.set("q", search.value.trim());
+      else url.searchParams.delete("q");
+      history.replaceState(null, "", url);
+    };
+
+    search.value = new URLSearchParams(location.search).get("q") ?? "";
+    search.addEventListener("input", filter);
+    search.addEventListener("keydown", (event) => {
+      if (event.key === "Escape" && search.value) {
+        search.value = "";
+        filter();
+      }
+    });
+    // "/" focuses the search box, as on the launch page.
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "/" && !(event.target instanceof HTMLInputElement)) {
+        event.preventDefault();
+        search.focus();
+      }
+    });
+    filter();
+  }
+</script>

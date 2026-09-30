@@ -2,7 +2,9 @@ name: Publish Upstream Updates
 
 # GitHub Actions cannot subscribe to events in another repository, so this
 # workflow polls micronaut-projects/pyronaut and redeploys the site when the
-# guide sources (src/main/docs) have a commit the published docs don't have.
+# guide sources (src/main/docs) have a commit the published docs don't have,
+# and micronaut-projects/micronaut-guides for a commit the published Python
+# guides don't have.
 
 on:
   schedule:
@@ -22,6 +24,8 @@ env:
   GH_TOKEN: ${{ secrets.GH_TOKEN || github.token }}
   DOCS_REPOSITORY: micronaut-projects/pyronaut
   DOCS_BRANCH: 0.0.x
+  GUIDES_REPOSITORY: micronaut-projects/micronaut-guides
+  GUIDES_BRANCH: master
 
 jobs:
   docs:
@@ -52,3 +56,32 @@ jobs:
       - name: Start docs publish
         if: steps.pending.outputs.publish == 'true'
         run: gh workflow run deploy-pages.yml --repo "$GITHUB_REPOSITORY" --ref main -f docs_ref="${{ steps.pending.outputs.sha }}"
+
+  guides:
+    name: Publish unpublished Python guides
+    runs-on: ubuntu-latest
+    steps:
+      - name: Compare published and upstream guides
+        id: pending
+        run: |
+          set -euo pipefail
+          upstream=$(gh api "repos/$GUIDES_REPOSITORY/commits/$GUIDES_BRANCH" --jq '.sha')
+          site=$(gh api "repos/$GITHUB_REPOSITORY/pages" --jq '.html_url')
+          published=$(curl -fsSL "${site%/}/guides/source.json" | jq -r '.commit // empty' || true)
+          echo "Upstream guides commit: $upstream"
+          echo "Published guides commit: ${published:-none}"
+
+          publish=true
+          if [ -n "$published" ]; then
+            # Up to date when the published commit already contains the branch head.
+            status=$(gh api "repos/$GUIDES_REPOSITORY/compare/$upstream...$published" --jq '.status' || echo unknown)
+            if [ "$status" = "identical" ] || [ "$status" = "ahead" ]; then
+              publish=false
+            fi
+          fi
+          echo "publish=$publish" >> "$GITHUB_OUTPUT"
+          echo "sha=$upstream" >> "$GITHUB_OUTPUT"
+
+      - name: Start guides publish
+        if: steps.pending.outputs.publish == 'true'
+        run: gh workflow run deploy-guides.yml --repo "$GITHUB_REPOSITORY" --ref main -f guides_ref="${{ steps.pending.outputs.sha }}"

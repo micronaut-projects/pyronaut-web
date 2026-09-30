@@ -15,5 +15,6 @@ node_modules/
 # Playwright design-review artifacts
 output/
 
-# rendered by scripts/render-docs.mjs
+# rendered by scripts/render-docs.mjs and scripts/render-guides.mjs
 src/generated/
+public/guides/

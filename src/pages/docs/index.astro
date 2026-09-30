@@ -77,7 +77,7 @@ const tocLink =
         </nav>
         <div class="mt-6 space-y-2 border-t border-ink-100 pt-4 text-sm dark:border-white/10">
           <a href={DOCS_LINKS.micronaut} class:list={[tocLink, "font-medium"]}>Micronaut Docs ↗</a>
-          <a href={DOCS_LINKS.guides} class:list={[tocLink, "font-medium"]}>Pyronaut Guides ↗</a>
+          <a href={DOCS_LINKS.guides} class:list={[tocLink, "font-medium"]}>Pyronaut Guides</a>
           <a href={sourceHref} class:list={[tocLink, "font-medium"]}>Docs source on GitHub ↗</a>
         </div>
       </details>
@@ -101,7 +101,7 @@ const tocLink =
               {
                 href: DOCS_LINKS.guides,
                 title: "Pyronaut Guides",
-                copy: "Step-by-step tutorials, shown in Python with the Pyronaut build tool.",
+                copy: "Step-by-step tutorials in Python, each with a sample project to download.",
               },
             ].map((card) => (
               <a
@@ -119,6 +119,7 @@ const tocLink =
         </div>
       </header>
       <div class="docs-prose" set:html={docs.html} />
+      <script is:inline type="application/json" data-code-properties set:html={JSON.stringify(docs.properties)} />
     </article>
 
     <!-- On this page: the current section's own subsections, desktop only. -->
@@ -147,47 +148,7 @@ const tocLink =
 </PageLayout>
 
 <script>
-  // Copy buttons on code snippets.
-  document.addEventListener("click", async (event) => {
-    const button = (event.target as Element).closest<HTMLButtonElement>("[data-copy]");
-    const code = button?.closest(".snippet")?.querySelector("pre code");
-    if (!button || !code) return;
-    const text = [...code.querySelectorAll(".line")]
-      .map((line) => [...line.childNodes].filter((n) => !(n instanceof Element && n.classList.contains("conum"))).map((n) => n.textContent).join(""))
-      .join("\n");
-    try {
-      await navigator.clipboard.writeText(text);
-      button.dataset.copied = "";
-      setTimeout(() => delete button.dataset.copied, 1500);
-    } catch {
-      // Clipboard access denied; nothing to do.
-    }
-  });
-
-  // Heading "#" permalinks: jump to the section and copy its full URL.
-  document.addEventListener("click", async (event) => {
-    const anchor = (event.target as Element).closest<HTMLAnchorElement>(".docs-prose .anchor");
-    if (!anchor || event.metaKey || event.ctrlKey || event.shiftKey) return;
-    event.preventDefault();
-    history.replaceState(null, "", anchor.hash);
-    anchor.parentElement?.scrollIntoView({ behavior: "smooth" });
-    try {
-      await navigator.clipboard.writeText(anchor.href);
-      anchor.dataset.copied = "";
-      anchor.title = "Link copied";
-      setTimeout(() => {
-        delete anchor.dataset.copied;
-        anchor.title = "Copy link to this section";
-      }, 1500);
-    } catch {
-      // Clipboard access denied; the address bar still has the link.
-    }
-  });
-  for (const anchor of document.querySelectorAll<HTMLAnchorElement>(".docs-prose .anchor")) {
-    anchor.title = "Copy link to this section";
-    anchor.removeAttribute("aria-hidden");
-    anchor.setAttribute("aria-label", `Copy link to ${anchor.parentElement?.textContent?.trim() ?? "this section"}`);
-  }
+  import "@/scripts/prose";
 
   const tocPanel = document.querySelector<HTMLDetailsElement>("[data-docs-toc]");
   const desktop = window.matchMedia("(min-width: 64rem)");

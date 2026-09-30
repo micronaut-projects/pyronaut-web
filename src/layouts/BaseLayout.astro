@@ -13,6 +13,10 @@ const {
   description = SITE_DESCRIPTION,
   bodyClass = "",
 } = Astro.props;
+
+// The preferred address of this page, and link previews, need absolute URLs.
+const canonical = new URL(Astro.url.pathname, Astro.site).href;
+const socialImage = new URL("/pyronaut-assets/social-card.png", Astro.site).href;
 ---
 
 <!doctype html>
@@ -21,10 +25,19 @@ const {
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:type" content="website" />
     <meta property="og:site_name" content={SITE_NAME} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
-    <meta property="og:image" content="/pyronaut-assets/mascot.png" />
+    <meta property="og:image" content={socialImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={socialImage} />
     <link rel="icon" type="image/png" href="/pyronaut-assets/favicon.png" />
     <meta name="color-scheme" content="light dark" />
     <script is:inline>
