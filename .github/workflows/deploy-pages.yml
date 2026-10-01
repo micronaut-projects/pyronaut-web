@@ -67,6 +67,7 @@ jobs:
       - run: npm ci
       - run: npm run build
         env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN || github.token }}
           PYRONAUT_DOCS_REF: ${{ github.event.client_payload.sha || inputs.docs_ref || '0.0.x' }}
           MICRONAUT_GUIDES_DIR: ${{ github.workspace }}/external/micronaut-guides
           GUIDES_REPOSITORY: ${{ inputs.guides_repository || 'micronaut-projects/micronaut-guides' }}
