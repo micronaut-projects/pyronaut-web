@@ -40,7 +40,12 @@ function checkout() {
   git("init", "-q");
   git("remote", "add", "origin", `https://github.com/${REPO}.git`);
   git("sparse-checkout", "set", "--no-cone", "/src/main/docs/", "/gradle.properties");
-  git("fetch", "-q", "--depth", "1", "origin", REF);
+  // pyronaut may be private: authenticate the fetch when a token is available.
+  const token = process.env.GH_TOKEN || process.env.GITHUB_TOKEN;
+  const auth = token
+    ? ["-c", `http.https://github.com/.extraheader=AUTHORIZATION: basic ${Buffer.from(`x-access-token:${token}`).toString("base64")}`]
+    : [];
+  git(...auth, "fetch", "-q", "--depth", "1", "origin", REF);
   git("checkout", "-q", "FETCH_HEAD");
   return dir;
 }
