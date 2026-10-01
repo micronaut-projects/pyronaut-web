@@ -45,7 +45,7 @@ jobs:
           path: external/micronaut-guides
       - uses: actions/setup-node@v4
         with:
-          node-version: 22
+          node-version: 24
           cache: npm
       # The guides build generates each Python guide's sample project with
       # Micronaut Starter; scripts/render-guides.mjs runs it.
