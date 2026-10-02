@@ -324,12 +324,13 @@ class BookRepository(CrudRepository[Book, int], Protocol):
     def findByTitelContains(self, fragment: str) -> list[Book]: ...
 ```
 
-Pyronaut refuses to compile it and tells you exactly what is wrong:
+Pyronaut refuses to process it and tells you exactly what is wrong:
 
 ```
-Compiling main.py...
-Compilation of 1 source failed (2.6s)
-Direct source launch failed: java.lang.RuntimeException: Pyronaut processing failed: Unable to implement Repository method: python.BookRepository.findByTitelContains(String fragment). Cannot query entity [Book] on non-existent property: Titel [title]
+$ pyronaut process
+Checking main sources...
+Full rebuild selected for main sources (2 files)
+Processing failed: Pyronaut processing failed: Unable to implement Repository method: python.BookRepository.findByTitelContains(String fragment). Cannot query entity [Book] on non-existent property: Titel [title]
 ```
 
 Configuration gets the same treatment. `pyronaut validate-config` checks your `application.toml` against the resolved application classpath, and `pyronaut dev`, `pyronaut run` and `pyronaut test` run the same validation automatically before your application starts, writing JSON and HTML reports to `__pyronaut__/reports/config-validation`:
@@ -353,7 +354,7 @@ pyronaut build main.py --jvm --docker
 Building a Docker image on top of the Crema base image, which gives you native startup time and memory usage without a per-application native image build:
 
 ```bash
-pyronaut build main.py --native-base=default --docker
+pyronaut build main.py --native-base --docker
 ```
 
 With Crema only the reusable base image is ever built with native image. Subsequent application builds just add your processed classes and dependencies as a thin layer on top, so you don't pay the cost of a native image build every time your code changes.
