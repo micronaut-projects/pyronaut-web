@@ -149,7 +149,7 @@ preview the generated files, copy a link, or download the ZIP.
   network. Refresh it when the starter or the denylist changes:
 
   ```sh
-  node scripts/sync-starter.mjs                    # snapshot.micronaut.io
+  node scripts/sync-starter.mjs                    # launch.micronaut.io
   node scripts/sync-starter.mjs https://launch.micronaut.io
   ```
 
