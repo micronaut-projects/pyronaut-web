@@ -759,6 +759,11 @@ const secondaryButton =
     setTimeout(() => URL.revokeObjectURL(url), 1000);
   }
 
+  // Google Analytics event; gtag is only loaded in production (BaseLayout).
+  function trackGenerated() {
+    (window as { gtag?: (...args: unknown[]) => void }).gtag?.("event", "GenerateProject");
+  }
+
   form.addEventListener("submit", async (event) => {
     event.preventDefault();
     if (!validate()) {
@@ -775,6 +780,7 @@ const secondaryButton =
         // Cross-origin fetch blocked: navigate instead — the API answers with
         // Content-Disposition: attachment, so the page stays put.
         location.assign(starterUrl(PUBLIC_API, "create", project));
+        trackGenerated();
         showNextSteps();
         return;
       }
@@ -783,6 +789,7 @@ const secondaryButton =
         return;
       }
       save(await response.blob(), `${project.name}.zip`);
+      trackGenerated();
       showNextSteps();
     } finally {
       generateButton.disabled = false;
