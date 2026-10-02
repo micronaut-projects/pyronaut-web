@@ -1,8 +1,8 @@
 ---
-slug: 2026/10/05/introducing-pyronaut
+slug: 2026/10/02/introducing-pyronaut
 title: Introducing Pyronaut
 description: Pyronaut is a high-performance Python application framework for building production services with rich data access, observability, cloud integrations, build-time validation, integrated testing, and enterprise support.
-date: '2026-10-05T10:00:00'
+date: '2026-10-02T10:00:00'
 category: announcements
 categories:
   - announcements
@@ -10,7 +10,7 @@ tags:
   - pyronaut
   - python
   - graalpy
-href: /2026/10/05/introducing-pyronaut/
+href: /2026/10/02/introducing-pyronaut/
 ---
 
 Today we are pleased to announce the availability of [Pyronaut](https://pyronaut.io), a high-performance Python application platform for building production-ready services built on [GraalVM](https://graalvm.org) and [Micronaut](https://micronaut.io).
@@ -557,6 +557,6 @@ From there, read the [documentation](/docs/), follow the [guides](https://guides
 
 ## See Pyronaut live at Devoxx
 
-If you are at [Devoxx Belgium](https://devoxx.be) in Antwerp this week, come and see Thomas Wuerthinger and me present [Faster Development with Java, Python, and Micronaut](https://m.devoxx.com/events/dvbe26/talks/16444/faster-development-with-java-python-and-micronaut) on Thursday 8 October at 15:00.
+If you are at [Devoxx Belgium](https://devoxx.be) in Antwerp next week, come and see Thomas Wuerthinger and me present [Faster Development with Java, Python, and Micronaut](https://m.devoxx.com/events/dvbe26/talks/16444/faster-development-with-java-python-and-micronaut) on Thursday 8 October at 15:00.
 
 We will be showing the pre-compiled, pre-optimized Micronaut runtime built on GraalVM that powers Pyronaut, and how it gives you fast startup, a low memory footprint and a consistent programming model across Java, Kotlin and Python, all without waiting on a native image build every time you change your code. Come and say hello!
