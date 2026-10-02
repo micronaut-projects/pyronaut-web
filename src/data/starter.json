@@ -1,6 +1,6 @@
 {
-  "api": "https://snapshot.micronaut.io",
-  "micronautVersion": "5.2.0-SNAPSHOT",
+  "api": "https://launch.micronaut.io",
+  "micronautVersion": "5.2.1",
   "lang": "PYTHON",
   "build": "PYRONAUT",
   "test": "PYTEST",

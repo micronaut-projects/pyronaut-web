@@ -10,7 +10,7 @@
 
 import { writeFile } from "node:fs/promises";
 
-const api = (process.argv[2] ?? "https://snapshot.micronaut.io").replace(/\/$/, "");
+const api = (process.argv[2] ?? "https://launch.micronaut.io").replace(/\/$/, "");
 const output = new URL("../src/data/starter.json", import.meta.url);
 
 // Categories the starter reports as Python-compatible but that only make
@@ -64,10 +64,12 @@ const [options, { types }, { versions }] = await Promise.all([
   get("/versions"),
 ]);
 
-const python = options.lang.options.find((option) => option.value === "PYTHON");
-if (!python) {
-  throw new Error(`${api} does not support Python yet`);
-}
+// The release API (launch.micronaut.io) generates Python projects but doesn't
+// list Python among its languages, so fall back to the Pyronaut defaults.
+const python = options.lang.options.find((option) => option.value === "PYTHON") ?? {
+  value: "PYTHON",
+  defaults: { build: "PYRONAUT", test: "PYTEST" },
+};
 
 // Features are shared across application types; store each one once.
 const features = {};

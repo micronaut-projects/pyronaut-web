@@ -1,0 +1,35 @@
+name: Deploy Docs
+
+# Republishes the Pyronaut docs. The docs are pages of this site (/docs/), so
+# publishing them is a site deploy pinned to a pyronaut revision.
+
+on:
+  workflow_dispatch:
+    inputs:
+      docs_ref:
+        description: Pyronaut branch, tag, or SHA to render the docs from (default the latest release)
+        required: false
+        default: ""
+
+permissions:
+  actions: write
+  contents: read
+
+concurrency:
+  group: docs-pages
+  cancel-in-progress: false
+
+run-name: Publish docs from ${{ inputs.docs_ref || 'the latest release' }}
+
+jobs:
+  publish:
+    name: Publish docs to the site
+    runs-on: ubuntu-latest
+    steps:
+      - name: Start site deploy
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN || github.token }}
+          DOCS_REF: ${{ inputs.docs_ref }}
+        run: |
+          gh workflow run deploy-pages.yml --repo "$GITHUB_REPOSITORY" --ref main \
+            -f docs_ref="$DOCS_REF"

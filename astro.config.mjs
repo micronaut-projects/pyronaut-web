@@ -19,7 +19,7 @@ export default defineConfig({
       // /launch/ page talks to it through this proxy during development.
       proxy: {
         "/starter-api": {
-          target: process.env.PUBLIC_STARTER_API ?? "https://snapshot.micronaut.io",
+          target: process.env.PUBLIC_STARTER_API ?? "https://launch.micronaut.io",
           changeOrigin: true,
           rewrite: (path) => path.replace(/^\/starter-api/, ""),
         },
