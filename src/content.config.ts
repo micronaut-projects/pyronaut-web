@@ -4,7 +4,7 @@ import { z } from "astro/zod";
 
 /**
  * Blog posts live under `src/content/blog/YYYY/MM/DD/<name>.md`, mirroring
- * the micronaut-web layout. `slug` is the public route (`2026/09/23/<name>`).
+ * the micronaut-web layout. `slug` is the public route (`2026/10/05/<name>`).
  */
 const blogPosts = defineCollection({
   loader: glob({
