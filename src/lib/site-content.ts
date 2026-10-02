@@ -16,6 +16,7 @@ export const DOCS_LINKS = {
   pyronaut: "/docs/",
   micronaut: "https://docs.micronaut.io/?lang=python&build=pyronaut",
   guides: "/guides/",
+  micronautGuides: "https://guides.micronaut.io/latest/index.html",
 };
 
 export interface Feature {

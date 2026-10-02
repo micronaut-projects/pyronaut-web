@@ -90,7 +90,17 @@ const tocLink =
           Pyronaut
         </h1>
         <!-- More documentation beyond this guide, opened with Python / Pyronaut selected. -->
-        <div class="mt-8 grid gap-3 sm:grid-cols-2">
+        <a
+          href={DOCS_LINKS.guides}
+          class="group mt-8 block rounded-xl border border-ink-200 p-4 transition hover:border-flame-400 hover:bg-flame-500/5 dark:border-white/10 dark:hover:border-flame-400"
+        >
+          <span class="flex items-center justify-between font-semibold text-ink-950 dark:text-white">
+            Pyronaut Guides
+            <span class="text-ink-400 transition group-hover:translate-x-0.5 group-hover:text-flame-500" aria-hidden="true">↗</span>
+          </span>
+          <span class="mt-1 block text-sm text-ink-600 dark:text-ink-300">Step-by-step tutorials in Python, each with a sample project to download.</span>
+        </a>
+        <div class="mt-3 grid gap-3 sm:grid-cols-2">
           {
             [
               {
@@ -99,9 +109,9 @@ const tocLink =
                 copy: "Reference for the Micronaut framework and modules Pyronaut builds on.",
               },
               {
-                href: DOCS_LINKS.guides,
-                title: "Pyronaut Guides",
-                copy: "Step-by-step tutorials in Python, each with a sample project to download.",
+                href: DOCS_LINKS.micronautGuides,
+                title: "Micronaut Guides",
+                copy: "The full Micronaut guides catalog, covering Java, Kotlin and Groovy.",
               },
             ].map((card) => (
               <a
