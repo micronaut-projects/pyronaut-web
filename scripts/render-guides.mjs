@@ -28,6 +28,18 @@ const PUBLIC_DIR = path.resolve("public/guides");
 const ROUTE = "/guides";
 const SITE = "https://pyronaut.io";
 const UPSTREAM_SITE = "https://guides.micronaut.io/latest";
+// Opens Micronaut docs pages on Python / Pyronaut code and TOML configuration,
+// like the site's other docs.micronaut.io links.
+const DOCS_SITE = "https://docs.micronaut.io/";
+const DOCS_QUERY = { lang: "python", build: "pyronaut", "config-format": "toml" };
+
+// Javadoc pages have no code or configuration tabs, so they are left alone.
+function withDocsQuery(value) {
+  if (!value.startsWith(DOCS_SITE) || /\/api\//.test(value)) return value;
+  const url = new URL(value);
+  for (const [name, setting] of Object.entries(DOCS_QUERY)) url.searchParams.set(name, setting);
+  return url.href;
+}
 const OPTION = "pyronaut-python";
 const force = process.argv.includes("--force");
 // CI must publish what it was asked to; locally a missing JDK or network
@@ -171,6 +183,7 @@ function rewriteUrls(html, slugs, images) {
 
 function rewriteTagUrls(tag, slugs, images) {
   return tag.replace(/\b(href|src)="([^"]*)"/g, (whole, attribute, value) => {
+    if (attribute === "href" && value.startsWith(DOCS_SITE)) return `href="${withDocsQuery(value.replace(/&amp;/g, "&")).replace(/&/g, "&amp;")}"`;
     // Links to this site stay on whichever host serves it.
     if (value.startsWith(`${SITE}/`)) {
       const target = value.slice(SITE.length);
