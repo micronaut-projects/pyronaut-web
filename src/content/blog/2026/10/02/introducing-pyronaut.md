@@ -212,7 +212,7 @@ Pyronaut is a source code processor for Python that analyzes the Python sources 
 
 What this means in practice is that every part of Micronaut "just works" in Python and Python developers have fully fledged access to the entirety of the platform.
 
-You can write serializable data classes with [Micronaut Serialization](https://micronaut-projects.github.io/micronaut-serialization/latest/guide/#introduction) which computes build time serializers/deserializers that provide fast efficient JSON serialization/deserialization:
+You can write serializable data classes with [Micronaut Serialization](https://docs.micronaut.io/5.2.x/serde/?lang=python&build=pyronaut&config-format=toml#serde-introduction) which computes build time serializers/deserializers that provide fast efficient JSON serialization/deserialization:
 
 ```python
 from dataclasses import dataclass
