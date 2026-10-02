@@ -9,7 +9,7 @@ import {
   postCategories,
 } from "@/lib/blog";
 
-/** Blog posts are served at their dated slug, e.g. /2026/10/05/<name>/. */
+/** Blog posts are served at their dated slug, e.g. /2026/10/02/<name>/. */
 export async function getStaticPaths() {
   const posts = await getBlogPosts();
   return posts.map((post) => ({
