@@ -164,7 +164,13 @@ function headings(html) {
 // page, ZIP and image is a sibling file. Point those at this site's routes,
 // and at the upstream site for guides that have no Python variant.
 function rewriteUrls(html, slugs, images) {
-  return html.replace(/\b(href|src)="([^"]*)"/g, (whole, attribute, value) => {
+  // Only attributes of real tags: a code sample's own `href="` or `src="` is
+  // text, which highlighting splits across spans.
+  return html.replace(/<[a-z][a-z0-9]*\b(?:[^>"']|"[^"]*"|'[^']*')*>/gi, (tag) => rewriteTagUrls(tag, slugs, images));
+}
+
+function rewriteTagUrls(tag, slugs, images) {
+  return tag.replace(/\b(href|src)="([^"]*)"/g, (whole, attribute, value) => {
     // Links to this site stay on whichever host serves it.
     if (value.startsWith(`${SITE}/`)) {
       const target = value.slice(SITE.length);
