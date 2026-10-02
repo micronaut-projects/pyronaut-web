@@ -28,7 +28,7 @@ const helloCode = `@Get("/hello/{name}")
 def hello(name: str):
     return {"message": f"Hello, {name}"}`;
 
-const createCommand = "pyronaut create rocket-service";
+const createCommands = ["pip install pyronaut", "pyronaut create rocket-service"];
 
 // A sparse, seeded starfield for the dark bands — deterministic so the
 // build is stable, uneven so it doesn't read as a pattern.
@@ -99,11 +99,17 @@ const btnGhost =
           <div
             class="mt-8 flex max-w-md items-center gap-3 rounded-md border border-white/10 bg-white/[0.04] py-2 pl-4 pr-2 font-mono text-sm"
           >
-            <span class="select-none text-flame-400">$</span>
-            <code class="flex-1 truncate text-ink-100">{createCommand}</code>
+            <code class="flex min-w-0 flex-1 flex-col text-ink-100">
+              {createCommands.map((command) => (
+                <span class="truncate">
+                  <span class="select-none text-flame-400">$ </span>
+                  {command}
+                </span>
+              ))}
+            </code>
             <button
               type="button"
-              data-copy={createCommand}
+              data-copy={createCommands.join("\n")}
               class="rounded px-2 py-1 font-sans text-xs font-medium text-ink-400 transition hover:bg-white/10 hover:text-white"
             >
               Copy
