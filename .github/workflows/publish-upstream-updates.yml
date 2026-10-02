@@ -1,10 +1,10 @@
 name: Publish Upstream Updates
 
 # GitHub Actions cannot subscribe to events in another repository, so this
-# workflow polls micronaut-projects/pyronaut and redeploys the site when the
-# guide sources (src/main/docs) have a commit the published docs don't have,
-# and micronaut-projects/micronaut-guides for a commit the published Python
-# guides don't have.
+# workflow polls micronaut-projects/pyronaut and redeploys the site when a
+# release is published that the published docs weren't rendered from, and
+# micronaut-projects/micronaut-guides for a commit the published Python guides
+# don't have.
 
 on:
   schedule:
@@ -23,39 +23,35 @@ concurrency:
 env:
   GH_TOKEN: ${{ secrets.GH_TOKEN || github.token }}
   DOCS_REPOSITORY: micronaut-projects/pyronaut
-  DOCS_BRANCH: 0.0.x
   GUIDES_REPOSITORY: micronaut-projects/micronaut-guides
   GUIDES_BRANCH: master
 
 jobs:
   docs:
-    name: Publish unpublished Pyronaut docs
+    name: Publish the latest Pyronaut release docs
     runs-on: ubuntu-latest
     steps:
-      - name: Compare published and upstream docs
+      - name: Compare published docs and latest release
         id: pending
         run: |
           set -euo pipefail
-          upstream=$(gh api "repos/$DOCS_REPOSITORY/commits?sha=$DOCS_BRANCH&path=src/main/docs&per_page=1" --jq '.[0].sha')
+          # Newest non-draft release, pre-releases included (/releases/latest skips them).
+          latest=$(gh api "repos/$DOCS_REPOSITORY/releases?per_page=20" --jq '[.[] | select(.draft | not)][0].tag_name // empty')
           site=$(gh api "repos/$GITHUB_REPOSITORY/pages" --jq '.html_url')
-          published=$(curl -fsSL "${site%/}/docs/source.json" | jq -r '.commit // empty' || true)
-          echo "Upstream docs commit: $upstream"
-          echo "Published docs commit: ${published:-none}"
+          published=$(curl -fsSL "${site%/}/docs/source.json" | jq -r '.ref // empty' || true)
+          echo "Latest release: ${latest:-none}"
+          echo "Published docs ref: ${published:-none}"
 
-          publish=true
-          if [ -n "$published" ]; then
-            # Up to date when the published commit already contains the latest docs change.
-            status=$(gh api "repos/$DOCS_REPOSITORY/compare/$upstream...$published" --jq '.status' || echo unknown)
-            if [ "$status" = "identical" ] || [ "$status" = "ahead" ]; then
-              publish=false
-            fi
+          publish=false
+          if [ -n "$latest" ] && [ "$latest" != "$published" ]; then
+            publish=true
           fi
           echo "publish=$publish" >> "$GITHUB_OUTPUT"
-          echo "sha=$upstream" >> "$GITHUB_OUTPUT"
+          echo "tag=$latest" >> "$GITHUB_OUTPUT"
 
       - name: Start docs publish
         if: steps.pending.outputs.publish == 'true'
-        run: gh workflow run deploy-pages.yml --repo "$GITHUB_REPOSITORY" --ref main -f docs_ref="${{ steps.pending.outputs.sha }}"
+        run: gh workflow run deploy-pages.yml --repo "$GITHUB_REPOSITORY" --ref main -f docs_ref="${{ steps.pending.outputs.tag }}"
 
   guides:
     name: Publish unpublished Python guides

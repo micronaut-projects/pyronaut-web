@@ -1,12 +1,15 @@
-// Renders the Pyronaut user guide (micronaut-projects/pyronaut, branch 0.0.x,
-// src/main/docs) into src/generated/docs.json for the /docs/ page.
+// Renders the Pyronaut user guide (micronaut-projects/pyronaut, src/main/docs)
+// of the latest published release into src/generated/docs.json for the /docs/
+// page, so the docs and their version match what users can install.
 //
 // Mirrors how micronaut-web renders Micronaut docs: guide/toc.yml drives the
 // section order and numbering, every section is its own .adoc file rendered by
 // Asciidoctor, and code listings are highlighted with Shiki at build time so no
 // highlighter ships to the browser.
 //
-// Set PYRONAUT_DOCS_REF to render a specific commit, or PYRONAUT_DOCS_DIR to a local pyronaut checkout to skip the git fetch.
+// Set PYRONAUT_DOCS_REF to render a specific branch, tag, or commit (e.g. 0.0.x
+// for the snapshot docs), or PYRONAUT_DOCS_DIR to a local pyronaut checkout to
+// skip the git fetch.
 import { convert } from "@asciidoctor/core";
 import { execFileSync } from "node:child_process";
 import { existsSync, mkdtempSync, readFileSync, promises as fs } from "node:fs";
@@ -18,8 +21,10 @@ import { configurationHints } from "./lib/configuration.mjs";
 
 const REPO = "micronaut-projects/pyronaut";
 const BRANCH = process.env.PYRONAUT_DOCS_BRANCH ?? "0.0.x";
-// A commit SHA or tag to render instead of the branch head (publish workflows).
-const REF = process.env.PYRONAUT_DOCS_REF || BRANCH;
+const token = process.env.GH_TOKEN || process.env.GITHUB_TOKEN;
+// The release tag the docs are rendered from, unless a ref is given explicitly.
+const TAG = process.env.PYRONAUT_DOCS_REF || process.env.PYRONAUT_DOCS_DIR ? "" : await latestReleaseTag();
+const REF = process.env.PYRONAUT_DOCS_REF || TAG || BRANCH;
 const OUTPUT = path.resolve("src/generated/docs.json");
 
 const repoDir = process.env.PYRONAUT_DOCS_DIR ?? checkout();
@@ -34,6 +39,23 @@ const commit = (() => {
   }
 })();
 
+// The newest published (non-draft) release, pre-releases included: every
+// Pyronaut release so far is a pre-release, which /releases/latest ignores.
+async function latestReleaseTag() {
+  try {
+    const response = await fetch(`https://api.github.com/repos/${REPO}/releases?per_page=20`, {
+      headers: { Accept: "application/vnd.github+json", ...(token ? { Authorization: `Bearer ${token}` } : {}) },
+    });
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+    const release = (await response.json()).find((r) => !r.draft);
+    if (release) return release.tag_name;
+    console.warn(`No published ${REPO} release; rendering the ${BRANCH} docs`);
+  } catch (error) {
+    console.warn(`Could not look up the latest ${REPO} release (${error.message}); rendering the ${BRANCH} docs`);
+  }
+  return "";
+}
+
 function checkout() {
   const dir = mkdtempSync(path.join(os.tmpdir(), "pyronaut-docs-"));
   const git = (...args) => execFileSync("git", args, { cwd: dir, stdio: "inherit" });
@@ -41,7 +63,6 @@ function checkout() {
   git("remote", "add", "origin", `https://github.com/${REPO}.git`);
   git("sparse-checkout", "set", "--no-cone", "/src/main/docs/", "/gradle.properties");
   // pyronaut may be private: authenticate the fetch when a token is available.
-  const token = process.env.GH_TOKEN || process.env.GITHUB_TOKEN;
   const auth = token
     ? ["-c", `http.https://github.com/.extraheader=AUTHORIZATION: basic ${Buffer.from(`x-access-token:${token}`).toString("base64")}`]
     : [];
@@ -201,10 +222,11 @@ await fs.writeFile(
   JSON.stringify({
     version: properties.projectVersion ?? "",
     branch: BRANCH,
+    ref: REF,
     commit,
     toc: stripFiles(toc),
     properties: await configurationHints(takeListings()),
     html,
   }),
 );
-console.log(`Rendered Pyronaut docs (${BRANCH} @ ${commit.slice(0, 7)}, ${reserved.size} sections) → ${path.relative(process.cwd(), OUTPUT)}`);
+console.log(`Rendered Pyronaut docs ${properties.projectVersion ?? ""} (${REF} @ ${commit.slice(0, 7)}, ${reserved.size} sections) → ${path.relative(process.cwd(), OUTPUT)}`);

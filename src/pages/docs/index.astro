@@ -17,7 +17,7 @@ interface TocNode {
 const toc = docs.toc as TocNode[];
 const flatten = (nodes: TocNode[]): TocNode[] => nodes.flatMap((node) => [node, ...flatten(node.children)]);
 const sections = flatten(toc).filter((node) => node.headings.length > 0);
-const sourceHref = `https://github.com/micronaut-projects/pyronaut/tree/${docs.branch}/src/main/docs`;
+const sourceHref = `https://github.com/micronaut-projects/pyronaut/tree/${docs.ref || docs.branch}/src/main/docs`;
 
 const tocLink =
   "block rounded-md py-1 pr-2 text-ink-600 transition hover:text-ink-950 dark:text-ink-300 dark:hover:text-white";
