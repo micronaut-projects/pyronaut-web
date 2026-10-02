@@ -54,7 +54,7 @@ pyronaut run main.py
 
 Micronaut is built on Netty, one of the most scalable and performant asynchronous frameworks in the world in any language.
 
-With Pyronaut your Python code is served by that same Netty-based HTTP server and optimized by the Graal JIT. In our benchmarks that means more than twice the throughput of the next fastest Python framework, at lower latency (more on that [later in this post](#jvm-level-performance-for-python-services)).
+With Pyronaut your Python code is served by that same Netty-based HTTP server and optimized by the Graal JIT. In our benchmarks that means 2.6 times the throughput of FastAPI and 6.5 times that of Flask, at lower latency (more on that [later in this post](#jvm-level-performance-for-python-services)).
 
 We wired the Python `asyncio` plumbing directly into the Netty event loop so that you can natively use `async/await` with Pyronaut to write scalable non-blocking services.
 
@@ -136,7 +136,7 @@ async def repo(owner: str, name: str) -> Repo:
 
 Most Python web frameworks leave data access up to you. You pick an ORM, wire up sessions and find out at runtime whether your queries actually work.
 
-Pyronaut includes [Micronaut Data](https://docs.micronaut.io/5.2.x/data/?lang=python&build=pyronaut), which lets you define repositories in Python and precomputes SQL queries at build time for your favourite database. There is no runtime query translation, and a query that references a property that doesn't exist fails the build instead of a request in production:
+Pyronaut includes [Micronaut Data](https://docs.micronaut.io/5.2.x/data/?lang=python&build=pyronaut&config-format=toml), which lets you define repositories in Python and precomputes SQL queries at build time for your favourite database. There is no runtime query translation, and a query that references a property that doesn't exist fails the build instead of a request in production:
 
 ```python
 from dataclasses import dataclass
@@ -280,7 +280,7 @@ paths:
                 type: string
 ```
 
-You can define message consumers and producers in [Kafka](https://docs.micronaut.io/5.2.x/kafka/#kafka-kafkaQuickStart?lang=python&build=pyronaut), [RabbitMQ](https://docs.micronaut.io/5.2.x/rabbitmq/#rabbitmq-quickStart), [JMS](https://docs.micronaut.io/5.2.x/jms/#jms-quickStart) and other messaging systems using Python:
+You can define message consumers and producers in [Kafka](https://docs.micronaut.io/5.2.x/kafka/?lang=python&build=pyronaut&config-format=toml#kafka-kafkaQuickStart), [RabbitMQ](https://docs.micronaut.io/5.2.x/rabbitmq/?lang=python&build=pyronaut&config-format=toml#rabbitmq-quickStart), [JMS](https://docs.micronaut.io/5.2.x/jms/?lang=python&build=pyronaut&config-format=toml#jms-quickStart) and other messaging systems using Python:
 
 ```python
 from micronaut.configuration.kafka.annotation import KafkaKey, KafkaListener, OffsetReset, Topic
@@ -294,7 +294,7 @@ class ProductListener:
         LOG.info("Got Product - %s by %s", name, brand)
 ```
 
-And you can write highly performant, low memory [MCP Tools](https://docs.micronaut.io/5.2.x/mcp) using Pyronaut:
+And you can write highly performant, low memory [MCP Tools](https://docs.micronaut.io/5.2.x/mcp?lang=python&build=pyronaut&config-format=toml) using Pyronaut:
 
 ```python
 from micronaut.context.annotation import Requires, Prototype
@@ -324,12 +324,13 @@ class BookRepository(CrudRepository[Book, int], Protocol):
     def findByTitelContains(self, fragment: str) -> list[Book]: ...
 ```
 
-Pyronaut refuses to compile it and tells you exactly what is wrong:
+Pyronaut refuses to process it and tells you exactly what is wrong:
 
 ```
-Compiling main.py...
-Compilation of 1 source failed (2.6s)
-Direct source launch failed: java.lang.RuntimeException: Pyronaut processing failed: Unable to implement Repository method: python.BookRepository.findByTitelContains(String fragment). Cannot query entity [Book] on non-existent property: Titel [title]
+$ pyronaut process
+Checking main sources...
+Full rebuild selected for main sources (2 files)
+Processing failed: Pyronaut processing failed: Unable to implement Repository method: python.BookRepository.findByTitelContains(String fragment). Cannot query entity [Book] on non-existent property: Titel [title]
 ```
 
 Configuration gets the same treatment. `pyronaut validate-config` checks your `application.toml` against the resolved application classpath, and `pyronaut dev`, `pyronaut run` and `pyronaut test` run the same validation automatically before your application starts, writing JSON and HTML reports to `__pyronaut__/reports/config-validation`:
@@ -353,7 +354,7 @@ pyronaut build main.py --jvm --docker
 Building a Docker image on top of the Crema base image, which gives you native startup time and memory usage without a per-application native image build:
 
 ```bash
-pyronaut build main.py --native-base=default --docker
+pyronaut build main.py --native-base --docker
 ```
 
 With Crema only the reusable base image is ever built with native image. Subsequent application builds just add your processed classes and dependencies as a thin layer on top, so you don't pay the cost of a native image build every time your code changes.
@@ -435,13 +436,13 @@ Performance has been a big focus of Micronaut and GraalVM since forever. We have
 
 That philosophy is no different today and with Pyronaut it already provides more throughput at reduced latency than any other comparable Python framework.
 
-We drove Pyronaut, Emmett on Granian and Flask on Gunicorn with the same Hyperfoil load ramp over HTTPS/HTTP2 against the same 3 OCPU VM. A step only counts if it meets every latency SLA (p50 under 100ms, p95 under 200ms, p99 under 1s). Pyronaut sustained 33,802 requests per second, more than twice the next fastest Python framework and nearly six times Flask:
+We drove Pyronaut, FastAPI on Granian and Flask on Gunicorn with the same Hyperfoil load ramp over HTTPS/HTTP2 against the same 3 OCPU VM. A step only counts if it meets every latency SLA (p50 under 100ms, p95 under 200ms, p99 under 1s). Pyronaut sustained 35,351 requests per second, 2.6 times FastAPI and 6.5 times Flask:
 
-![Sustained throughput: Pyronaut 33,802 req/s, Emmett + Granian at least 14,569 req/s, Flask + Gunicorn 5,675 req/s](/pyronaut-assets/blog/introducing-pyronaut/performance-throughput.png)
+![Sustained throughput: Pyronaut 35,351 req/s, FastAPI + Granian 13,576 req/s, Flask + Gunicorn 5,453 req/s](/pyronaut-assets/blog/introducing-pyronaut/performance-throughput.png)
 
-And latency stays flat as the load increases, with p99 latency under 1ms all the way up to around 18,000 requests per second:
+And latency stays flat as the load increases, with p99 latency under 1ms all the way up to around 22,000 requests per second. At 11,655 requests per second, Pyronaut's p99 latency was 0.51ms compared to 6.62ms for FastAPI:
 
-![p99 latency as load increases, on a log scale. Pyronaut stays near 0.5ms until around 15k req/s and reaches about 2ms at 28k req/s, while Emmett and Flask climb sooner](/pyronaut-assets/blog/introducing-pyronaut/performance-latency.png)
+![p99 latency as load increases, on a log scale. Pyronaut stays near 0.5ms until around 12k req/s and reaches about 2.5ms at 35.6k req/s, while FastAPI and Flask climb much sooner](/pyronaut-assets/blog/introducing-pyronaut/performance-latency.png)
 
 The test setup, along with the p50 and p95 numbers, is available on the [performance page](https://pyronaut.io/performance/).
 
@@ -552,7 +553,7 @@ Then follow along with one of these:
 - [Performance benchmarks](https://pyronaut.io/performance/)
 - [The Pyronaut full stack template](https://github.com/micronaut-projects/pyronaut-full-stack-template)
 
-From there, read the [documentation](/docs/), follow the [guides](https://guides.micronaut.io/latest/index.html?language=python&lang=python&build=pyronaut), and let us know what you build on [GitHub](https://github.com/micronaut-projects/pyronaut). Pyronaut is part of Micronaut, a Commonhaus Foundation project, and we look forward to building it with you.
+From there, read the [documentation](/docs/), follow the [guides](/guides/), and let us know what you build on [GitHub](https://github.com/micronaut-projects/pyronaut). Pyronaut is part of Micronaut, a Commonhaus Foundation project, and we look forward to building it with you.
 
 
 ## See Pyronaut live at Devoxx

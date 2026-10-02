@@ -14,7 +14,7 @@ export const SITE_DESCRIPTION =
  */
 export const DOCS_LINKS = {
   pyronaut: "/docs/",
-  micronaut: "https://docs.micronaut.io/?lang=python&build=pyronaut",
+  micronaut: "https://docs.micronaut.io/?lang=python&build=pyronaut&config-format=toml",
   guides: "/guides/",
   micronautGuides: "https://guides.micronaut.io/latest/index.html",
 };
@@ -38,13 +38,13 @@ export const FEATURES: Feature[] = [
     title: "Rich data access",
     copy: "Define data access declaratively in Python. Pyronaut generates repository implementations and precomputes queries at build time, with a consistent programming model across supported databases.",
     icon: "annotations",
-    href: "https://docs.micronaut.io/latest/data/?lang=python&build=pyronaut",
+    href: "https://docs.micronaut.io/latest/data/?lang=python&build=pyronaut&config-format=toml",
   },
   {
     title: "Production observability",
     copy: "Understand how your service behaves in production. Pyronaut brings together traces, correlated logs, health checks, and metrics with integrated Micrometer and OpenTelemetry support.",
     icon: "gauge",
-    href: "https://docs.micronaut.io/latest/micrometer/?lang=python&build=pyronaut",
+    href: "https://docs.micronaut.io/latest/micrometer/?lang=python&build=pyronaut&config-format=toml",
   },
   {
     title: "Cloud integrations",
