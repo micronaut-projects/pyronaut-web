@@ -18,3 +18,4 @@ output/
 # rendered by scripts/render-docs.mjs and scripts/render-guides.mjs
 src/generated/
 public/guides/
+/.idea
