@@ -136,7 +136,7 @@ async def repo(owner: str, name: str) -> Repo:
 
 Most Python web frameworks leave data access up to you. You pick an ORM, wire up sessions and find out at runtime whether your queries actually work.
 
-Pyronaut includes [Micronaut Data](https://docs.micronaut.io/5.2.x/data/?lang=python&build=pyronaut), which lets you define repositories in Python and precomputes SQL queries at build time for your favourite database. There is no runtime query translation, and a query that references a property that doesn't exist fails the build instead of a request in production:
+Pyronaut includes [Micronaut Data](https://docs.micronaut.io/5.2.x/data/?lang=python&build=pyronaut&config-format=toml), which lets you define repositories in Python and precomputes SQL queries at build time for your favourite database. There is no runtime query translation, and a query that references a property that doesn't exist fails the build instead of a request in production:
 
 ```python
 from dataclasses import dataclass
@@ -280,7 +280,7 @@ paths:
                 type: string
 ```
 
-You can define message consumers and producers in [Kafka](https://docs.micronaut.io/5.2.x/kafka/#kafka-kafkaQuickStart?lang=python&build=pyronaut), [RabbitMQ](https://docs.micronaut.io/5.2.x/rabbitmq/#rabbitmq-quickStart), [JMS](https://docs.micronaut.io/5.2.x/jms/#jms-quickStart) and other messaging systems using Python:
+You can define message consumers and producers in [Kafka](https://docs.micronaut.io/5.2.x/kafka/?lang=python&build=pyronaut&config-format=toml#kafka-kafkaQuickStart), [RabbitMQ](https://docs.micronaut.io/5.2.x/rabbitmq/?lang=python&build=pyronaut&config-format=toml#rabbitmq-quickStart), [JMS](https://docs.micronaut.io/5.2.x/jms/?lang=python&build=pyronaut&config-format=toml#jms-quickStart) and other messaging systems using Python:
 
 ```python
 from micronaut.configuration.kafka.annotation import KafkaKey, KafkaListener, OffsetReset, Topic
@@ -294,7 +294,7 @@ class ProductListener:
         LOG.info("Got Product - %s by %s", name, brand)
 ```
 
-And you can write highly performant, low memory [MCP Tools](https://docs.micronaut.io/5.2.x/mcp) using Pyronaut:
+And you can write highly performant, low memory [MCP Tools](https://docs.micronaut.io/5.2.x/mcp?lang=python&build=pyronaut&config-format=toml) using Pyronaut:
 
 ```python
 from micronaut.context.annotation import Requires, Prototype
