@@ -3,6 +3,7 @@ slug: 2026/10/02/introducing-pyronaut
 title: Introducing Pyronaut
 description: Pyronaut is a high-performance Python application framework for building production services with rich data access, observability, cloud integrations, build-time validation, integrated testing, and enterprise support.
 date: '2026-10-02T10:00:00'
+author: Graeme Rocher
 category: announcements
 categories:
   - announcements
