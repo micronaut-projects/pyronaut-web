@@ -222,7 +222,9 @@ def test_validation(client: requests.Session):
     language: "shell",
     caption:
       "One CLI coordinates creation, development, testing, validation, and production packaging.",
-    code: `$ pyronaut create rocket-service
+    code: `$ pip install pyronaut
+
+$ pyronaut create rocket-service
   Resolved Micronaut platform 5.x via Maven
   Created rocket-service/ with pyproject.toml
 
