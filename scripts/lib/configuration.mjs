@@ -33,9 +33,9 @@ const MODULES = [
 const referenceUrl = (module) =>
   `https://micronaut-projects.github.io/micronaut-${module}/latest/guide/configurationreference.html`;
 // Where the hover links: the same reference on the Micronaut docs site, which
-// keeps the table anchors and opens with Python / Pyronaut selected.
+// keeps the table anchors and opens with Python / Pyronaut and TOML selected.
 const referenceHref = (module, anchor) =>
-  `https://docs.micronaut.io/latest/${module}/configuration-reference/?lang=python&build=pyronaut${anchor ? `#${anchor}` : ""}`;
+  `https://docs.micronaut.io/latest/${module}/configuration-reference/?lang=python&build=pyronaut&config-format=toml${anchor ? `#${anchor}` : ""}`;
 
 const text = (html) =>
   html
