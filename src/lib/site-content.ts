@@ -382,7 +382,7 @@ export const FOOTER_COLUMNS = [
       { label: "Micronaut Docs", href: DOCS_LINKS.micronaut },
       { label: "Pyronaut Guides", href: DOCS_LINKS.guides },
       { label: "CLI reference", href: "/docs/#pyronautCliV2" },
-      { label: "Python package compatibility", href: "/docs/compatibility/" },
+      { label: "Python package compatibility", href: "https://graalpy.org/python-developers/compatibility/" },
     ],
   },
   {
