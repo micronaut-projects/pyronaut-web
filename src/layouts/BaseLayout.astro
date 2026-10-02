@@ -56,6 +56,24 @@ const socialImage = new URL("/pyronaut-assets/social-card.png", Astro.site).href
         document.documentElement.style.colorScheme = dark ? "dark" : "light";
       })();
     </script>
+    {
+      // Google Analytics; production builds only, so `astro dev` is not counted.
+      import.meta.env.PROD && (
+        <>
+          <script
+            is:inline
+            async
+            src="https://www.googletagmanager.com/gtag/js?id=G-CX27EK7C7J"
+          />
+          <script is:inline>
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-CX27EK7C7J');
+          </script>
+        </>
+      )
+    }
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
