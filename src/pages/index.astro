@@ -74,12 +74,12 @@ const btnGhost =
       <div
         class:list={[
           container,
-          "grid w-full gap-14 pb-20 pt-16 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] lg:items-center lg:gap-10 lg:pb-28 lg:pt-24",
+          "grid w-full grid-cols-1 gap-14 pb-20 pt-16 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] lg:items-center lg:gap-10 lg:pb-28 lg:pt-24",
         ]}
       >
-        <div>
+        <div class="min-w-0">
           <h1
-            class="font-display mt-5 text-balance text-5xl font-bold leading-[0.98] tracking-[-0.03em] md:text-7xl lg:text-[3.9rem] xl:text-[4.25rem]"
+            class="font-display mt-5 text-balance text-[clamp(2.25rem,11vw,3rem)] font-bold leading-[0.98] tracking-[-0.03em] md:text-7xl lg:text-[3.9rem] xl:text-[4.25rem]"
           >
             A <span class="text-flame-400 sm:whitespace-nowrap">high-performance</span> Python framework.
           </h1>
@@ -117,7 +117,7 @@ const btnGhost =
           </div>
         </div>
 
-        <div class="relative">
+        <div class="relative min-w-0">
           <Mascot class="mx-auto w-full max-w-lg lg:max-w-none lg:translate-x-6" />
           <figure
             class="code-block relative mx-auto mt-6 w-full max-w-md overflow-hidden rounded-lg border border-white/10 bg-ink-900/90 shadow-2xl shadow-black/40 backdrop-blur"
