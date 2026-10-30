@@ -31,6 +31,9 @@ const repoDir = process.env.PYRONAUT_DOCS_DIR ?? checkout();
 const docsDir = path.join(repoDir, "src/main/docs");
 const guideDir = path.join(docsDir, "guide");
 const properties = readProperties(path.join(repoDir, "gradle.properties"));
+// Release tags can point to source that still declares a snapshot version.
+const releaseVersion = /^(?:refs\/tags\/)?v?(\d+\.\d+\.\d+(?:-[A-Za-z0-9.]+)?)$/.exec(REF)?.[1];
+if (releaseVersion) properties.projectVersion = releaseVersion;
 const commit = (() => {
   try {
     return execFileSync("git", ["rev-parse", "HEAD"], { cwd: repoDir, encoding: "utf8" }).trim();
