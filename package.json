@@ -9,7 +9,8 @@
     "preview": "astro preview --host 127.0.0.1",
     "typecheck": "astro check",
     "docs": "node scripts/render-docs.mjs",
-    "guides": "node scripts/render-guides.mjs"
+    "guides": "node scripts/render-guides.mjs",
+    "test": "node --test \"scripts/**/*.test.mjs\""
   },
   "dependencies": {
     "@asciidoctor/core": "^4.0.11",
