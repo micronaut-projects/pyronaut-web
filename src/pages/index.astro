@@ -10,7 +10,9 @@ import SiteFooter from "@/components/SiteFooter.astro";
 import SiteHeader from "@/components/SiteHeader.astro";
 import {
   CODE_PROOFS,
+  DB_BENCHMARK,
   FEATURES,
+  INSTALL,
   PERSONAS,
   SITE_NAME,
   STACK_COMPARISON,
@@ -28,7 +30,7 @@ const helloCode = `@Get("/hello/{name}")
 def hello(name: str):
     return {"message": f"Hello, {name}"}`;
 
-const createCommands = ["pip install pyronaut", "pyronaut create rocket-service"];
+const createCommands = INSTALL.commands;
 
 // A sparse, seeded starfield for the dark bands — deterministic so the
 // build is stable, uneven so it doesn't read as a pattern.
@@ -84,17 +86,17 @@ const btnGhost =
             A <span class="text-flame-400 sm:whitespace-nowrap">high-performance</span> Python framework.
           </h1>
           <p class="mt-5 font-mono text-sm text-ink-300">
-            Built on <a href="https://micronaut.io" class="underline decoration-ink-500 underline-offset-4 hover:text-flame-400">Micronaut</a> and <a href="https://www.graalvm.org" class="underline decoration-ink-500 underline-offset-4 hover:text-flame-400">GraalVM</a>
+            Python 3.13 on <a href="https://www.graalpy.org" class="underline decoration-ink-500 underline-offset-4 hover:text-flame-400">GraalPy</a>, with the <a href="https://micronaut.io" class="underline decoration-ink-500 underline-offset-4 hover:text-flame-400">Micronaut</a> framework underneath
           </p>
           <p class="mt-7 max-w-xl text-lg leading-8 text-ink-300">
-            Build production services with rich data access, observability, cloud integrations, build-time validation, integrated testing, and enterprise support.
+            Reading a single row from a database and returning it as JSON, a Pyronaut service handled about {DB_BENCHMARK.pyronaut.rps} requests per second. FastAPI on {DB_BENCHMARK.fastapi.server} handled about {DB_BENCHMARK.fastapi.rps}, and its p99 latency was {DB_BENCHMARK.fastapi.p99} against {DB_BENCHMARK.pyronaut.p99}. You still write routes as Python functions with type hints and test them with pytest.
           </p>
           <div class="mt-9 flex flex-wrap gap-3" id="get-started">
             <a href="/docs/#gettingStarted" class={btnFlame}>
               Get started
               <Glyph name="arrow-right" class="size-4" />
             </a>
-            <a href="#features" class={btnGhost}>Explore the framework</a>
+            <a href="#tradeoffs" class={btnGhost}>Where it is and isn't faster</a>
           </div>
           <div
             class="mt-8 flex max-w-md items-center gap-3 rounded-md border border-white/10 bg-white/[0.04] py-2 pl-4 pr-2 font-mono text-sm"
@@ -115,6 +117,9 @@ const btnGhost =
               Copy
             </button>
           </div>
+          <p class="mt-3 max-w-md text-sm leading-6 text-ink-400">
+            Using pip? <code class="font-mono text-ink-200">{INSTALL.pip}</code>. Setup downloads a JDK and GraalPy, {INSTALL.size} in total.
+          </p>
         </div>
 
         <div class="relative min-w-0">
@@ -157,9 +162,9 @@ const btnGhost =
     <section id="features">
       <div class:list={[container, "py-20 lg:py-28"]}>
         <div class="grid gap-6 lg:grid-cols-2 lg:items-end lg:gap-16">
-          <h2 class={h2}>Production Python, working together.</h2>
+          <h2 class={h2}>The pieces a FastAPI project adds one by one, included.</h2>
           <p class={lead}>
-            Pyronaut brings dependency injection, validation, data access, observability, testing, and packaging into one application model.
+            With FastAPI you choose and connect an HTTP server, an ORM, a settings library, test fixtures, and metrics. Pyronaut ships them together. Underneath is Micronaut, a Java framework used in production since 2018, which you use through Python decorators.
           </p>
         </div>
         <div
@@ -193,12 +198,12 @@ const btnGhost =
         class:list={[container, "grid gap-12 py-20 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.5fr)] lg:gap-16 lg:py-28"]}
       >
         <div class="lg:sticky lg:top-28 lg:self-start">
-          <h2 class={h2}>Write Python. Get the platform around it.</h2>
+          <h2 class={h2}>A route, a repository, and a test.</h2>
           <p class:list={[lead, "mt-5"]}>
-            Your Python types and annotations define routing, validation, serialization, dependency injection, OpenAPI, and tests.
+            Models are dataclasses, routes are functions with type hints, and tests are pytest functions. The decorators come from Micronaut, so some names look like Java.
           </p>
           <p class="mt-4 text-sm leading-6 text-ink-500 dark:text-ink-400">
-            Pyronaut processes the application model before startup, enabling earlier validation and carrying the same model through development, testing, and packaging.
+            Pyronaut reads this code when it builds the app and generates the SQL, the JSON serializers, and the validation. If a repository method names a field that doesn't exist, you get a build error, not a 500 on the first request. The same code also produces OpenAPI docs.
           </p>
           <ul class="mt-8 divide-y divide-ink-200 border-y border-ink-200 dark:divide-white/10 dark:border-white/10">
             {
@@ -215,9 +220,9 @@ const btnGhost =
     <!-- Workflow: the CLI as a pipeline -->
     <section id="workflow" class={sectionRule}>
       <div class:list={[container, "py-20 lg:py-28"]}>
-        <h2 class:list={[h2, "max-w-3xl"]}>From Python source to a production artifact.</h2>
+        <h2 class:list={[h2, "max-w-3xl"]}>From an empty directory to a file you can deploy.</h2>
         <p class:list={[lead, "mt-5 max-w-xl"]}>
-          One CLI coordinates creation, development, testing, validation, and packaging.
+          The <code class="font-mono text-[0.9em]">pyronaut</code> command creates the project, runs it with reload, runs your tests, checks configuration, and builds the deployable package.
         </p>
         <ol class="relative mt-14 grid gap-10 md:grid-cols-5 md:gap-6">
           <span
@@ -252,22 +257,28 @@ const btnGhost =
     <!-- Stack comparison -->
     <section id="compare" class={sectionRule}>
       <div class:list={[container, "py-20 lg:py-28"]}>
-        <h2 class:list={[h2, "max-w-3xl"]}>A representative FastAPI stack vs. Pyronaut</h2>
+        <h2 class:list={[h2, "max-w-3xl"]}>Compared with Flask and FastAPI</h2>
         <p class:list={[lead, "mt-5 max-w-2xl"]}>
-          FastAPI is a strong HTTP framework. Pyronaut takes a different approach, combining high performance with data access, observability, build-time validation, testing, and production packaging.
+          Flask and FastAPI are mature, run on CPython, and work with any package on PyPI. Pyronaut gives up some of that compatibility in exchange for speed and checks that run before the app starts.
         </p>
         <div class="mt-14 overflow-x-auto">
-          <table class="w-full min-w-[640px] border-collapse text-left text-sm">
+          <table class="w-full min-w-[760px] border-collapse text-left text-sm">
             <thead>
               <tr>
-                <th scope="col" class="w-[18%] border-b border-ink-300 py-4 pr-6 dark:border-white/20">
+                <th scope="col" class="w-[16%] border-b border-ink-300 py-4 pr-6 dark:border-white/20">
                   <span class="sr-only">Area</span>
                 </th>
                 <th
                   scope="col"
-                  class="border-b border-ink-300 py-4 pr-6 font-semibold text-ink-500 dark:border-white/20 dark:text-ink-400"
+                  class="w-[24%] border-b border-ink-300 py-4 pr-6 font-semibold text-ink-500 dark:border-white/20 dark:text-ink-400"
                 >
-                  {STACK_COMPARISON.conventionalTitle}
+                  {STACK_COMPARISON.columns.flask}
+                </th>
+                <th
+                  scope="col"
+                  class="w-[28%] border-b border-ink-300 py-4 pr-6 font-semibold text-ink-500 dark:border-white/20 dark:text-ink-400"
+                >
+                  {STACK_COMPARISON.columns.fastapi}
                 </th>
                 <th
                   scope="col"
@@ -275,14 +286,14 @@ const btnGhost =
                 >
                   <span class="inline-flex items-center gap-2">
                     <Glyph name="flame" class="size-4 text-flame-400" />
-                    {STACK_COMPARISON.pyronautTitle}
+                    {STACK_COMPARISON.columns.pyronaut}
                   </span>
                 </th>
               </tr>
             </thead>
             <tbody>
               {
-                STACK_COMPARISON.rows.map((row) => (
+                STACK_COMPARISON.rows.map((row, index) => (
                   <tr class="align-top">
                     <th
                       scope="row"
@@ -291,37 +302,40 @@ const btnGhost =
                       {row.area}
                     </th>
                     <td class="border-b border-ink-200 py-4 pr-6 text-ink-600 dark:border-white/10 dark:text-ink-300">
-                      {row.conventional}
+                      {row.flask}
                     </td>
-                    <td class="border-b border-white/10 bg-ink-950 px-5 py-4 text-ink-100 dark:bg-ink-900">{row.pyronaut}</td>
+                    <td class="border-b border-ink-200 py-4 pr-6 text-ink-600 dark:border-white/10 dark:text-ink-300">
+                      {row.fastapi}
+                    </td>
+                    <td
+                      class:list={[
+                        "bg-ink-950 px-5 py-4 text-ink-100 dark:bg-ink-900",
+                        index === STACK_COMPARISON.rows.length - 1 ? "rounded-b-lg" : "border-b border-white/10",
+                      ]}
+                    >
+                      {row.pyronaut}
+                    </td>
                   </tr>
                 ))
               }
             </tbody>
-            <tfoot>
-              <tr>
-                <td class="py-4 pr-6"></td>
-                <td class="py-4 pr-6 italic text-ink-500 dark:text-ink-400">
-                  {STACK_COMPARISON.conventionalFootnote}
-                </td>
-                <td class="rounded-b-lg bg-ink-950 px-5 py-4 font-medium italic text-flame-300 dark:bg-ink-900">
-                  {STACK_COMPARISON.pyronautFootnote}
-                </td>
-              </tr>
-            </tfoot>
           </table>
         </div>
+        <p class="mt-6 max-w-3xl text-xs leading-5 text-ink-500 dark:text-ink-400">
+          {STACK_COMPARISON.footnote}{" "}
+          <a href="/performance/" class="font-semibold text-flame-600 hover:text-flame-500 dark:text-flame-400">Performance benchmarks</a>
+        </p>
       </div>
     </section>
 
-    <!-- Personas -->
-    <section id="teams" class:list={[sectionRule, "bg-ink-50 dark:bg-ink-900/40"]}>
+    <!-- Trade-offs -->
+    <section id="tradeoffs" class:list={[sectionRule, "bg-ink-50 dark:bg-ink-900/40"]}>
       <div class:list={[container, "py-20 lg:py-28"]}>
-        <h2 class:list={[h2, "max-w-3xl"]}>For teams building production Python services.</h2>
+        <h2 class:list={[h2, "max-w-3xl"]}>Where it is faster, and where it isn't.</h2>
         <p class:list={[lead, "mt-5 max-w-xl"]}>
-          Choose Pyronaut when your Python services need high performance and deeper production capabilities.
+          Speed is the main reason to pick Pyronaut, but it is not faster at everything yet. Check these against your workload before you switch.
         </p>
-        <dl class="mt-14 grid gap-x-10 gap-y-10 sm:grid-cols-2 lg:grid-cols-4">
+        <dl class="mt-14 grid gap-x-10 gap-y-10 sm:grid-cols-2 lg:grid-cols-3">
           {
             PERSONAS.map((persona) => (
               <div class="border-l-2 border-flame-500 pl-5">
@@ -349,11 +363,11 @@ const btnGhost =
           Build your first Pyronaut service.
         </h2>
         <p class="mt-6 max-w-xl text-lg leading-8 text-ink-300">
-          Start with HTTP, data access, validation, observability, testing, and production packaging in one Python project.
+          The getting-started guide rebuilds the example from the FastAPI docs in Pyronaut, so you can compare the two side by side.
         </p>
         <div class="mt-10 flex flex-wrap justify-center gap-3">
-          <a href="/docs/" class={btnFlame}>
-            Read the docs
+          <a href="/docs/#fastApiTutorial" class={btnFlame}>
+            Read the guide
             <Glyph name="arrow-right" class="size-4" />
           </a>
           <a href="https://github.com/micronaut-projects/pyronaut" class={btnGhost}>View the repository</a>
