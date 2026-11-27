@@ -2,10 +2,35 @@
  * Shared marketing content for every Pyronaut design variant.
  */
 
+import { BENCHMARKS } from "@/data/benchmarks";
+
+/** Sustained req/s from the HTTPS/HTTP2 benchmark, formatted for copy. */
+const sustained = (id: string) =>
+  (BENCHMARKS.find((f) => f.id === id)?.sustained ?? 0).toLocaleString("en-US");
+
 export const SITE_NAME = "Pyronaut";
 
 export const SITE_DESCRIPTION =
-  "Pyronaut is a high-performance Python framework for building production services with rich data access, observability, cloud integrations, build-time validation, testing, and enterprise support.";
+  "Pyronaut is a Python web framework that runs on GraalPy with the Micronaut framework underneath. It serves single-row database reads about four times faster than FastAPI, and checks validation, database queries, and configuration when you build the app instead of when a request arrives.";
+
+/**
+ * Install commands. uv is the primary path; pip is the documented
+ * alternative. `pyronaut setup` provisions the JDK and GraalPy the CLI needs.
+ */
+export const INSTALL = {
+  commands: ["uv tool install pyronaut", "pyronaut setup", "pyronaut create rocket-service"],
+  pip: "python3 -m pip install pyronaut",
+  size: "about 3.4 GiB",
+};
+
+/**
+ * Single-row database read benchmark, quoted on the homepage. FastAPI ran
+ * with 4 uvicorn workers. A 20-row list endpoint came out about even.
+ */
+export const DB_BENCHMARK = {
+  pyronaut: { rps: "16,800", p99: "2.7 ms" },
+  fastapi: { rps: "4,100", p99: "18.2 ms", server: "4 uvicorn workers" },
+};
 
 /**
  * Documentation destinations. The Micronaut sites keep the reader's code
@@ -29,38 +54,38 @@ export interface Feature {
 /** Icon names map to inline SVG glyphs rendered by each design. */
 export const FEATURES: Feature[] = [
   {
-    title: "High performance",
-    copy: "Pyronaut shifts application work to build time, preparing dependency injection, serialization, routing, and more before startup. A JIT compiler optimizes hot Python code, while a non-blocking HTTP runtime handles concurrent requests.",
+    title: "Fast HTTP",
+    copy: "Requests are served by Netty, an event-driven HTTP server that does the job uvicorn does for FastAPI. Your route functions run on GraalPy, a Python implementation with a JIT compiler that speeds up code that runs often.",
     icon: "bolt",
     href: "/performance/",
   },
   {
-    title: "Rich data access",
-    copy: "Define data access declaratively in Python. Pyronaut generates repository implementations and precomputes queries at build time, with a consistent programming model across supported databases.",
+    title: "Generated database queries",
+    copy: "Write a repository class with methods such as findByNameContains and Pyronaut generates the SQL when it builds the app. A method that names a field your model doesn't have fails the build. Works with MySQL, PostgreSQL, Oracle, SQL Server, and H2.",
     icon: "annotations",
     href: "https://docs.micronaut.io/latest/data/?lang=python&build=pyronaut&config-format=toml",
   },
   {
-    title: "Production observability",
-    copy: "Understand how your service behaves in production. Pyronaut brings together traces, correlated logs, health checks, and metrics with integrated Micrometer and OpenTelemetry support.",
+    title: "Metrics and tracing included",
+    copy: "Metrics, OpenTelemetry tracing, health check endpoints, and logs tagged with trace IDs are part of the framework. You don't add and configure separate instrumentation packages.",
     icon: "gauge",
     href: "https://docs.micronaut.io/latest/micrometer/?lang=python&build=pyronaut&config-format=toml",
   },
   {
-    title: "Cloud integrations",
-    copy: "Make AWS, Azure, GCP, and Oracle Cloud services part of your Python application. Inject managed SDK clients, import cloud configuration and secrets, and work with messaging, storage, events, serverless workloads, and more through one application model.",
+    title: "Cloud SDK clients",
+    copy: "Ask for an AWS, Azure, Google Cloud, or Oracle Cloud client as a typed parameter and Pyronaut creates and configures it. Configuration and secrets can be read from the provider's secret store.",
     icon: "flask",
     href: "https://guides.micronaut.io/latest/tag-cloud.html?lang=python&build=pyronaut",
   },
   {
-    title: "Build-time validation",
-    copy: "Catch configuration and dependency wiring problems at build time, giving coding agents and humans feedback before runtime.",
+    title: "Mistakes fail the build",
+    copy: "Pydantic checks your models when a request comes in. Pyronaut reads your type hints when it builds the app, so a misspelled config key, a bad repository method, or a dependency nothing provides is reported before the app starts.",
     icon: "shield",
     href: "/docs/#validateConfig",
   },
   {
-    title: "Enterprise support",
-    copy: "Enterprise support for teams running business-critical Pyronaut services in production.",
+    title: "Commercial support",
+    copy: "Paid support is available for teams that run Pyronaut services in production.",
     icon: "rocket",
     href: "https://micronaut.io/support/",
   },
@@ -76,27 +101,27 @@ export const WORKFLOW: WorkflowStage[] = [
   {
     command: "pyronaut create",
     title: "Create",
-    copy: "Generate a project with platform dependencies resolved.",
+    copy: "Generate a project with a pyproject.toml and its dependencies resolved.",
   },
   {
     command: "pyronaut dev",
     title: "Develop",
-    copy: "Local server with automatic reload and managed Test Resources.",
+    copy: "Run the app on localhost:8080 and reload on save. A database the app needs is started for you in Docker.",
   },
   {
     command: "pyronaut test",
     title: "Test",
-    copy: "Run pytest against the real application context and test infrastructure.",
+    copy: "Run pytest against the running app and a real database, without writing Testcontainers fixtures.",
   },
   {
     command: "pyronaut validate-config",
     title: "Validate",
-    copy: "Check configuration and DI wiring for dev, run, test, and production.",
+    copy: "Check configuration files and which objects get injected where, per environment, without starting the app.",
   },
   {
     command: "pyronaut build",
     title: "Package",
-    copy: "Produce a wheel, container image, or native executable.",
+    copy: "Build a wheel, a native executable that needs no Python or Java installed, or a container image.",
   },
 ];
 
@@ -116,7 +141,7 @@ export const CODE_EXAMPLES: CodeExample[] = [
     filename: "rockets.py",
     language: "python",
     caption:
-      "Use Micronaut annotations directly from Python for data access, routing, dependency injection, validation, and serialization.",
+      "Entity, repository, and routes in one module. The decorators come from Micronaut, the Java framework underneath; everything else is ordinary Python.",
     code: `from dataclasses import dataclass
 from typing import Annotated, List
 
@@ -131,6 +156,8 @@ from micronaut.http.annotation import Body, Get, Post
 from micronaut.serde.annotation import Serdeable
 
 
+# A table row, like a SQLAlchemy model. Its JSON serializer
+# is generated when the app is built.
 @dataclass
 @MappedEntity
 @Serdeable
@@ -140,6 +167,7 @@ class Rocket:
     thrust_kn: float
 
 
+# A request body with field constraints, like a Pydantic model.
 @Serdeable
 @dataclass
 class LaunchCommand:
@@ -147,18 +175,16 @@ class LaunchCommand:
     thrust_kn: Annotated[float, Positive]
 
 
+# The SQL for each method is generated from its name at build time.
+# Misspell the field (findByNmeContains) and the build fails.
 @JdbcRepository(dialect="MYSQL")
 class RocketRepository(CrudRepository[Rocket, int]):
 
     def findByNameContains(self, fragment: str) -> List[Rocket]: ...
 
 
+# Injected when the app starts, similar to FastAPI's Depends().
 rockets: Annotated[RocketRepository, Inject]
-
-
-@Get("/rockets")
-def fleet() -> List[Rocket]:
-    return rockets.findAll()
 
 
 @Get("/rockets/search/{fragment}")
@@ -166,6 +192,7 @@ def search(fragment: str) -> List[Rocket]:
     return rockets.findByNameContains(fragment)
 
 
+# An invalid body gets a 400 before this function runs.
 @Post("/rockets")
 def launch(command: Annotated[LaunchCommand, Body, Valid]) -> HttpResponse:
     rocket = Rocket(None, command.name, command.thrust_kn)
@@ -177,7 +204,7 @@ def launch(command: Annotated[LaunchCommand, Body, Valid]) -> HttpResponse:
     filename: "test_rockets.py",
     language: "python",
     caption:
-      "pytest runs against the same embedded server, DI context, and Test Resources database the application uses.",
+      "Plain pytest. The fixture starts the app on a test port, and Pyronaut starts a MySQL container for it, so the test talks to a real database.",
     code: `from typing import Any
 
 import pytest
@@ -221,15 +248,16 @@ def test_validation(client: requests.Session):
     filename: "terminal",
     language: "shell",
     caption:
-      "One CLI coordinates creation, development, testing, validation, and production packaging.",
-    code: `$ pip install pyronaut
+      "From an empty directory to a deployable file. With pip, run python3 -m pip install pyronaut instead of the first command.",
+    code: `$ uv tool install pyronaut
+$ pyronaut setup
+  GraalVM JDK and GraalPy ready
 
 $ pyronaut create rocket-service
-  Resolved Micronaut platform 5.x via Maven
   Created rocket-service/ with pyproject.toml
 
 $ pyronaut dev
-  Test Resources: mysql:8 ready on :3306
+  Started mysql:8 in Docker on :3306
   Server running on http://localhost:8080 (reload on)
 
 $ pyronaut test
@@ -238,15 +266,15 @@ $ pyronaut test
 $ pyronaut validate-config --env production
   Configuration OK · DI graph OK
 
-$ pyronaut build --native-base
+$ pyronaut build --native
   Native executable: build/rocket-service`,
   },
 ];
 
 export const CODE_PROOFS = [
-  "One type definition drives the application model",
-  "Check configuration and dependency wiring before runtime",
-  "One application model spans development, tests, and packaging",
+  "@MappedEntity is roughly a SQLAlchemy model; @JdbcRepository writes the queries for you",
+  "Annotated[str, NotBlank] works like a Pydantic field constraint: bad input gets a 400",
+  "pyronaut test runs pytest against the app and a MySQL container it starts itself",
 ];
 
 export const MICRONAUT_AUDIENCE = {
@@ -310,68 +338,129 @@ export interface Persona {
   value: string;
 }
 
+/**
+ * Where Pyronaut is fast and where it is not. Rendered in the homepage
+ * trade-offs section (formerly personas).
+ */
 export const PERSONAS: Persona[] = [
   {
-    role: "Python developers",
+    role: "Single-row reads: about 4x",
     value:
-      "Build with one consistent application model.",
+      "Fetching one row by ID and returning it as JSON: about 16,800 requests per second, against about 4,100 for FastAPI on 4 uvicorn workers. p99 latency was 2.7 ms against 18.2 ms.",
   },
   {
-    role: "Architects",
+    role: "Small lists: about even",
     value:
-      "Standardize how teams build and run production Python services.",
+      "Returning a 20-row list came out roughly the same as FastAPI.",
   },
   {
-    role: "Platform engineering",
+    role: "Python loops over rows: slower",
     value:
-      "Give teams one path from project creation to production artifact.",
+      "Endpoints that loop over many database rows in Python code are currently much slower than the same code under FastAPI.",
   },
   {
-    role: "Engineering leadership",
+    role: "Install size: about 3.4 GiB",
     value:
-      "Adopt a high-performance Python framework with enterprise support.",
+      "The CLI is a normal Python package, but pyronaut setup downloads a JDK, GraalPy, and native launchers. Expect about 3.4 GiB on disk.",
+  },
+  {
+    role: "C extensions: check first",
+    value:
+      "Apps run on GraalPy, not CPython. Pure-Python packages generally work; packages with C extensions may not. pyronaut doctor checks the packages your project declares.",
   },
 ];
 
 export interface ComparisonRow {
   area: string;
-  conventional: string;
+  flask: string;
+  fastapi: string;
   pyronaut: string;
 }
 
 export const STACK_COMPARISON = {
-  conventionalTitle: "A representative FastAPI stack",
-  pyronautTitle: "Pyronaut",
+  columns: { flask: "Flask", fastapi: "FastAPI", pyronaut: "Pyronaut" },
   rows: [
     {
-      area: "HTTP & data",
-      conventional: "FastAPI + Uvicorn + SQLAlchemy",
-      pyronaut: "Micronaut HTTP on Netty + Micronaut Data",
+      area: "Runs on",
+      flask: "CPython",
+      fastapi: "CPython",
+      pyronaut: "GraalPy (Python 3.13) on the JVM",
     },
     {
-      area: "Types & config",
-      conventional: "Pydantic + Pydantic Settings",
-      pyronaut: "Build-time processing for DI, validation, and serialization",
+      area: "HTTP server",
+      flask: "Gunicorn or uWSGI, installed separately",
+      fastapi: "Uvicorn or Granian, installed separately",
+      pyronaut: "Netty, built in. It fills the role of uvicorn.",
+    },
+    {
+      area: "HTTP benchmark",
+      flask: `${sustained("flask")} req/s (Gunicorn)`,
+      fastapi: `${sustained("fastapi")} req/s (Granian)`,
+      pyronaut: `${sustained("pyronaut")} req/s`,
+    },
+    {
+      area: "Single-row DB read",
+      flask: "Not measured",
+      fastapi: "~4,100 req/s, p99 18.2 ms (4 uvicorn workers)",
+      pyronaut: "~16,800 req/s, p99 2.7 ms",
+    },
+    {
+      area: "Validation and JSON",
+      flask: "Add a library such as marshmallow or Pydantic",
+      fastapi: "Pydantic models, checked at request time",
+      pyronaut: "Dataclasses with constraint annotations; serializers generated at build time",
+    },
+    {
+      area: "Database",
+      flask: "Flask-SQLAlchemy or raw SQL",
+      fastapi: "SQLAlchemy or SQLModel, queries written by you",
+      pyronaut: "Repository methods; SQL generated and checked at build time",
+    },
+    {
+      area: "Dependency injection",
+      flask: "None built in",
+      fastapi: "Depends(), resolved on each request",
+      pyronaut: "Type-annotated injection, wiring checked at build time",
     },
     {
       area: "Testing",
-      conventional: "pytest + Testcontainers + fixtures",
-      pyronaut: "pytest + Micronaut Test + Test Resources",
+      flask: "pytest + test client",
+      fastapi: "pytest + TestClient; Testcontainers if you want a real database",
+      pyronaut: "pytest; database containers started automatically",
     },
     {
-      area: "Observability",
-      conventional: "structlog + OpenTelemetry + OpenAPI",
-      pyronaut:
-        "Micrometer metrics + OpenTelemetry tracing + observability integrations",
+      area: "Metrics and tracing",
+      flask: "Add-on packages",
+      fastapi: "Add-on packages",
+      pyronaut: "Built in (Micrometer metrics, OpenTelemetry tracing)",
     },
     {
       area: "Deployment",
-      conventional: "Dockerfiles + CI templates",
-      pyronaut: "Production packaging + supported cloud integrations",
+      flask: "Usually a Dockerfile you write",
+      fastapi: "Usually a Dockerfile you write",
+      pyronaut: "A wheel, a native executable, or a container image. Docker is optional.",
+    },
+    {
+      area: "Python packages",
+      flask: "Anything on PyPI",
+      fastapi: "Anything on PyPI",
+      pyronaut: "Pure-Python packages generally work; C extensions are limited",
+    },
+    {
+      area: "Install size",
+      flask: "A small virtualenv",
+      fastapi: "A small virtualenv",
+      pyronaut: "About 3.4 GiB including the JDK and GraalPy",
+    },
+    {
+      area: "First released",
+      flask: "2010",
+      fastapi: "2018",
+      pyronaut: "2026 (Micronaut underneath: 2018)",
     },
   ] satisfies ComparisonRow[],
-  conventionalFootnote: "…and every integration between them",
-  pyronautFootnote: "…designed to work together",
+  footnote:
+    "HTTP benchmark throughput is the highest rate that met the latency targets in our HTTPS/HTTP2 benchmark on a 3-OCPU VM; see the performance page for the method. The single-row read is a separate database benchmark.",
 };
 
 export const FOOTER_COLUMNS = [

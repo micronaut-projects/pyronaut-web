@@ -12,9 +12,9 @@ the dark hero and CTA bands sit in a sparse seeded starfield, lit warm from
 where the flamethrower points. Headings use Bricolage Grotesque; flame
 orange is kept for things you act on (buttons, commands, the active tab).
 Code panels are always editor-dark, the CLI workflow is drawn as a
-pipeline, and the FastAPI comparison is a real table. No fake window
+pipeline, and the Flask and FastAPI comparison is a real table. No fake window
 chrome, decorative shapes or scroll animations. Structure runs hero → features → code showcase → workflow →
-stack comparison → personas → CTA → footer.
+Flask and FastAPI comparison → trade-offs → CTA → footer.
 
 **Light and dark mode are both supported** — the moon/sun toggle in the
 header persists the choice (`localStorage`, class-based Tailwind `dark:`
@@ -22,7 +22,7 @@ variant, falls back to the OS preference).
 
 ## Project layout
 
-- `src/lib/site-content.ts` — all shared copy (hero, features, workflow,
+- `src/lib/site-content.ts` — all shared copy (hero, install commands, benchmark figures, features, workflow,
   code examples, personas, footer), derived from the Pyronaut positioning
   material
 - `src/components/CodeTabs.astro` — tabbed code showcase with dual Shiki
